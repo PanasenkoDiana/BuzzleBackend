@@ -7,6 +7,6 @@ const userRouter = Router()
 userRouter.post("/register", UserController.createUser)
 userRouter.post("/login", UserController.authUser)
 
-userRouter.get('/me', authTokenMiddleware, UserController.findUserByEmail)
+userRouter.get('/me', authTokenMiddleware, UserController.findUserById)
 
 export default userRouter;

@@ -8,9 +8,8 @@ export const UserController = {
         res.json(result)
     },
     findUserByEmail: async function(req: Request, res: Response){
-        const email = req.body.email
         const data = req.body
-        const result = await UserService.findUserByEmail(email, data)
+        const result = await UserService.findUserByEmail(data.email, data)
         res.json(result)
     },
     authUser: async function(req: Request, res: Response){
