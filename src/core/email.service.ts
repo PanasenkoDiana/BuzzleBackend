@@ -1,6 +1,5 @@
-import * as crypto from 'crypto'
-import * as nodemailer from 'nodemailer'
-
+import * as crypto from 'crypto';
+import * as nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -10,10 +9,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
-
 export const EmailService = {
-    sendVerifyMail: async function (email:string, code:string): Promise<boolean> {
+    sendVerifyMail: async function (email: string, code: string): Promise<boolean> {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
@@ -31,11 +28,11 @@ export const EmailService = {
         }
     },
 
-    generateCode: function(lenght: number) {
-        return crypto.randomBytes(lenght)
+    generateCode: function(length: number) {
+        return crypto.randomBytes(length)
             .toString('base64')
             .replace(/[^A-Z0-9]/gi, '')
-            .slice(0, lenght)
+            .slice(0, length)
             .toUpperCase();
     }
-}
+};

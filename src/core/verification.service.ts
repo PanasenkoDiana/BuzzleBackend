@@ -1,39 +1,38 @@
-import {EmailService } from './email.service';
+import { EmailService } from './email.service';
 
 interface VerificationRecord {
-    user:any;
+    user: any;
     code: string;
-    expiresAt: number;}
+    expiresAt: number;
+}
+
 export class VerificationService {
     private storage: Map<string, VerificationRecord>;
-    private emailService:typeof EmailService;
+    private emailService: typeof EmailService;
+
     constructor(emailService: typeof EmailService) {
         this.storage = new Map();
         this.emailService = emailService;
-        
     }
-    async generateAndSendCode(email:string,user:any):Promise<boolean> {
-        const code= this.emailService.generateCode(6);
-        const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes from now
-        this.storage.set(email,{user,code,expiresAt});
-        return await this.emailService.sendVerifyMail(email,code);}
 
+    async generateAndSendCode(email: string, user: any): Promise<boolean> {
+        const code = this.emailService.generateCode(6);
+        const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+        this.storage.set(email, { user, code, expiresAt });
 
-
-verifyCode(email: string,code: string): any | null {
-    const record = this.storage.get(email);
-    if (!record) {
-        return null;
+        return await this.emailService.sendVerifyMail(email, code);
     }
-    if (record.expiresAt < Date.now()) {
+
+    verifyCode(email: string, code: string): any | null {
+        const record = this.storage.get(email);
+        if (!record) return null;
+        if (record.expiresAt < Date.now()) {
+            this.storage.delete(email);
+            return null;
+        }
+        if (record.code !== code) return null;
+
         this.storage.delete(email);
-        return null;
+        return record.user;
     }
-    if (record.code !== code) {
-        return null;
-    }
-    const user = record.user;
-    this.storage.delete(email);
-    return user;
-}
 }

@@ -1,122 +1,70 @@
 import { CreateUser, IError, ISuccess, User } from "./user.types";
-import { UserRepositories } from "./user.repositories"
+import { UserRepositories } from "./user.repositories";
 import { sign } from "jsonwebtoken";
-import { compare, hash } from "bcryptjs"
+import { compare, hash } from "bcryptjs";
 import { SECRET_KEY } from "../config/token";
 import { EmailService } from "../core/email.service";
 import { VerificationService } from "../core/verification.service";
+
 const verificationService = new VerificationService(EmailService);
+
 export const UserService = {
-    createUser: async function(data: CreateUser): Promise< IError | ISuccess<string> >{
-        const user = await UserRepositories.findUserByEmail(data.email)
-        if (user) {
-            return {status: 'error', message: 'User exists'}
+    createUser: async function(data: CreateUser): Promise<IError | ISuccess<string>> {
+        const existingUserByUsername = await UserRepositories.findUserByEmail(data.email);
+        if (existingUserByUsername) {
+            return { status: 'error', message: 'User with this username already exists'};
         }
 
-        // const hashedPassword = await hash(data.password, 10)
-        // const userData = {
-        //     ...data,
-        //     password: hashedPassword
-        // }
-        
-        // const newUser = await UserRepositories.createUser(userData)
-        // if (!newUser) {
-        //     return {status: 'error', message: 'Create error'}
-        // }
-        
-        // const token = sign({id: newUser.id}, SECRET_KEY, {expiresIn: '1d'})
+        const existingUserByEmail = await UserRepositories.findUserByEmail(data.email);
+        if (existingUserByEmail) {
+            return { status: 'error', message: 'User with this email already exists'};
+        }
 
-        //const verifyCode = EmailService.generateCode(6)
-        //const email = EmailService.sendVerifyMail(data.email, verifyCode)
-        const emailSent = await verificationService.generateAndSendCode(data.email);
+        const emailSent = await verificationService.generateAndSendCode(data.email, data);
         if (!emailSent) {
-            return {status: 'error', message: 'Email not sent'}
+            return { status: 'error', message: 'Failed to send verification email' };
         }
 
-
-    
-        return {status: 'success', data: 'ok'}
+        return { status: 'success', data: 'Verification code sent' };
     },
-    verifyUser: async function(email: string, code: string): Promise< IError | ISuccess<string> >{
-        const isCodeValid = await verificationService.verifyCode(email, code);
-        if (!isCodeValid) {
-            return {status: 'error', message: 'Invalid code'}
-        }
-        return {status: 'success', data: 'Succesful Verification'}
 
-        // const user = await UserRepositories.findUserByEmail(email)
-        // if (!user) {
-        //     return {status: 'error', message: 'User not found'}
-        // }
-
-        const hashedPassword = await hash(user.password, 10)
-        const userData = {
-            ...user,
-            password: hashedPassword
+    verifyUser: async function(email: string, code: string): Promise<IError | ISuccess<string>> {
+        const userData = await verificationService.verifyCode(email, code);
+        if (!userData) {
+            return { status: 'error', message: 'Invalid or expired verification code' };
         }
-        
-        const newUser = await UserRepositories.createUser(userData)
+
+        const hashedPassword = await hash(userData.password, 10);
+        const newUser = await UserRepositories.createUser({ ...userData, password: hashedPassword });
         if (!newUser) {
-            return {status: 'error', message: 'Create error'}
+            return { status: 'error', message: 'Failed to create user' };
         }
-        
-        const token = sign({id: newUser.id}, SECRET_KEY, {expiresIn: '1d'})
-        
-        return {status: 'success', data: token}
+
+        const token = sign({ id: newUser.id }, SECRET_KEY, { expiresIn: '1d' });
+        return { status: 'success', data: token };
     },
 
-    findUserByEmail: async function(email: string, data: CreateUser) {
-        const user = await UserRepositories.findUserByEmail(email)
+    authUser: async function(email: string, password: string): Promise<IError | ISuccess<string>> {
+        const user = await UserRepositories.findUserByEmail(email);
         if (!user) {
-            return {status: 'error', message: 'User find error'}
+            return { status: 'error', message: 'User not found' };
         }
-        return {status: 'success', data: user}
+
+        const isMatch = await compare(password, user.password);
+        if (!isMatch) {
+            return { status: 'error', message: 'Incorrect password' };
+        }
+
+        const token = sign({ id: user.id }, SECRET_KEY, { expiresIn: '1d' });
+        return { status: 'success', data: token };
     },
-    
-    authUser: async function(email: string, password: string): Promise< IError | ISuccess<string> >{
-        let user = await UserRepositories.findUserByEmail(email);
 
-        if (!user){
-            return {status: 'error', message: 'User not found'};
-        }
-
-        const isMatch = await compare(password, user.password)
-
-        if (!isMatch){
-            return {status: 'error', message: 'Wrong password'};
-        }
-
-        const token = sign({id: user.id}, SECRET_KEY, {expiresIn: '1d'})
-
-        return {status: 'success', data: token};
-
-    },
-    getUserByid: async function(id: number): Promise< IError | ISuccess<User> >{
+    getUserByid: async function(id: number): Promise<IError | ISuccess<User>> {
         const user = await UserRepositories.findUserById(id);
-
         if (!user) {
-            return {status: 'error', message: "User is not found"}
+            return { status: 'error', message: 'User not found' };
         }
-
-        return {status: 'success', data: user}
-    },
-
-    //verifyUser: async function(): Promise<IError | ISuccess<string>>{
-
-        // const hashedPassword = await hash(data.password, 10)
-        // const userData = {
-        //     ...data,
-        //     password: hashedPassword
-        // }
         
-        // const newUser = await UserRepositories.createUser(userData)
-        // if (!newUser) {
-        //     return {status: 'error', message: 'Create error'}
-        // }
-        
-        // const token = sign({id: newUser.id}, SECRET_KEY, {expiresIn: '1d'})
-        //return
-   // }
-
-
-}
+        return { status: 'success', data: user };
+    }
+};
