@@ -35,17 +35,5 @@ export const UserRepositories = {
         } catch(error) {
             console.log(error)
         }
-    },
-    findUserByUsername: async function(username: string){
-        try {
-            const user = await PrismaClient.user.findUnique({
-                where: {
-                    username: username
-                }
-            })
-            return user
-        } catch(error) {
-            console.log(error)
-        }
     }
 }

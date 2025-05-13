@@ -11,10 +11,6 @@ const verificationService = new VerificationService(EmailService);
 export const UserService = {
     createUser: async function(data: CreateUser): Promise<IError | ISuccess<string>> {
         const existingUserByUsername = await UserRepositories.findUserByEmail(data.email);
-        if (existingUserByUsername) {
-            return { status: 'error', message: 'User with this username already exists'};
-        }
-
         const existingUserByEmail = await UserRepositories.findUserByEmail(data.email);
         if (existingUserByEmail) {
             return { status: 'error', message: 'User with this email already exists'};
