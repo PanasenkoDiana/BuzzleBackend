@@ -5,6 +5,18 @@ model User {
   profileImage String?
 }
 
+model User_Post {
+  id     Int    @id @default(autoincrement())
+  name   String
+  topic  String
+  tags   String
+  text   String
+  link   String
+  images String
+  views  Int
+  likes  Int
+}
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 

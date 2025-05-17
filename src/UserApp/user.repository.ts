@@ -1,5 +1,5 @@
 import { PrismaClient } from "../prisma/client"
-import { CreateUser } from "./user.types"
+import { CreateUser } from "./user.type"
 
 export const UserRepositories = {
     createUser: async function(data: CreateUser) {

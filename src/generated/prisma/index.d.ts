@@ -18,6 +18,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model User_Post
+ * 
+ */
+export type User_Post = $Result.DefaultSelection<Prisma.$User_PostPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -153,6 +158,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.user_Post`: Exposes CRUD operations for the **User_Post** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more User_Posts
+    * const user_Posts = await prisma.user_Post.findMany()
+    * ```
+    */
+  get user_Post(): Prisma.User_PostDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -593,7 +608,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User'
+    User: 'User',
+    User_Post: 'User_Post'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -612,7 +628,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user"
+      modelProps: "user" | "user_Post"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -687,6 +703,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      User_Post: {
+        payload: Prisma.$User_PostPayload<ExtArgs>
+        fields: Prisma.User_PostFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.User_PostFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.User_PostFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>
+          }
+          findFirst: {
+            args: Prisma.User_PostFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.User_PostFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>
+          }
+          findMany: {
+            args: Prisma.User_PostFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>[]
+          }
+          create: {
+            args: Prisma.User_PostCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>
+          }
+          createMany: {
+            args: Prisma.User_PostCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.User_PostCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>[]
+          }
+          delete: {
+            args: Prisma.User_PostDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>
+          }
+          update: {
+            args: Prisma.User_PostUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>
+          }
+          deleteMany: {
+            args: Prisma.User_PostDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.User_PostUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.User_PostUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>[]
+          }
+          upsert: {
+            args: Prisma.User_PostUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$User_PostPayload>
+          }
+          aggregate: {
+            args: Prisma.User_PostAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUser_Post>
+          }
+          groupBy: {
+            args: Prisma.User_PostGroupByArgs<ExtArgs>
+            result: $Utils.Optional<User_PostGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.User_PostCountArgs<ExtArgs>
+            result: $Utils.Optional<User_PostCountAggregateOutputType> | number
           }
         }
       }
@@ -775,6 +865,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    user_Post?: User_PostOmit
   }
 
   /* Types for Logging */
@@ -1884,6 +1975,1093 @@ export namespace Prisma {
 
 
   /**
+   * Model User_Post
+   */
+
+  export type AggregateUser_Post = {
+    _count: User_PostCountAggregateOutputType | null
+    _avg: User_PostAvgAggregateOutputType | null
+    _sum: User_PostSumAggregateOutputType | null
+    _min: User_PostMinAggregateOutputType | null
+    _max: User_PostMaxAggregateOutputType | null
+  }
+
+  export type User_PostAvgAggregateOutputType = {
+    id: number | null
+    views: number | null
+    likes: number | null
+  }
+
+  export type User_PostSumAggregateOutputType = {
+    id: number | null
+    views: number | null
+    likes: number | null
+  }
+
+  export type User_PostMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    topic: string | null
+    tags: string | null
+    text: string | null
+    link: string | null
+    images: string | null
+    views: number | null
+    likes: number | null
+  }
+
+  export type User_PostMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    topic: string | null
+    tags: string | null
+    text: string | null
+    link: string | null
+    images: string | null
+    views: number | null
+    likes: number | null
+  }
+
+  export type User_PostCountAggregateOutputType = {
+    id: number
+    name: number
+    topic: number
+    tags: number
+    text: number
+    link: number
+    images: number
+    views: number
+    likes: number
+    _all: number
+  }
+
+
+  export type User_PostAvgAggregateInputType = {
+    id?: true
+    views?: true
+    likes?: true
+  }
+
+  export type User_PostSumAggregateInputType = {
+    id?: true
+    views?: true
+    likes?: true
+  }
+
+  export type User_PostMinAggregateInputType = {
+    id?: true
+    name?: true
+    topic?: true
+    tags?: true
+    text?: true
+    link?: true
+    images?: true
+    views?: true
+    likes?: true
+  }
+
+  export type User_PostMaxAggregateInputType = {
+    id?: true
+    name?: true
+    topic?: true
+    tags?: true
+    text?: true
+    link?: true
+    images?: true
+    views?: true
+    likes?: true
+  }
+
+  export type User_PostCountAggregateInputType = {
+    id?: true
+    name?: true
+    topic?: true
+    tags?: true
+    text?: true
+    link?: true
+    images?: true
+    views?: true
+    likes?: true
+    _all?: true
+  }
+
+  export type User_PostAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which User_Post to aggregate.
+     */
+    where?: User_PostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of User_Posts to fetch.
+     */
+    orderBy?: User_PostOrderByWithRelationInput | User_PostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: User_PostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` User_Posts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` User_Posts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned User_Posts
+    **/
+    _count?: true | User_PostCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: User_PostAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: User_PostSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: User_PostMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: User_PostMaxAggregateInputType
+  }
+
+  export type GetUser_PostAggregateType<T extends User_PostAggregateArgs> = {
+        [P in keyof T & keyof AggregateUser_Post]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUser_Post[P]>
+      : GetScalarType<T[P], AggregateUser_Post[P]>
+  }
+
+
+
+
+  export type User_PostGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: User_PostWhereInput
+    orderBy?: User_PostOrderByWithAggregationInput | User_PostOrderByWithAggregationInput[]
+    by: User_PostScalarFieldEnum[] | User_PostScalarFieldEnum
+    having?: User_PostScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: User_PostCountAggregateInputType | true
+    _avg?: User_PostAvgAggregateInputType
+    _sum?: User_PostSumAggregateInputType
+    _min?: User_PostMinAggregateInputType
+    _max?: User_PostMaxAggregateInputType
+  }
+
+  export type User_PostGroupByOutputType = {
+    id: number
+    name: string
+    topic: string
+    tags: string
+    text: string
+    link: string
+    images: string
+    views: number
+    likes: number
+    _count: User_PostCountAggregateOutputType | null
+    _avg: User_PostAvgAggregateOutputType | null
+    _sum: User_PostSumAggregateOutputType | null
+    _min: User_PostMinAggregateOutputType | null
+    _max: User_PostMaxAggregateOutputType | null
+  }
+
+  type GetUser_PostGroupByPayload<T extends User_PostGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<User_PostGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof User_PostGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], User_PostGroupByOutputType[P]>
+            : GetScalarType<T[P], User_PostGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type User_PostSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    topic?: boolean
+    tags?: boolean
+    text?: boolean
+    link?: boolean
+    images?: boolean
+    views?: boolean
+    likes?: boolean
+  }, ExtArgs["result"]["user_Post"]>
+
+  export type User_PostSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    topic?: boolean
+    tags?: boolean
+    text?: boolean
+    link?: boolean
+    images?: boolean
+    views?: boolean
+    likes?: boolean
+  }, ExtArgs["result"]["user_Post"]>
+
+  export type User_PostSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    topic?: boolean
+    tags?: boolean
+    text?: boolean
+    link?: boolean
+    images?: boolean
+    views?: boolean
+    likes?: boolean
+  }, ExtArgs["result"]["user_Post"]>
+
+  export type User_PostSelectScalar = {
+    id?: boolean
+    name?: boolean
+    topic?: boolean
+    tags?: boolean
+    text?: boolean
+    link?: boolean
+    images?: boolean
+    views?: boolean
+    likes?: boolean
+  }
+
+  export type User_PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "topic" | "tags" | "text" | "link" | "images" | "views" | "likes", ExtArgs["result"]["user_Post"]>
+
+  export type $User_PostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "User_Post"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      topic: string
+      tags: string
+      text: string
+      link: string
+      images: string
+      views: number
+      likes: number
+    }, ExtArgs["result"]["user_Post"]>
+    composites: {}
+  }
+
+  type User_PostGetPayload<S extends boolean | null | undefined | User_PostDefaultArgs> = $Result.GetResult<Prisma.$User_PostPayload, S>
+
+  type User_PostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<User_PostFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: User_PostCountAggregateInputType | true
+    }
+
+  export interface User_PostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User_Post'], meta: { name: 'User_Post' } }
+    /**
+     * Find zero or one User_Post that matches the filter.
+     * @param {User_PostFindUniqueArgs} args - Arguments to find a User_Post
+     * @example
+     * // Get one User_Post
+     * const user_Post = await prisma.user_Post.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends User_PostFindUniqueArgs>(args: SelectSubset<T, User_PostFindUniqueArgs<ExtArgs>>): Prisma__User_PostClient<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one User_Post that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {User_PostFindUniqueOrThrowArgs} args - Arguments to find a User_Post
+     * @example
+     * // Get one User_Post
+     * const user_Post = await prisma.user_Post.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends User_PostFindUniqueOrThrowArgs>(args: SelectSubset<T, User_PostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__User_PostClient<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first User_Post that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {User_PostFindFirstArgs} args - Arguments to find a User_Post
+     * @example
+     * // Get one User_Post
+     * const user_Post = await prisma.user_Post.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends User_PostFindFirstArgs>(args?: SelectSubset<T, User_PostFindFirstArgs<ExtArgs>>): Prisma__User_PostClient<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first User_Post that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {User_PostFindFirstOrThrowArgs} args - Arguments to find a User_Post
+     * @example
+     * // Get one User_Post
+     * const user_Post = await prisma.user_Post.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends User_PostFindFirstOrThrowArgs>(args?: SelectSubset<T, User_PostFindFirstOrThrowArgs<ExtArgs>>): Prisma__User_PostClient<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more User_Posts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {User_PostFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all User_Posts
+     * const user_Posts = await prisma.user_Post.findMany()
+     * 
+     * // Get first 10 User_Posts
+     * const user_Posts = await prisma.user_Post.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const user_PostWithIdOnly = await prisma.user_Post.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends User_PostFindManyArgs>(args?: SelectSubset<T, User_PostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a User_Post.
+     * @param {User_PostCreateArgs} args - Arguments to create a User_Post.
+     * @example
+     * // Create one User_Post
+     * const User_Post = await prisma.user_Post.create({
+     *   data: {
+     *     // ... data to create a User_Post
+     *   }
+     * })
+     * 
+     */
+    create<T extends User_PostCreateArgs>(args: SelectSubset<T, User_PostCreateArgs<ExtArgs>>): Prisma__User_PostClient<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many User_Posts.
+     * @param {User_PostCreateManyArgs} args - Arguments to create many User_Posts.
+     * @example
+     * // Create many User_Posts
+     * const user_Post = await prisma.user_Post.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends User_PostCreateManyArgs>(args?: SelectSubset<T, User_PostCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many User_Posts and returns the data saved in the database.
+     * @param {User_PostCreateManyAndReturnArgs} args - Arguments to create many User_Posts.
+     * @example
+     * // Create many User_Posts
+     * const user_Post = await prisma.user_Post.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many User_Posts and only return the `id`
+     * const user_PostWithIdOnly = await prisma.user_Post.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends User_PostCreateManyAndReturnArgs>(args?: SelectSubset<T, User_PostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a User_Post.
+     * @param {User_PostDeleteArgs} args - Arguments to delete one User_Post.
+     * @example
+     * // Delete one User_Post
+     * const User_Post = await prisma.user_Post.delete({
+     *   where: {
+     *     // ... filter to delete one User_Post
+     *   }
+     * })
+     * 
+     */
+    delete<T extends User_PostDeleteArgs>(args: SelectSubset<T, User_PostDeleteArgs<ExtArgs>>): Prisma__User_PostClient<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one User_Post.
+     * @param {User_PostUpdateArgs} args - Arguments to update one User_Post.
+     * @example
+     * // Update one User_Post
+     * const user_Post = await prisma.user_Post.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends User_PostUpdateArgs>(args: SelectSubset<T, User_PostUpdateArgs<ExtArgs>>): Prisma__User_PostClient<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more User_Posts.
+     * @param {User_PostDeleteManyArgs} args - Arguments to filter User_Posts to delete.
+     * @example
+     * // Delete a few User_Posts
+     * const { count } = await prisma.user_Post.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends User_PostDeleteManyArgs>(args?: SelectSubset<T, User_PostDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more User_Posts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {User_PostUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many User_Posts
+     * const user_Post = await prisma.user_Post.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends User_PostUpdateManyArgs>(args: SelectSubset<T, User_PostUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more User_Posts and returns the data updated in the database.
+     * @param {User_PostUpdateManyAndReturnArgs} args - Arguments to update many User_Posts.
+     * @example
+     * // Update many User_Posts
+     * const user_Post = await prisma.user_Post.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more User_Posts and only return the `id`
+     * const user_PostWithIdOnly = await prisma.user_Post.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends User_PostUpdateManyAndReturnArgs>(args: SelectSubset<T, User_PostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one User_Post.
+     * @param {User_PostUpsertArgs} args - Arguments to update or create a User_Post.
+     * @example
+     * // Update or create a User_Post
+     * const user_Post = await prisma.user_Post.upsert({
+     *   create: {
+     *     // ... data to create a User_Post
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the User_Post we want to update
+     *   }
+     * })
+     */
+    upsert<T extends User_PostUpsertArgs>(args: SelectSubset<T, User_PostUpsertArgs<ExtArgs>>): Prisma__User_PostClient<$Result.GetResult<Prisma.$User_PostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of User_Posts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {User_PostCountArgs} args - Arguments to filter User_Posts to count.
+     * @example
+     * // Count the number of User_Posts
+     * const count = await prisma.user_Post.count({
+     *   where: {
+     *     // ... the filter for the User_Posts we want to count
+     *   }
+     * })
+    **/
+    count<T extends User_PostCountArgs>(
+      args?: Subset<T, User_PostCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], User_PostCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a User_Post.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {User_PostAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends User_PostAggregateArgs>(args: Subset<T, User_PostAggregateArgs>): Prisma.PrismaPromise<GetUser_PostAggregateType<T>>
+
+    /**
+     * Group by User_Post.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {User_PostGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends User_PostGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: User_PostGroupByArgs['orderBy'] }
+        : { orderBy?: User_PostGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, User_PostGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUser_PostGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the User_Post model
+   */
+  readonly fields: User_PostFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for User_Post.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__User_PostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the User_Post model
+   */
+  interface User_PostFieldRefs {
+    readonly id: FieldRef<"User_Post", 'Int'>
+    readonly name: FieldRef<"User_Post", 'String'>
+    readonly topic: FieldRef<"User_Post", 'String'>
+    readonly tags: FieldRef<"User_Post", 'String'>
+    readonly text: FieldRef<"User_Post", 'String'>
+    readonly link: FieldRef<"User_Post", 'String'>
+    readonly images: FieldRef<"User_Post", 'String'>
+    readonly views: FieldRef<"User_Post", 'Int'>
+    readonly likes: FieldRef<"User_Post", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * User_Post findUnique
+   */
+  export type User_PostFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * Filter, which User_Post to fetch.
+     */
+    where: User_PostWhereUniqueInput
+  }
+
+  /**
+   * User_Post findUniqueOrThrow
+   */
+  export type User_PostFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * Filter, which User_Post to fetch.
+     */
+    where: User_PostWhereUniqueInput
+  }
+
+  /**
+   * User_Post findFirst
+   */
+  export type User_PostFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * Filter, which User_Post to fetch.
+     */
+    where?: User_PostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of User_Posts to fetch.
+     */
+    orderBy?: User_PostOrderByWithRelationInput | User_PostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for User_Posts.
+     */
+    cursor?: User_PostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` User_Posts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` User_Posts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of User_Posts.
+     */
+    distinct?: User_PostScalarFieldEnum | User_PostScalarFieldEnum[]
+  }
+
+  /**
+   * User_Post findFirstOrThrow
+   */
+  export type User_PostFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * Filter, which User_Post to fetch.
+     */
+    where?: User_PostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of User_Posts to fetch.
+     */
+    orderBy?: User_PostOrderByWithRelationInput | User_PostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for User_Posts.
+     */
+    cursor?: User_PostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` User_Posts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` User_Posts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of User_Posts.
+     */
+    distinct?: User_PostScalarFieldEnum | User_PostScalarFieldEnum[]
+  }
+
+  /**
+   * User_Post findMany
+   */
+  export type User_PostFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * Filter, which User_Posts to fetch.
+     */
+    where?: User_PostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of User_Posts to fetch.
+     */
+    orderBy?: User_PostOrderByWithRelationInput | User_PostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing User_Posts.
+     */
+    cursor?: User_PostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` User_Posts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` User_Posts.
+     */
+    skip?: number
+    distinct?: User_PostScalarFieldEnum | User_PostScalarFieldEnum[]
+  }
+
+  /**
+   * User_Post create
+   */
+  export type User_PostCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * The data needed to create a User_Post.
+     */
+    data: XOR<User_PostCreateInput, User_PostUncheckedCreateInput>
+  }
+
+  /**
+   * User_Post createMany
+   */
+  export type User_PostCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many User_Posts.
+     */
+    data: User_PostCreateManyInput | User_PostCreateManyInput[]
+  }
+
+  /**
+   * User_Post createManyAndReturn
+   */
+  export type User_PostCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * The data used to create many User_Posts.
+     */
+    data: User_PostCreateManyInput | User_PostCreateManyInput[]
+  }
+
+  /**
+   * User_Post update
+   */
+  export type User_PostUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * The data needed to update a User_Post.
+     */
+    data: XOR<User_PostUpdateInput, User_PostUncheckedUpdateInput>
+    /**
+     * Choose, which User_Post to update.
+     */
+    where: User_PostWhereUniqueInput
+  }
+
+  /**
+   * User_Post updateMany
+   */
+  export type User_PostUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update User_Posts.
+     */
+    data: XOR<User_PostUpdateManyMutationInput, User_PostUncheckedUpdateManyInput>
+    /**
+     * Filter which User_Posts to update
+     */
+    where?: User_PostWhereInput
+    /**
+     * Limit how many User_Posts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * User_Post updateManyAndReturn
+   */
+  export type User_PostUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * The data used to update User_Posts.
+     */
+    data: XOR<User_PostUpdateManyMutationInput, User_PostUncheckedUpdateManyInput>
+    /**
+     * Filter which User_Posts to update
+     */
+    where?: User_PostWhereInput
+    /**
+     * Limit how many User_Posts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * User_Post upsert
+   */
+  export type User_PostUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * The filter to search for the User_Post to update in case it exists.
+     */
+    where: User_PostWhereUniqueInput
+    /**
+     * In case the User_Post found by the `where` argument doesn't exist, create a new User_Post with this data.
+     */
+    create: XOR<User_PostCreateInput, User_PostUncheckedCreateInput>
+    /**
+     * In case the User_Post was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<User_PostUpdateInput, User_PostUncheckedUpdateInput>
+  }
+
+  /**
+   * User_Post delete
+   */
+  export type User_PostDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+    /**
+     * Filter which User_Post to delete.
+     */
+    where: User_PostWhereUniqueInput
+  }
+
+  /**
+   * User_Post deleteMany
+   */
+  export type User_PostDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which User_Posts to delete
+     */
+    where?: User_PostWhereInput
+    /**
+     * Limit how many User_Posts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * User_Post without action
+   */
+  export type User_PostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Post
+     */
+    select?: User_PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Post
+     */
+    omit?: User_PostOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -1902,6 +3080,21 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const User_PostScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    topic: 'topic',
+    tags: 'tags',
+    text: 'text',
+    link: 'link',
+    images: 'images',
+    views: 'views',
+    likes: 'likes'
+  };
+
+  export type User_PostScalarFieldEnum = (typeof User_PostScalarFieldEnum)[keyof typeof User_PostScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -1998,6 +3191,80 @@ export namespace Prisma {
     profileImage?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
+  export type User_PostWhereInput = {
+    AND?: User_PostWhereInput | User_PostWhereInput[]
+    OR?: User_PostWhereInput[]
+    NOT?: User_PostWhereInput | User_PostWhereInput[]
+    id?: IntFilter<"User_Post"> | number
+    name?: StringFilter<"User_Post"> | string
+    topic?: StringFilter<"User_Post"> | string
+    tags?: StringFilter<"User_Post"> | string
+    text?: StringFilter<"User_Post"> | string
+    link?: StringFilter<"User_Post"> | string
+    images?: StringFilter<"User_Post"> | string
+    views?: IntFilter<"User_Post"> | number
+    likes?: IntFilter<"User_Post"> | number
+  }
+
+  export type User_PostOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    topic?: SortOrder
+    tags?: SortOrder
+    text?: SortOrder
+    link?: SortOrder
+    images?: SortOrder
+    views?: SortOrder
+    likes?: SortOrder
+  }
+
+  export type User_PostWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: User_PostWhereInput | User_PostWhereInput[]
+    OR?: User_PostWhereInput[]
+    NOT?: User_PostWhereInput | User_PostWhereInput[]
+    name?: StringFilter<"User_Post"> | string
+    topic?: StringFilter<"User_Post"> | string
+    tags?: StringFilter<"User_Post"> | string
+    text?: StringFilter<"User_Post"> | string
+    link?: StringFilter<"User_Post"> | string
+    images?: StringFilter<"User_Post"> | string
+    views?: IntFilter<"User_Post"> | number
+    likes?: IntFilter<"User_Post"> | number
+  }, "id">
+
+  export type User_PostOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    topic?: SortOrder
+    tags?: SortOrder
+    text?: SortOrder
+    link?: SortOrder
+    images?: SortOrder
+    views?: SortOrder
+    likes?: SortOrder
+    _count?: User_PostCountOrderByAggregateInput
+    _avg?: User_PostAvgOrderByAggregateInput
+    _max?: User_PostMaxOrderByAggregateInput
+    _min?: User_PostMinOrderByAggregateInput
+    _sum?: User_PostSumOrderByAggregateInput
+  }
+
+  export type User_PostScalarWhereWithAggregatesInput = {
+    AND?: User_PostScalarWhereWithAggregatesInput | User_PostScalarWhereWithAggregatesInput[]
+    OR?: User_PostScalarWhereWithAggregatesInput[]
+    NOT?: User_PostScalarWhereWithAggregatesInput | User_PostScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"User_Post"> | number
+    name?: StringWithAggregatesFilter<"User_Post"> | string
+    topic?: StringWithAggregatesFilter<"User_Post"> | string
+    tags?: StringWithAggregatesFilter<"User_Post"> | string
+    text?: StringWithAggregatesFilter<"User_Post"> | string
+    link?: StringWithAggregatesFilter<"User_Post"> | string
+    images?: StringWithAggregatesFilter<"User_Post"> | string
+    views?: IntWithAggregatesFilter<"User_Post"> | number
+    likes?: IntWithAggregatesFilter<"User_Post"> | number
+  }
+
   export type UserCreateInput = {
     email: string
     password: string
@@ -2042,6 +3309,87 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type User_PostCreateInput = {
+    name: string
+    topic: string
+    tags: string
+    text: string
+    link: string
+    images: string
+    views: number
+    likes: number
+  }
+
+  export type User_PostUncheckedCreateInput = {
+    id?: number
+    name: string
+    topic: string
+    tags: string
+    text: string
+    link: string
+    images: string
+    views: number
+    likes: number
+  }
+
+  export type User_PostUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    topic?: StringFieldUpdateOperationsInput | string
+    tags?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    link?: StringFieldUpdateOperationsInput | string
+    images?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
+    likes?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type User_PostUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    topic?: StringFieldUpdateOperationsInput | string
+    tags?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    link?: StringFieldUpdateOperationsInput | string
+    images?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
+    likes?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type User_PostCreateManyInput = {
+    id?: number
+    name: string
+    topic: string
+    tags: string
+    text: string
+    link: string
+    images: string
+    views: number
+    likes: number
+  }
+
+  export type User_PostUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    topic?: StringFieldUpdateOperationsInput | string
+    tags?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    link?: StringFieldUpdateOperationsInput | string
+    images?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
+    likes?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type User_PostUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    topic?: StringFieldUpdateOperationsInput | string
+    tags?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    link?: StringFieldUpdateOperationsInput | string
+    images?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
+    likes?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -2165,6 +3513,54 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type User_PostCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    topic?: SortOrder
+    tags?: SortOrder
+    text?: SortOrder
+    link?: SortOrder
+    images?: SortOrder
+    views?: SortOrder
+    likes?: SortOrder
+  }
+
+  export type User_PostAvgOrderByAggregateInput = {
+    id?: SortOrder
+    views?: SortOrder
+    likes?: SortOrder
+  }
+
+  export type User_PostMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    topic?: SortOrder
+    tags?: SortOrder
+    text?: SortOrder
+    link?: SortOrder
+    images?: SortOrder
+    views?: SortOrder
+    likes?: SortOrder
+  }
+
+  export type User_PostMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    topic?: SortOrder
+    tags?: SortOrder
+    text?: SortOrder
+    link?: SortOrder
+    images?: SortOrder
+    views?: SortOrder
+    likes?: SortOrder
+  }
+
+  export type User_PostSumOrderByAggregateInput = {
+    id?: SortOrder
+    views?: SortOrder
+    likes?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {

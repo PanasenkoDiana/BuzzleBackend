@@ -1,5 +1,5 @@
-import { CreateUser, IError, ISuccess, User } from "./user.types";
-import { UserRepositories } from "./user.repositories";
+import { CreateUser, IError, ISuccess, User } from "./user.type";
+import { UserRepositories } from "./user.repository";
 import { sign } from "jsonwebtoken";
 import { compare, hash } from "bcryptjs";
 import { SECRET_KEY } from "../config/token";

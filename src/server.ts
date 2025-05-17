@@ -1,5 +1,5 @@
 import express from 'express'
-import userRouter from './UserApp/user.routers'
+import userRouter from './UserApp/user.router'
 import cors from 'cors'
 import dotenv from 'dotenv';
 
