@@ -1,11 +1,11 @@
 model User_Post {
-    id     Int    @id @default(autoincrement())
-    name   String
-    topic  String?
-    tags   String?
-    text   String
-    link   String?
-    images String?
-    views  Int?
-    likes  Int?
+  id     Int      @id @default(autoincrement())
+  name   String
+  topic  String?
+  tags   Tag[]
+  text   String?
+  link   String?
+  images Images[]
+  views  Int?
+  likes  Int?
 }
