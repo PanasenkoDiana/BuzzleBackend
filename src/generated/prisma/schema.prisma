@@ -1,3 +1,11 @@
+model Image {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  User_Post   User_Post? @relation(fields: [user_PostId], references: [id])
+  user_PostId Int?
+}
+
 model Tag {
   id    Int         @id @default(autoincrement())
   name  String      @unique
@@ -18,7 +26,7 @@ model User_Post {
   tags   Tag[]
   text   String?
   link   String?
-  images String?
+  images Image[]
   views  Int?
   likes  Int?
 }

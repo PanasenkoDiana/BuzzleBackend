@@ -4,7 +4,8 @@ import { Request, Response } from "express";
 export const userPostController = {
 	createPost: async function (req: Request, res: Response) {
 		const data = req.body;
-		const result = await userPostService.createPost(data);
+		console.log(data)
+		const result = await userPostService.createPost(data, data.images)
 		res.json(result);
 	},
 	deletePost: async function (req: Request, res: Response) {

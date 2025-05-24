@@ -1,7 +1,0 @@
-model Images {
-  id          Int        @id @default(autoincrement())
-  name        String // Название файла
-  path        String
-  User_Post   User_Post? @relation(fields: [user_PostId], references: [id])
-  user_PostId Int?
-}

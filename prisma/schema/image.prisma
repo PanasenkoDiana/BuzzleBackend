@@ -1,0 +1,7 @@
+model Image {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  User_Post   User_Post? @relation(fields: [user_PostId], references: [id])
+  user_PostId Int?
+}

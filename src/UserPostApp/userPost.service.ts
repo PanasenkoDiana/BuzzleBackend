@@ -1,106 +1,85 @@
+import { Tag } from "../generated/prisma";
 import { PrismaClient } from "../prisma/client";
+import { error, success } from "../tools/result";
 import { userPostRepository } from "./userPost.repository";
-import { CreateUserPost, UserPost } from "./userPost.type";
+import { CreateUserPost, ImageCreateMany, UpdateUserPost, UserPost, Image } from "./userPost.type";
+import { base64ToImage } from "../tools/base64ToImage";
 
-import fs from "fs";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
 
-export const userPostService = {
-	createPost: async function (data: CreateUserPost) {
-		function base64ToImage(base64: string): string {
-			const matches = base64.match(/^data:(image\/\w+);base64,(.+)$/);
-			if (!matches) {
-				throw new Error("Неверный формат base64 изображения");
-			}
+export const userPostService = {    
+    createPost: async function (data: CreateUserPost, images: string[]) {
+        const fileNames = Promise.all(images.map((base64) => base64ToImage(base64)))
 
-			const mimeType = matches[1];
-			const extension = mimeType.split("/")[1];
-			const imageData = matches[2];
+        const imagesData = (await fileNames).filter((img): img is Image => 'name' in img);
 
-			const buffer = Buffer.from(imageData, "base64");
-			const fileName = `${uuidv4()}.${extension}`;
+        console.log(imagesData)
 
-			const mediaDir = path.join(__dirname, "..", "..", "media");
-			const filePath = path.join(mediaDir, fileName);
+        const newPost = await userPostRepository.createPost(data, imagesData);
+        return success<UserPost>(newPost);
+    },
 
-			fs.writeFileSync(filePath, buffer);
+    deletePost: async function (id: number) {
+        const deletedPost = await userPostRepository.deletePost(id);
+        return deletedPost;
+    },
 
-			return `../../media/${fileName}`;
-		}
+    updatePost: async function (id: number, data: UpdateUserPost): Promise<UserPost> {
+        try {
+            const imagesArray = Array.isArray(data.images) ? data.images : [];
+            const tagsArray = Array.isArray(data.tags) ? data.tags : [];
 
-		const savedPaths: string[] = Array.isArray(data.images)
-			? data.images.map((base64) => base64ToImage(base64))
-			: [];
+            const updatedPost = await PrismaClient.user_Post.update({
+                where: { id },
+                data: {
+                    name: data.name,
+                    topic: data.topic ?? null,
+                    text: data.text ?? null,
+                    link: data.link ?? null,
+                    views: data.views ?? 0,
+                    likes: data.likes ?? 0,
+                    images:
+                        imagesArray.length > 0
+                            ? {
+                                  deleteMany: {},
+                                  createMany: {
+                                      data: imagesArray.map((path) => ({
+                                          name: path.split("/").pop()!,
+                                          path,
+                                      })),
+                                  },
+                              }
+                            : undefined,
+                    tags:
+                        tagsArray.length > 0
+                            ? {
+                                  set: [],
+                                  connectOrCreate: tagsArray.map((tag: Tag) => ({
+                                      where: { name: tag.name },
+                                      create: { name: tag.name },
+                                  })),
+                              }
+                            : undefined,
+                },
+                include: { tags: true, images: true },
+            });
 
-		const newData = {
-			...data,
-			images: savedPaths,
-		};
-		let newPost = userPostRepository.createPost(data);
-		return newPost;
-	},
-	deletePost: async function (id: number) {
-		let deletedPost = userPostRepository.deletePost(id);
+            return updatedPost;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
 
-		return deletedPost;
-	},
-	updatePost: async function (
-		id: number,
-		data: CreateUserPost
-	): Promise<UserPost> {
-		try {
-			const imagesArray = Array.isArray(data.images) ? data.images : [];
-			const updatedPost = await PrismaClient.user_Post.update({
-				where: { id },
-				data: {
-					name: data.name,
-					topic: data.topic ?? null,
-					text: data.text ?? null,
-					link: data.link ?? null,
-					images:
-						imagesArray.length > 0
-							? {
-									deleteMany: {},
-									createMany: {
-										data: imagesArray.map((path) => ({
-											name: path.split("/").pop()!,
-											path: path,
-										})),
-									},
-							  }
-							: undefined,
-					views: data.views ?? 0,
-					likes: data.likes ?? 0,
+    getPostById: async function (id: number) {
+        let post = await userPostRepository.getPostById(id);
+        return post;
+    },
 
-					tags: data.tags
-						? {
-								set: [],
-								connectOrCreate: data.tags.map((tagName) => ({
-									where: { name: tagName },
-									create: { name: tagName },
-								})),
-						  }
-						: undefined,
-				},
-				include: { tags: true },
-			});
+    getAllPosts: async function () {
+        let allPosts = await userPostRepository.getAllPosts();
 
-			return updatedPost;
-		} catch (error) {
-			console.log(error);
-			throw error;
-		}
-	},
+        if (!allPosts) return error("123123");
 
-	getPostById: async function (id: number) {
-		let post = userPostRepository.getPostById(id);
-
-		return post;
-	},
-	getAllPosts: async function () {
-		let allPosts = userPostRepository.getAllPosts();
-
-		return allPosts;
-	},
+        return success<UserPost[]>(allPosts);
+    },
 };
