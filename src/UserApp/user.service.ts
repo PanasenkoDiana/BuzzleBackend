@@ -1,4 +1,4 @@
-import { CreateUser, IError, ISuccess, secondRegister, User } from "./user.type";
+import { changeUserPartOne, changeUserPartTwo, CreateUser, IError, ISuccess, secondRegister, User } from "./user.type";
 import { UserRepositories } from "./user.repository";
 import { sign } from "jsonwebtoken";
 import { compare, hash } from "bcryptjs";
@@ -73,5 +73,23 @@ export const UserService = {
         }
         
         return { status: 'success', data: user };
-    }
+    },
+
+    changeUserPartOne: async function(data: changeUserPartOne, id: number): Promise<IError | ISuccess<User>> {
+        const user = await UserRepositories.changeUserPartOne(data, id)
+        if (!user) {
+            return { status: 'error', message: 'User not found' };
+        }
+        
+        return { status: 'success', data: user };
+    },
+
+    changeUserPartTwo: async function(data: changeUserPartTwo, id: number): Promise<IError | ISuccess<User>> {
+        const user = await UserRepositories.changeUserPartTwo(data, id)
+        if (!user) {
+            return { status: 'error', message: 'User not found' };
+        }
+        
+        return { status: 'success', data: user };
+    },
 };

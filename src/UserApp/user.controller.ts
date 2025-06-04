@@ -34,5 +34,22 @@ export const UserController = {
         const id = req.params.id
         const data = req.body
         const result = await UserService.secondRegister(data, +id)
-    }
+
+        res.json(result)
+
+    },
+    changeUserPartOne: async function(req: Request, res: Response) {
+        const id = req.params.id
+        const data = req.body
+        const result = await UserService.changeUserPartOne(data, +id)
+
+        res.json(result)
+    },
+    changeUserPartTwo: async function(req: Request, res: Response) {
+        const id = req.params.id
+        const data = req.body
+        const result = await UserService.changeUserPartTwo(data, +id)
+
+        res.json(result)
+    },
 }
