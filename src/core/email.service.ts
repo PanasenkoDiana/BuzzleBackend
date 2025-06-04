@@ -29,10 +29,12 @@ export const EmailService = {
     },
 
     generateCode: function(length: number) {
-        return crypto.randomBytes(length)
-            .toString('base64')
-            .replace(/[^A-Z0-9]/gi, '')
-            .slice(0, length)
-            .toUpperCase();
+        const digits = '0123456789';
+        const bytes = crypto.randomBytes(length);
+        let code = '';
+        for (let i = 0; i < length; i++) {
+            code += digits[bytes[i] % 10];
+        }
+        return code;
     }
 };
