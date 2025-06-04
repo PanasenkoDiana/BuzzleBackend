@@ -1,5 +1,5 @@
 import { PrismaClient } from "../prisma/client"
-import { CreateUser } from "./user.type"
+import { changeUserPartOne, changeUserPartTwo, CreateUser, secondRegister } from "./user.type"
 
 export const UserRepositories = {
     createUser: async function(data: CreateUser) {
@@ -35,5 +35,50 @@ export const UserRepositories = {
         } catch(error) {
             console.log(error)
         }
-    }
+    },
+    secondRegister: async function(data: secondRegister, id: number){
+        try {
+            const user= await PrismaClient.user.update({
+                where: { id },
+                data: {
+                    name: data.name,
+                    surname: data.surname,
+                    username: data.surname
+                },
+            })
+            return user
+        } catch(error) {
+            console.log(error)
+        }
+    },
+    changeUserPartOne: async function(data: changeUserPartOne, id: number){
+        try {
+            const user= await PrismaClient.user.update({
+                where: { id },
+                data: {
+                    profileImage: data.profileImage
+                },
+            })
+            return user
+        } catch(error) {
+            console.log(error)
+        }
+    },
+    changeUserPartTwo: async function(data: changeUserPartTwo, id: number){
+        try {
+            const user= await PrismaClient.user.update({
+                where: { id },
+                data: {
+                    name: data.name,
+                    surname: data.surname,
+                    email: data.email,
+                    username: data.username,
+                    password: data.password,
+                },
+            })
+            return user
+        } catch(error) {
+            console.log(error)
+        }
+    },
 }

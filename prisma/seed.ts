@@ -10,7 +10,7 @@ async function main() {
         '#гармонія',
         '#музика',
         '#фільми',
-        '#подорожі'
+        '#подорожі',
 ];
 for (const tag of tags) {
     await PrismaClient.tag.create({
