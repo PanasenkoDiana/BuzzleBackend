@@ -12,3 +12,4 @@ export interface ISuccess<T>{
 
 export type User = Prisma.UserGetPayload<{}>
 export type CreateUser = Prisma.UserCreateInput
+export type secondRegister = Pick<User, 'name' | 'surname'>

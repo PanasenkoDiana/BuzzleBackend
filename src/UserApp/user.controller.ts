@@ -29,5 +29,10 @@ export const UserController = {
         const result = await UserService.verifyUser(email, code)
 
         res.json(result)
+    },
+    secondRegister: async function(req: Request, res: Response) {
+        const id = req.params.id
+        const data = req.body
+        const result = await UserService.secondRegister(data, +id)
     }
 }

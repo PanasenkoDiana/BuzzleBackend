@@ -4,3 +4,7 @@ package-lock.json
 db/
 migrations/
 .vscode
+./meedia
+/media/
+media
+/media
