@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.8.2
- * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+ * Prisma Client JS version: 6.9.0
+ * Query Engine version: 81e4af48011447c3cc503a190e86995b66d2a28e
  */
 Prisma.prismaVersion = {
-  client: "6.8.2",
-  engine: "2060c79ba17c6bb9f5823312b6f6b7f4a845738e"
+  client: "6.9.0",
+  engine: "81e4af48011447c3cc503a190e86995b66d2a28e"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -117,6 +117,13 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.FriendRequestScalarFieldEnum = {
+  id: 'id',
+  fromId: 'fromId',
+  toId: 'toId',
+  status: 'status'
+};
+
 exports.Prisma.ImageScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -135,7 +142,8 @@ exports.Prisma.UserScalarFieldEnum = {
   profileImage: 'profileImage',
   name: 'name',
   surname: 'surname',
-  username: 'username'
+  username: 'username',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.User_PostScalarFieldEnum = {
@@ -157,9 +165,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.FriendRequestStatus = exports.$Enums.FriendRequestStatus = {
+  pending: 'pending',
+  accepted: 'accepted'
+};
 
 exports.Prisma.ModelName = {
+  FriendRequest: 'FriendRequest',
   Image: 'Image',
   Tag: 'Tag',
   User: 'User',

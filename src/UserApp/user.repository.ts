@@ -42,8 +42,7 @@ export const UserRepositories = {
                 where: { id },
                 data: {
                     name: data.name,
-                    surname: data.surname,
-                    username: data.surname
+                    surname: data.surname
                 },
             })
             return user
