@@ -13,6 +13,10 @@ export const friendRepository = {
 					from: { connect: { id: data.fromId } },
 					to: { connect: { id: data.toId } },
 				},
+				include: {
+					from: true,
+					to: true
+				},
 				omit: {
 					id: true,
 				},
@@ -37,6 +41,10 @@ export const friendRepository = {
 				},
 				data: {
 					status: "accepted",
+				},
+				include: {
+					from: true,
+					to: true
 				},
 				omit: {
 					id: true,
@@ -64,6 +72,35 @@ export const friendRepository = {
             throw err
 		}
 	},
+    getAllFriends: async function (id: number): Promise<IFriendRequest[]> {
+        try {
+            const fromMyRequests = await PrismaClient.friendRequest.findMany({
+                where: {
+                    status: "accepted",
+                    from: {id: id}
+                },
+				include: {
+					to: true,
+					from: true
+				},
+            })
+			const toMeRequests = await PrismaClient.friendRequest.findMany({
+                where: {
+                    status: "accepted",
+                    to: {id: id}
+                },
+				include: {
+					to: true,
+					from: true
+				},
+            })
+			const friends = [...fromMyRequests, ...toMeRequests]
+            return friends
+		} catch (err) {
+			console.log(err);
+            throw err
+		}
+    },
     getRequests: async function (id: number): Promise<IGetRequest[]> {
         try {
             const requests = await PrismaClient.friendRequest.findMany({
@@ -103,5 +140,22 @@ export const friendRepository = {
 			console.log(err);
             throw err
 		}
-    }
+    },
+	getIdsFromUsernames: async function (usernames: string[]): Promise<number[]> {
+		try {
+			const users = await Promise.all(
+				usernames.map((username) =>
+					PrismaClient.user.findUnique({
+						where: { username },
+						select: { id: true }
+					})
+				)
+			);
+	
+			return users.map(user => user!.id);
+		} catch (err) {
+			console.log(err);
+			throw err
+		}
+	}
 };

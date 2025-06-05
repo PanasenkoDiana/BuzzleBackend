@@ -17,13 +17,18 @@ export const friendController = {
         const result = await friendService.cancelRequest(data)
         res.json(result)
     },
+    getAllFriends: async function (req: Request, res: Response) {
+        const id: number = Number(res.locals.userId)
+        const result = await friendService.getAllFriends(id)
+        res.json(result)
+    },
     getRequests: async function (req: Request, res: Response) {
-        const id = res.locals.userId
+        const id: number = Number(res.locals.userId)
         const result = await friendService.getRequests(id)
         res.json(result)
     },
     getMyRequests: async function (req: Request, res: Response) {
-        const id = res.locals.userId
+        const id: number = Number(res.locals.userId)
         const result = await friendService.getMyRequests(id)
         res.json(result)
     },

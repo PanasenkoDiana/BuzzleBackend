@@ -5,12 +5,9 @@ model User {
   profileImage String?
   name         String?
   surname      String?
-  username     String?
+  username     String   @unique
   createdAt    DateTime @default(now())
 
   sentRequests     FriendRequest[] @relation("SentRequests")
   receivedRequests FriendRequest[] @relation("ReceivedRequests")
-
-  friends  User[] @relation("UserFriends")
-  friendOf User[] @relation("UserFriends")
 }

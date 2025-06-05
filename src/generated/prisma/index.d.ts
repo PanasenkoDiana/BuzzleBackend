@@ -1283,15 +1283,11 @@ export namespace Prisma {
   export type UserCountOutputType = {
     sentRequests: number
     receivedRequests: number
-    friends: number
-    friendOf: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sentRequests?: boolean | UserCountOutputTypeCountSentRequestsArgs
     receivedRequests?: boolean | UserCountOutputTypeCountReceivedRequestsArgs
-    friends?: boolean | UserCountOutputTypeCountFriendsArgs
-    friendOf?: boolean | UserCountOutputTypeCountFriendOfArgs
   }
 
   // Custom InputTypes
@@ -1317,20 +1313,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountReceivedRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FriendRequestWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountFriendsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountFriendOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
   }
 
 
@@ -4811,7 +4793,7 @@ export namespace Prisma {
     profileImage: string | null
     name: string | null
     surname: string | null
-    username: string | null
+    username: string
     createdAt: Date
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
@@ -4845,8 +4827,6 @@ export namespace Prisma {
     createdAt?: boolean
     sentRequests?: boolean | User$sentRequestsArgs<ExtArgs>
     receivedRequests?: boolean | User$receivedRequestsArgs<ExtArgs>
-    friends?: boolean | User$friendsArgs<ExtArgs>
-    friendOf?: boolean | User$friendOfArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4887,8 +4867,6 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sentRequests?: boolean | User$sentRequestsArgs<ExtArgs>
     receivedRequests?: boolean | User$receivedRequestsArgs<ExtArgs>
-    friends?: boolean | User$friendsArgs<ExtArgs>
-    friendOf?: boolean | User$friendOfArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4899,8 +4877,6 @@ export namespace Prisma {
     objects: {
       sentRequests: Prisma.$FriendRequestPayload<ExtArgs>[]
       receivedRequests: Prisma.$FriendRequestPayload<ExtArgs>[]
-      friends: Prisma.$UserPayload<ExtArgs>[]
-      friendOf: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4909,7 +4885,7 @@ export namespace Prisma {
       profileImage: string | null
       name: string | null
       surname: string | null
-      username: string | null
+      username: string
       createdAt: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -5307,8 +5283,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     sentRequests<T extends User$sentRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$sentRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FriendRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     receivedRequests<T extends User$receivedRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FriendRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    friends<T extends User$friendsArgs<ExtArgs> = {}>(args?: Subset<T, User$friendsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    friendOf<T extends User$friendOfArgs<ExtArgs> = {}>(args?: Subset<T, User$friendOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5777,54 +5751,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FriendRequestScalarFieldEnum | FriendRequestScalarFieldEnum[]
-  }
-
-  /**
-   * User.friends
-   */
-  export type User$friendsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-  /**
-   * User.friendOf
-   */
-  export type User$friendOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -7289,12 +7215,10 @@ export namespace Prisma {
     profileImage?: StringNullableFilter<"User"> | string | null
     name?: StringNullableFilter<"User"> | string | null
     surname?: StringNullableFilter<"User"> | string | null
-    username?: StringNullableFilter<"User"> | string | null
+    username?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     sentRequests?: FriendRequestListRelationFilter
     receivedRequests?: FriendRequestListRelationFilter
-    friends?: UserListRelationFilter
-    friendOf?: UserListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -7304,17 +7228,16 @@ export namespace Prisma {
     profileImage?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     surname?: SortOrderInput | SortOrder
-    username?: SortOrderInput | SortOrder
+    username?: SortOrder
     createdAt?: SortOrder
     sentRequests?: FriendRequestOrderByRelationAggregateInput
     receivedRequests?: FriendRequestOrderByRelationAggregateInput
-    friends?: UserOrderByRelationAggregateInput
-    friendOf?: UserOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     email?: string
+    username?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -7322,13 +7245,10 @@ export namespace Prisma {
     profileImage?: StringNullableFilter<"User"> | string | null
     name?: StringNullableFilter<"User"> | string | null
     surname?: StringNullableFilter<"User"> | string | null
-    username?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     sentRequests?: FriendRequestListRelationFilter
     receivedRequests?: FriendRequestListRelationFilter
-    friends?: UserListRelationFilter
-    friendOf?: UserListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "username">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -7337,7 +7257,7 @@ export namespace Prisma {
     profileImage?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     surname?: SortOrderInput | SortOrder
-    username?: SortOrderInput | SortOrder
+    username?: SortOrder
     createdAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
@@ -7356,7 +7276,7 @@ export namespace Prisma {
     profileImage?: StringNullableWithAggregatesFilter<"User"> | string | null
     name?: StringNullableWithAggregatesFilter<"User"> | string | null
     surname?: StringNullableWithAggregatesFilter<"User"> | string | null
-    username?: StringNullableWithAggregatesFilter<"User"> | string | null
+    username?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
@@ -7554,12 +7474,10 @@ export namespace Prisma {
     profileImage?: string | null
     name?: string | null
     surname?: string | null
-    username?: string | null
+    username: string
     createdAt?: Date | string
     sentRequests?: FriendRequestCreateNestedManyWithoutFromInput
     receivedRequests?: FriendRequestCreateNestedManyWithoutToInput
-    friends?: UserCreateNestedManyWithoutFriendOfInput
-    friendOf?: UserCreateNestedManyWithoutFriendsInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -7569,12 +7487,10 @@ export namespace Prisma {
     profileImage?: string | null
     name?: string | null
     surname?: string | null
-    username?: string | null
+    username: string
     createdAt?: Date | string
     sentRequests?: FriendRequestUncheckedCreateNestedManyWithoutFromInput
     receivedRequests?: FriendRequestUncheckedCreateNestedManyWithoutToInput
-    friends?: UserUncheckedCreateNestedManyWithoutFriendOfInput
-    friendOf?: UserUncheckedCreateNestedManyWithoutFriendsInput
   }
 
   export type UserUpdateInput = {
@@ -7583,12 +7499,10 @@ export namespace Prisma {
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sentRequests?: FriendRequestUpdateManyWithoutFromNestedInput
     receivedRequests?: FriendRequestUpdateManyWithoutToNestedInput
-    friends?: UserUpdateManyWithoutFriendOfNestedInput
-    friendOf?: UserUpdateManyWithoutFriendsNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -7598,12 +7512,10 @@ export namespace Prisma {
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sentRequests?: FriendRequestUncheckedUpdateManyWithoutFromNestedInput
     receivedRequests?: FriendRequestUncheckedUpdateManyWithoutToNestedInput
-    friends?: UserUncheckedUpdateManyWithoutFriendOfNestedInput
-    friendOf?: UserUncheckedUpdateManyWithoutFriendsNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -7613,7 +7525,7 @@ export namespace Prisma {
     profileImage?: string | null
     name?: string | null
     surname?: string | null
-    username?: string | null
+    username: string
     createdAt?: Date | string
   }
 
@@ -7623,7 +7535,7 @@ export namespace Prisma {
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7634,7 +7546,7 @@ export namespace Prisma {
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7960,17 +7872,7 @@ export namespace Prisma {
     none?: FriendRequestWhereInput
   }
 
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
-  }
-
   export type FriendRequestOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -8228,18 +8130,6 @@ export namespace Prisma {
     connect?: FriendRequestWhereUniqueInput | FriendRequestWhereUniqueInput[]
   }
 
-  export type UserCreateNestedManyWithoutFriendOfInput = {
-    create?: XOR<UserCreateWithoutFriendOfInput, UserUncheckedCreateWithoutFriendOfInput> | UserCreateWithoutFriendOfInput[] | UserUncheckedCreateWithoutFriendOfInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutFriendOfInput | UserCreateOrConnectWithoutFriendOfInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-  }
-
-  export type UserCreateNestedManyWithoutFriendsInput = {
-    create?: XOR<UserCreateWithoutFriendsInput, UserUncheckedCreateWithoutFriendsInput> | UserCreateWithoutFriendsInput[] | UserUncheckedCreateWithoutFriendsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutFriendsInput | UserCreateOrConnectWithoutFriendsInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-  }
-
   export type FriendRequestUncheckedCreateNestedManyWithoutFromInput = {
     create?: XOR<FriendRequestCreateWithoutFromInput, FriendRequestUncheckedCreateWithoutFromInput> | FriendRequestCreateWithoutFromInput[] | FriendRequestUncheckedCreateWithoutFromInput[]
     connectOrCreate?: FriendRequestCreateOrConnectWithoutFromInput | FriendRequestCreateOrConnectWithoutFromInput[]
@@ -8252,18 +8142,6 @@ export namespace Prisma {
     connectOrCreate?: FriendRequestCreateOrConnectWithoutToInput | FriendRequestCreateOrConnectWithoutToInput[]
     createMany?: FriendRequestCreateManyToInputEnvelope
     connect?: FriendRequestWhereUniqueInput | FriendRequestWhereUniqueInput[]
-  }
-
-  export type UserUncheckedCreateNestedManyWithoutFriendOfInput = {
-    create?: XOR<UserCreateWithoutFriendOfInput, UserUncheckedCreateWithoutFriendOfInput> | UserCreateWithoutFriendOfInput[] | UserUncheckedCreateWithoutFriendOfInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutFriendOfInput | UserCreateOrConnectWithoutFriendOfInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-  }
-
-  export type UserUncheckedCreateNestedManyWithoutFriendsInput = {
-    create?: XOR<UserCreateWithoutFriendsInput, UserUncheckedCreateWithoutFriendsInput> | UserCreateWithoutFriendsInput[] | UserUncheckedCreateWithoutFriendsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutFriendsInput | UserCreateOrConnectWithoutFriendsInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -8302,32 +8180,6 @@ export namespace Prisma {
     deleteMany?: FriendRequestScalarWhereInput | FriendRequestScalarWhereInput[]
   }
 
-  export type UserUpdateManyWithoutFriendOfNestedInput = {
-    create?: XOR<UserCreateWithoutFriendOfInput, UserUncheckedCreateWithoutFriendOfInput> | UserCreateWithoutFriendOfInput[] | UserUncheckedCreateWithoutFriendOfInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutFriendOfInput | UserCreateOrConnectWithoutFriendOfInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutFriendOfInput | UserUpsertWithWhereUniqueWithoutFriendOfInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutFriendOfInput | UserUpdateWithWhereUniqueWithoutFriendOfInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutFriendOfInput | UserUpdateManyWithWhereWithoutFriendOfInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
-  }
-
-  export type UserUpdateManyWithoutFriendsNestedInput = {
-    create?: XOR<UserCreateWithoutFriendsInput, UserUncheckedCreateWithoutFriendsInput> | UserCreateWithoutFriendsInput[] | UserUncheckedCreateWithoutFriendsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutFriendsInput | UserCreateOrConnectWithoutFriendsInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutFriendsInput | UserUpsertWithWhereUniqueWithoutFriendsInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutFriendsInput | UserUpdateWithWhereUniqueWithoutFriendsInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutFriendsInput | UserUpdateManyWithWhereWithoutFriendsInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
-  }
-
   export type FriendRequestUncheckedUpdateManyWithoutFromNestedInput = {
     create?: XOR<FriendRequestCreateWithoutFromInput, FriendRequestUncheckedCreateWithoutFromInput> | FriendRequestCreateWithoutFromInput[] | FriendRequestUncheckedCreateWithoutFromInput[]
     connectOrCreate?: FriendRequestCreateOrConnectWithoutFromInput | FriendRequestCreateOrConnectWithoutFromInput[]
@@ -8354,32 +8206,6 @@ export namespace Prisma {
     update?: FriendRequestUpdateWithWhereUniqueWithoutToInput | FriendRequestUpdateWithWhereUniqueWithoutToInput[]
     updateMany?: FriendRequestUpdateManyWithWhereWithoutToInput | FriendRequestUpdateManyWithWhereWithoutToInput[]
     deleteMany?: FriendRequestScalarWhereInput | FriendRequestScalarWhereInput[]
-  }
-
-  export type UserUncheckedUpdateManyWithoutFriendOfNestedInput = {
-    create?: XOR<UserCreateWithoutFriendOfInput, UserUncheckedCreateWithoutFriendOfInput> | UserCreateWithoutFriendOfInput[] | UserUncheckedCreateWithoutFriendOfInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutFriendOfInput | UserCreateOrConnectWithoutFriendOfInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutFriendOfInput | UserUpsertWithWhereUniqueWithoutFriendOfInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutFriendOfInput | UserUpdateWithWhereUniqueWithoutFriendOfInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutFriendOfInput | UserUpdateManyWithWhereWithoutFriendOfInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
-  }
-
-  export type UserUncheckedUpdateManyWithoutFriendsNestedInput = {
-    create?: XOR<UserCreateWithoutFriendsInput, UserUncheckedCreateWithoutFriendsInput> | UserCreateWithoutFriendsInput[] | UserUncheckedCreateWithoutFriendsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutFriendsInput | UserCreateOrConnectWithoutFriendsInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutFriendsInput | UserUpsertWithWhereUniqueWithoutFriendsInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutFriendsInput | UserUpdateWithWhereUniqueWithoutFriendsInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutFriendsInput | UserUpdateManyWithWhereWithoutFriendsInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type TagCreateNestedManyWithoutPostsInput = {
@@ -8648,11 +8474,9 @@ export namespace Prisma {
     profileImage?: string | null
     name?: string | null
     surname?: string | null
-    username?: string | null
+    username: string
     createdAt?: Date | string
     receivedRequests?: FriendRequestCreateNestedManyWithoutToInput
-    friends?: UserCreateNestedManyWithoutFriendOfInput
-    friendOf?: UserCreateNestedManyWithoutFriendsInput
   }
 
   export type UserUncheckedCreateWithoutSentRequestsInput = {
@@ -8662,11 +8486,9 @@ export namespace Prisma {
     profileImage?: string | null
     name?: string | null
     surname?: string | null
-    username?: string | null
+    username: string
     createdAt?: Date | string
     receivedRequests?: FriendRequestUncheckedCreateNestedManyWithoutToInput
-    friends?: UserUncheckedCreateNestedManyWithoutFriendOfInput
-    friendOf?: UserUncheckedCreateNestedManyWithoutFriendsInput
   }
 
   export type UserCreateOrConnectWithoutSentRequestsInput = {
@@ -8680,11 +8502,9 @@ export namespace Prisma {
     profileImage?: string | null
     name?: string | null
     surname?: string | null
-    username?: string | null
+    username: string
     createdAt?: Date | string
     sentRequests?: FriendRequestCreateNestedManyWithoutFromInput
-    friends?: UserCreateNestedManyWithoutFriendOfInput
-    friendOf?: UserCreateNestedManyWithoutFriendsInput
   }
 
   export type UserUncheckedCreateWithoutReceivedRequestsInput = {
@@ -8694,11 +8514,9 @@ export namespace Prisma {
     profileImage?: string | null
     name?: string | null
     surname?: string | null
-    username?: string | null
+    username: string
     createdAt?: Date | string
     sentRequests?: FriendRequestUncheckedCreateNestedManyWithoutFromInput
-    friends?: UserUncheckedCreateNestedManyWithoutFriendOfInput
-    friendOf?: UserUncheckedCreateNestedManyWithoutFriendsInput
   }
 
   export type UserCreateOrConnectWithoutReceivedRequestsInput = {
@@ -8723,11 +8541,9 @@ export namespace Prisma {
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     receivedRequests?: FriendRequestUpdateManyWithoutToNestedInput
-    friends?: UserUpdateManyWithoutFriendOfNestedInput
-    friendOf?: UserUpdateManyWithoutFriendsNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentRequestsInput = {
@@ -8737,11 +8553,9 @@ export namespace Prisma {
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     receivedRequests?: FriendRequestUncheckedUpdateManyWithoutToNestedInput
-    friends?: UserUncheckedUpdateManyWithoutFriendOfNestedInput
-    friendOf?: UserUncheckedUpdateManyWithoutFriendsNestedInput
   }
 
   export type UserUpsertWithoutReceivedRequestsInput = {
@@ -8761,11 +8575,9 @@ export namespace Prisma {
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sentRequests?: FriendRequestUpdateManyWithoutFromNestedInput
-    friends?: UserUpdateManyWithoutFriendOfNestedInput
-    friendOf?: UserUpdateManyWithoutFriendsNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedRequestsInput = {
@@ -8775,11 +8587,9 @@ export namespace Prisma {
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sentRequests?: FriendRequestUncheckedUpdateManyWithoutFromNestedInput
-    friends?: UserUncheckedUpdateManyWithoutFriendOfNestedInput
-    friendOf?: UserUncheckedUpdateManyWithoutFriendsNestedInput
   }
 
   export type User_PostCreateWithoutImagesInput = {
@@ -8935,70 +8745,6 @@ export namespace Prisma {
     data: FriendRequestCreateManyToInput | FriendRequestCreateManyToInput[]
   }
 
-  export type UserCreateWithoutFriendOfInput = {
-    email: string
-    password: string
-    profileImage?: string | null
-    name?: string | null
-    surname?: string | null
-    username?: string | null
-    createdAt?: Date | string
-    sentRequests?: FriendRequestCreateNestedManyWithoutFromInput
-    receivedRequests?: FriendRequestCreateNestedManyWithoutToInput
-    friends?: UserCreateNestedManyWithoutFriendOfInput
-  }
-
-  export type UserUncheckedCreateWithoutFriendOfInput = {
-    id?: number
-    email: string
-    password: string
-    profileImage?: string | null
-    name?: string | null
-    surname?: string | null
-    username?: string | null
-    createdAt?: Date | string
-    sentRequests?: FriendRequestUncheckedCreateNestedManyWithoutFromInput
-    receivedRequests?: FriendRequestUncheckedCreateNestedManyWithoutToInput
-    friends?: UserUncheckedCreateNestedManyWithoutFriendOfInput
-  }
-
-  export type UserCreateOrConnectWithoutFriendOfInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutFriendOfInput, UserUncheckedCreateWithoutFriendOfInput>
-  }
-
-  export type UserCreateWithoutFriendsInput = {
-    email: string
-    password: string
-    profileImage?: string | null
-    name?: string | null
-    surname?: string | null
-    username?: string | null
-    createdAt?: Date | string
-    sentRequests?: FriendRequestCreateNestedManyWithoutFromInput
-    receivedRequests?: FriendRequestCreateNestedManyWithoutToInput
-    friendOf?: UserCreateNestedManyWithoutFriendsInput
-  }
-
-  export type UserUncheckedCreateWithoutFriendsInput = {
-    id?: number
-    email: string
-    password: string
-    profileImage?: string | null
-    name?: string | null
-    surname?: string | null
-    username?: string | null
-    createdAt?: Date | string
-    sentRequests?: FriendRequestUncheckedCreateNestedManyWithoutFromInput
-    receivedRequests?: FriendRequestUncheckedCreateNestedManyWithoutToInput
-    friendOf?: UserUncheckedCreateNestedManyWithoutFriendsInput
-  }
-
-  export type UserCreateOrConnectWithoutFriendsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutFriendsInput, UserUncheckedCreateWithoutFriendsInput>
-  }
-
   export type FriendRequestUpsertWithWhereUniqueWithoutFromInput = {
     where: FriendRequestWhereUniqueInput
     update: XOR<FriendRequestUpdateWithoutFromInput, FriendRequestUncheckedUpdateWithoutFromInput>
@@ -9039,52 +8785,6 @@ export namespace Prisma {
   export type FriendRequestUpdateManyWithWhereWithoutToInput = {
     where: FriendRequestScalarWhereInput
     data: XOR<FriendRequestUpdateManyMutationInput, FriendRequestUncheckedUpdateManyWithoutToInput>
-  }
-
-  export type UserUpsertWithWhereUniqueWithoutFriendOfInput = {
-    where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutFriendOfInput, UserUncheckedUpdateWithoutFriendOfInput>
-    create: XOR<UserCreateWithoutFriendOfInput, UserUncheckedCreateWithoutFriendOfInput>
-  }
-
-  export type UserUpdateWithWhereUniqueWithoutFriendOfInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutFriendOfInput, UserUncheckedUpdateWithoutFriendOfInput>
-  }
-
-  export type UserUpdateManyWithWhereWithoutFriendOfInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutFriendOfInput>
-  }
-
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: IntFilter<"User"> | number
-    email?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    profileImage?: StringNullableFilter<"User"> | string | null
-    name?: StringNullableFilter<"User"> | string | null
-    surname?: StringNullableFilter<"User"> | string | null
-    username?: StringNullableFilter<"User"> | string | null
-    createdAt?: DateTimeFilter<"User"> | Date | string
-  }
-
-  export type UserUpsertWithWhereUniqueWithoutFriendsInput = {
-    where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutFriendsInput, UserUncheckedUpdateWithoutFriendsInput>
-    create: XOR<UserCreateWithoutFriendsInput, UserUncheckedCreateWithoutFriendsInput>
-  }
-
-  export type UserUpdateWithWhereUniqueWithoutFriendsInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutFriendsInput, UserUncheckedUpdateWithoutFriendsInput>
-  }
-
-  export type UserUpdateManyWithWhereWithoutFriendsInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutFriendsInput>
   }
 
   export type TagCreateWithoutPostsInput = {
@@ -9243,82 +8943,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     fromId?: IntFieldUpdateOperationsInput | number
     status?: EnumFriendRequestStatusFieldUpdateOperationsInput | $Enums.FriendRequestStatus
-  }
-
-  export type UserUpdateWithoutFriendOfInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentRequests?: FriendRequestUpdateManyWithoutFromNestedInput
-    receivedRequests?: FriendRequestUpdateManyWithoutToNestedInput
-    friends?: UserUpdateManyWithoutFriendOfNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutFriendOfInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentRequests?: FriendRequestUncheckedUpdateManyWithoutFromNestedInput
-    receivedRequests?: FriendRequestUncheckedUpdateManyWithoutToNestedInput
-    friends?: UserUncheckedUpdateManyWithoutFriendOfNestedInput
-  }
-
-  export type UserUncheckedUpdateManyWithoutFriendOfInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UserUpdateWithoutFriendsInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentRequests?: FriendRequestUpdateManyWithoutFromNestedInput
-    receivedRequests?: FriendRequestUpdateManyWithoutToNestedInput
-    friendOf?: UserUpdateManyWithoutFriendsNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutFriendsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sentRequests?: FriendRequestUncheckedUpdateManyWithoutFromNestedInput
-    receivedRequests?: FriendRequestUncheckedUpdateManyWithoutToNestedInput
-    friendOf?: UserUncheckedUpdateManyWithoutFriendsNestedInput
-  }
-
-  export type UserUncheckedUpdateManyWithoutFriendsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    surname?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ImageCreateManyUser_PostInput = {

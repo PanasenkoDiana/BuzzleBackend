@@ -7,6 +7,7 @@ friendRouter.post("/send", friendController.sendRequest)
 friendRouter.post("/accept", friendController.acceptRequest)
 friendRouter.post("/cancel", friendController.cancelRequest)
 
+friendRouter.post("/:id", friendController.getAllFriends)
 friendRouter.get("/requests", friendController.getRequests)
 friendRouter.get("/myRequests", friendController.getMyRequests)
 
