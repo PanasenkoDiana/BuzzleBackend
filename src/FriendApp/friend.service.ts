@@ -1,8 +1,30 @@
 import { error, Result, success } from "../tools/result";
 import { friendRepository } from "./friend.repository";
-import { ICreateFriendRequest, ICreateFriendRequestUsernames, IFriendRequest, IGetMyRequest, IGetRequest } from "./friend.types";
+import { ICreateFriendRequest, ICreateFriendRequestUsernames, IFriendRequest, IGetMyRequest, IGetRequest, IUser } from "./friend.types";
 
 export const friendService = {
+	getAllFriends: async function (
+		id: number
+	): Promise<Result<IUser[]>> {
+        try {
+            const friends = await friendRepository.getAllFriends(id)
+            return success(friends)
+		} catch (err) {
+			console.log(err);
+			error("Error getting friends");
+            throw err
+		}
+    },
+	getRecommends: async function (): Promise<Result<IUser[]>> {
+		try {
+            const users = await friendRepository.getRecommends()
+            return success(users)
+		} catch (err) {
+			console.log(err);
+			error("Error get recommends");
+            throw err
+		}
+	},
 	sendRequest: async function (
 		data: ICreateFriendRequestUsernames
 	): Promise<Result<IFriendRequest>> {
@@ -22,6 +44,7 @@ export const friendService = {
             throw err
 		}
     },
+
     acceptRequest: async function (
 		data: ICreateFriendRequestUsernames
 	): Promise<Result<IFriendRequest>> {
@@ -57,18 +80,6 @@ export const friendService = {
 		} catch (err) {
 			console.log(err);
 			error("Error sending friend request");
-            throw err
-		}
-    },
-    getAllFriends: async function (
-		id: number
-	): Promise<Result<IGetMyRequest[]>> {
-        try {
-            const friends = await friendRepository.getAllFriends(id)
-            return success(friends)
-		} catch (err) {
-			console.log(err);
-			error("Error getting friends");
             throw err
 		}
     },

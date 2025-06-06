@@ -1,5 +1,25 @@
 import { Prisma } from "../generated/prisma";
 
+export type IUser = Prisma.UserGetPayload<{
+	select: {
+		id: true;
+		name: true;
+		profileImage: true;
+		surname: true;
+		username: true;
+	};
+}>;
+
+export interface IGetRequest {
+	status: "pending";
+	from: IUser;
+}
+
+export interface IGetMyRequest {
+	status: "pending";
+	to: IUser;
+}
+
 export interface ICreateFriendRequestUsernames {
 	fromUsername: string;
 	toUsername: string;
@@ -12,31 +32,9 @@ export interface ICreateFriendRequest {
 
 export type IFriendRequest = Prisma.FriendRequestGetPayload<{
 	include: {
-		from: true,
-		to: true
-	},
-	omit: {
-		id: true;
+		from: true;
+		to: true;
 	};
-}>;
-
-export interface IGetFriend {
-	status: "accepted",
-} 
-
-export type IGetRequest = Prisma.FriendRequestGetPayload<{
-	include: {
-        from: true
-    };
-	omit: {
-		id: true;
-	};
-}>;
-
-export type IGetMyRequest = Prisma.FriendRequestGetPayload<{
-	include: {
-        to: true
-    };
 	omit: {
 		id: true;
 	};

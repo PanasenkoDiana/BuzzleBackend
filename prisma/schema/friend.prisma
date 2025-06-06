@@ -10,6 +10,6 @@ model FriendRequest {
 }
 
 enum FriendRequestStatus {
-  pending
   accepted
+  pending
 }

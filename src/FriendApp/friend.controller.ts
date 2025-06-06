@@ -2,6 +2,26 @@ import { friendService } from "./friend.service";
 import { Request, Response } from "express"
 
 export const friendController = {
+    getAllFriends: async function (req: Request, res: Response) {
+        console.log("getAllFriends")
+        const id: number = Number(res.locals.userId)
+        const result = await friendService.getAllFriends(id)
+        res.json(result)
+    },
+    getRecommends: async function (req: Request, res: Response) {
+        const result = await friendService.getRecommends()
+        res.json(result)
+    },
+    getRequests: async function (req: Request, res: Response) {
+        const id: number = Number(res.locals.userId)
+        const result = await friendService.getRequests(id)
+        res.json(result)
+    },
+    getMyRequests: async function (req: Request, res: Response) {
+        const id: number = Number(res.locals.userId)
+        const result = await friendService.getMyRequests(id)
+        res.json(result)
+    },
     sendRequest: async function (req: Request, res: Response) {
         const data = req.body
         const result = await friendService.sendRequest(data)
@@ -15,21 +35,6 @@ export const friendController = {
     cancelRequest: async function (req: Request, res: Response) {
         const data = req.body
         const result = await friendService.cancelRequest(data)
-        res.json(result)
-    },
-    getAllFriends: async function (req: Request, res: Response) {
-        const id: number = Number(res.locals.userId)
-        const result = await friendService.getAllFriends(id)
-        res.json(result)
-    },
-    getRequests: async function (req: Request, res: Response) {
-        const id: number = Number(res.locals.userId)
-        const result = await friendService.getRequests(id)
-        res.json(result)
-    },
-    getMyRequests: async function (req: Request, res: Response) {
-        const id: number = Number(res.locals.userId)
-        const result = await friendService.getMyRequests(id)
         res.json(result)
     },
 }

@@ -1,72 +1,71 @@
 import { PrismaClient } from '../src/generated/prisma';
-
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.friendRequest.deleteMany();
-  await prisma.user.deleteMany();
+	const usersData = [
+		{
+			email: 'alice@example.com',
+			password: 'hashedpassword1',
+			username: 'alice123',
+			name: 'Alice',
+			surname: 'Smith',
+			profileImage: 'https://randomuser.me/api/portraits/women/1.jpg',
+		},
+		{
+			email: 'bob@example.com',
+			password: 'hashedpassword2',
+			username: 'bobster',
+			name: 'Bob',
+			surname: 'Johnson',
+			profileImage: 'https://randomuser.me/api/portraits/men/2.jpg',
+		},
+		{
+			email: 'carol@example.com',
+			password: 'hashedpassword3',
+			username: 'carol456',
+			name: 'Carol',
+			surname: 'Davis',
+			profileImage: 'https://randomuser.me/api/portraits/women/3.jpg',
+		},
+		{
+			email: 'dave@example.com',
+			password: 'hashedpassword4',
+			username: 'dave789',
+			name: 'Dave',
+			surname: 'Wilson',
+			profileImage: 'https://randomuser.me/api/portraits/men/4.jpg',
+		},
+		{
+			email: 'eva@example.com',
+			password: 'hashedpassword5',
+			username: 'eva_xo',
+			name: 'Eva',
+			surname: 'Taylor',
+			profileImage: 'https://randomuser.me/api/portraits/women/5.jpg',
+		},
+		{
+			email: 'frank@example.com',
+			password: 'hashedpassword6',
+			username: 'franky',
+			name: 'Frank',
+			surname: 'Anderson',
+			profileImage: 'https://randomuser.me/api/portraits/men/6.jpg',
+		},
+	];
 
-  const alice = await prisma.user.create({
-    data: {
-      email: 'alice@example.com',
-      password: 'password123',
-      name: 'Alice',
-      username: 'alice',
-    },
-  });
-
-  const bob = await prisma.user.create({
-    data: {
-      email: 'bob@example.com',
-      password: 'password123',
-      name: 'Bob',
-      username: 'bob',
-    },
-  });
-
-  const charlie = await prisma.user.create({
-    data: {
-      email: 'charlie@example.com',
-      password: 'password123',
-      name: 'Charlie',
-      username: 'charlie',
-    },
-  });
-
-  await prisma.friendRequest.create({
-    data: {
-      from: { connect: { id: alice.id } },
-      to: { connect: { id: bob.id } },
-      status: 'pending',
-    },
-  });
-
-  await prisma.friendRequest.create({
-    data: {
-      from: { connect: { id: bob.id } },
-      to: { connect: { id: charlie.id } },
-      status: 'pending',
-    },
-  });
-  
-  await prisma.friendRequest.update({
-    where: {
-      fromId_toId: {
-        fromId: alice.id,
-        toId: bob.id,
-      },
-    },
-    data: {
-      status: 'accepted',
-    },
-  });
+	for (const user of usersData) {
+		await prisma.user.create({ data: user });
+	}
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+	.then(() => {
+		console.log('✅ Seed complete');
+	})
+	.catch((e) => {
+		console.error(e);
+		process.exit(1);
+	})
+	.finally(async () => {
+		await prisma.$disconnect();
+	});

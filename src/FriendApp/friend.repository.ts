@@ -1,8 +1,140 @@
 import { PrismaClient } from "../prisma/client";
 import { error, Result, success } from "../tools/result";
-import { ICreateFriendRequest, IFriendRequest, IGetMyRequest, IGetRequest } from "./friend.types";
+import {
+	ICreateFriendRequest,
+	IFriendRequest,
+	IGetMyRequest,
+	IGetRequest,
+	IUser
+} from "./friend.types";
 
 export const friendRepository = {
+	getAllFriends: async function (id: number): Promise<IUser[]> {
+		try {
+			const fromMyRequests = await PrismaClient.friendRequest.findMany({
+				where: {
+					status: "accepted",
+					from: { id: id },
+				},
+				select: {
+					to: {
+						select: {
+							id: true,
+							name: true,
+							profileImage: true,
+							surname: true,
+							username: true,
+						},
+					},
+				},
+			});
+			const toMeRequests = await PrismaClient.friendRequest.findMany({
+				where: {
+					status: "accepted",
+					to: { id: id },
+				},
+				select: {
+					from: {
+						select: {
+							id: true,
+							name: true,
+							profileImage: true,
+							surname: true,
+							username: true,
+						},
+					},
+				},
+			});
+			const friends = [
+				...fromMyRequests.map(req => req.to),
+				...toMeRequests.map(req => req.from),
+			];
+			return friends;
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
+	},
+	getRecommends: async function (): Promise<IUser[]> {
+		try {
+			const users = await PrismaClient.user.findMany({
+				orderBy: {
+					id: "desc",
+				},
+				take: 5,
+				select: {
+					id: true,
+					name: true,
+					profileImage: true,
+					surname: true,
+					username: true,
+				}
+			});
+
+			return users;
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
+	},
+	getRequests: async function (id: number): Promise<IGetRequest[]> {
+		try {
+			const requests = await PrismaClient.friendRequest.findMany({
+				where: {
+					status: "pending",
+					toId: id,
+				},
+				select: {
+					status: true,
+					from: {
+						select: {
+							id: true,
+							name: true,
+							profileImage: true,
+							surname: true,
+							username: true,
+						},
+					},
+				},
+			});
+			return requests.map(req => ({
+				...req,
+				status: "pending",
+			}));
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
+	},
+	getMyRequests: async function (id: number): Promise<IGetMyRequest[]> {
+		try {
+			const requests = await PrismaClient.friendRequest.findMany({
+				where: {
+					status: "pending",
+					fromId: id,
+				},
+				select: {
+					status: true,
+					to: {
+						select: {
+							id: true,
+							name: true,
+							profileImage: true,
+							surname: true,
+							username: true,
+						},
+					},
+				},
+			});
+			return requests.map(req => ({
+				...req,
+				status: "pending",
+			}));
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
+	},
 	sendRequest: async function (
 		data: ICreateFriendRequest
 	): Promise<Result<IFriendRequest>> {
@@ -15,7 +147,7 @@ export const friendRepository = {
 				},
 				include: {
 					from: true,
-					to: true
+					to: true,
 				},
 				omit: {
 					id: true,
@@ -25,7 +157,7 @@ export const friendRepository = {
 		} catch (err) {
 			console.log(err);
 			error("Error sending friend request");
-            throw err
+			throw err;
 		}
 	},
 	acceptRequest: async function (
@@ -44,7 +176,7 @@ export const friendRepository = {
 				},
 				include: {
 					from: true,
-					to: true
+					to: true,
 				},
 				omit: {
 					id: true,
@@ -53,8 +185,8 @@ export const friendRepository = {
 			return success(request);
 		} catch (err) {
 			console.log(err);
-            error("Error accepting friend request");
-            throw err
+			error("Error accepting friend request");
+			throw err;
 		}
 	},
 	cancelRequest: async function (data: ICreateFriendRequest) {
@@ -69,93 +201,26 @@ export const friendRepository = {
 			});
 		} catch (err) {
 			console.log(err);
-            throw err
+			throw err;
 		}
 	},
-    getAllFriends: async function (id: number): Promise<IFriendRequest[]> {
-        try {
-            const fromMyRequests = await PrismaClient.friendRequest.findMany({
-                where: {
-                    status: "accepted",
-                    from: {id: id}
-                },
-				include: {
-					to: true,
-					from: true
-				},
-            })
-			const toMeRequests = await PrismaClient.friendRequest.findMany({
-                where: {
-                    status: "accepted",
-                    to: {id: id}
-                },
-				include: {
-					to: true,
-					from: true
-				},
-            })
-			const friends = [...fromMyRequests, ...toMeRequests]
-            return friends
-		} catch (err) {
-			console.log(err);
-            throw err
-		}
-    },
-    getRequests: async function (id: number): Promise<IGetRequest[]> {
-        try {
-            const requests = await PrismaClient.friendRequest.findMany({
-                where: {
-                    status: "pending",
-                    toId: id
-                },
-                include: {
-                    from: true
-                },
-                omit: {
-					id: true,
-				},
-            })
-            return requests
-		} catch (err) {
-			console.log(err);
-            throw err
-		}
-    },
-    getMyRequests: async function (id: number): Promise<IGetMyRequest[]>  {
-        try {
-            const requests = await PrismaClient.friendRequest.findMany({
-                where: {
-                    status: "pending",
-                    fromId: id
-                },
-                include: {
-                    to: true
-                },
-                omit: {
-					id: true,
-				},
-            })
-            return requests
-		} catch (err) {
-			console.log(err);
-            throw err
-		}
-    },
-	getIdsFromUsernames: async function (usernames: string[]): Promise<number[]> {
+	getIdsFromUsernames: async function (
+		usernames: string[]
+	): Promise<number[]> {
 		try {
 			const users = await Promise.all(
 				usernames.map((username) =>
 					PrismaClient.user.findUnique({
 						where: { username },
-						select: { id: true }
+						select: { id: true },
 					})
 				)
 			);
-	
-			return users.map(user => user!.id);
+
+			return users.map((user) => user!.id);
 		} catch (err) {
 			console.log(err);
-			throw err
+			throw err;
 		}
-	}
+	},
 };
