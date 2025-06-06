@@ -192,7 +192,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": null
+        "value": "file:./db/buzzle.db"
       }
     }
   },
