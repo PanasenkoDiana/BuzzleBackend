@@ -1,110 +1,114 @@
 import { error, Result, success } from "../tools/result";
 import { friendRepository } from "./friend.repository";
-import { ICreateFriendRequest, ICreateFriendRequestUsernames, IFriendRequest, IGetMyRequest, IGetRequest, IUser } from "./friend.types";
+import {
+	ICanceledRequest,
+	ICreateFriendRequest,
+	ICreateFriendRequestUsernames,
+	IFriendRequest,
+	IGetMyRequest,
+	IGetRequest,
+	IUser,
+} from "./friend.types";
 
 export const friendService = {
-	getAllFriends: async function (
-		id: number
-	): Promise<Result<IUser[]>> {
-        try {
-            const friends = await friendRepository.getAllFriends(id)
-            return success(friends)
+	getAllFriends: async function (id: number): Promise<Result<IUser[]>> {
+		try {
+			const friends = await friendRepository.getAllFriends(id);
+			return success(friends);
 		} catch (err) {
 			console.log(err);
 			error("Error getting friends");
-            throw err
+			throw err;
 		}
-    },
+	},
 	getRecommends: async function (): Promise<Result<IUser[]>> {
 		try {
-            const users = await friendRepository.getRecommends()
-            return success(users)
+			const users = await friendRepository.getRecommends();
+			return success(users);
 		} catch (err) {
 			console.log(err);
 			error("Error get recommends");
-            throw err
+			throw err;
 		}
 	},
 	sendRequest: async function (
 		data: ICreateFriendRequestUsernames
 	): Promise<Result<IFriendRequest>> {
-        try {
+		try {
 			const ids = await friendRepository.getIdsFromUsernames([
 				data.fromUsername,
-				data.toUsername
+				data.toUsername,
 			]);
-            const friendRequest = await friendRepository.sendRequest({
+			const friendRequest = await friendRepository.sendRequest({
 				fromId: ids[0],
-				toId: ids[1]
+				toId: ids[1],
 			});
-            return friendRequest
+			return success(friendRequest);
 		} catch (err) {
 			console.log(err);
 			error("Error sending friend request");
-            throw err
+			throw err;
 		}
-    },
+	},
 
-    acceptRequest: async function (
+	acceptRequest: async function (
 		data: ICreateFriendRequestUsernames
 	): Promise<Result<IFriendRequest>> {
-        try {
+		try {
 			const ids = await friendRepository.getIdsFromUsernames([
 				data.fromUsername,
-				data.toUsername
+				data.toUsername,
 			]);
-            const friendRequest = await friendRepository.acceptRequest({
+			const friendRequest = await friendRepository.acceptRequest({
 				fromId: ids[0],
-				toId: ids[1]
+				toId: ids[1],
 			});
-            return friendRequest
+			return success(friendRequest);
 		} catch (err) {
 			console.log(err);
 			error("Error sending friend request");
-            throw err
+			throw err;
 		}
-    },
-    cancelRequest: async function (
+	},
+	cancelRequest: async function (
 		data: ICreateFriendRequestUsernames
-	): Promise<Result<string>> {
-        try {
+	): Promise<Result<ICanceledRequest>> {
+		try {
 			const ids = await friendRepository.getIdsFromUsernames([
 				data.fromUsername,
-				data.toUsername
+				data.toUsername,
 			]);
-            const friendRequest = await friendRepository.cancelRequest({
+			const friendRequest = await friendRepository.cancelRequest({
 				fromId: ids[0],
-				toId: ids[1]
+				toId: ids[1],
 			});
-            return success("Request successfully rejected")
+			return success(friendRequest);
 		} catch (err) {
 			console.log(err);
 			error("Error sending friend request");
-            throw err
+			throw err;
 		}
-    },
-    getRequests: async function (
-		id: number
-	): Promise<Result<IGetRequest[]>> {
-        try {
-            const friendRequests = await friendRepository.getRequests(id)
-            return success(friendRequests)
+	},
+	getRequests: async function (id: number): Promise<Result<IGetRequest[]>> {
+		try {
+			const friendRequests = await friendRepository.getRequests(id);
+			return success(friendRequests);
 		} catch (err) {
 			console.log(err);
 			error("Error receiving friend requests");
-            throw err
+			throw err;
 		}
-    },
-    getMyRequests: async function (
+	},
+	getMyRequests: async function (
 		id: number
 	): Promise<Result<IGetMyRequest[]>> {
-        try {
-            const friendRequests = await friendRepository.getMyRequests(id)
-            return success(friendRequests)
+		try {
+			const friendRequests = await friendRepository.getMyRequests(id);
+			return success(friendRequests);
 		} catch (err) {
 			console.log(err);
 			error("Error receiving my friend requests");
-            throw err
+			throw err;
 		}
-    },
+	},
 };

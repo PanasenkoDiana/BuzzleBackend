@@ -8,4 +8,4 @@ migrations/
 /media/
 media
 /media
-scr/generated/
+src\middlewares

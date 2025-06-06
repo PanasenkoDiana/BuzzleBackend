@@ -1,11 +1,12 @@
 import { PrismaClient } from "../prisma/client";
 import { error, Result, success } from "../tools/result";
 import {
+	ICanceledRequest,
 	ICreateFriendRequest,
 	IFriendRequest,
 	IGetMyRequest,
 	IGetRequest,
-	IUser
+	IUser,
 } from "./friend.types";
 
 export const friendRepository = {
@@ -46,8 +47,8 @@ export const friendRepository = {
 				},
 			});
 			const friends = [
-				...fromMyRequests.map(req => req.to),
-				...toMeRequests.map(req => req.from),
+				...fromMyRequests.map((req) => req.to),
+				...toMeRequests.map((req) => req.from),
 			];
 			return friends;
 		} catch (err) {
@@ -68,7 +69,7 @@ export const friendRepository = {
 					profileImage: true,
 					surname: true,
 					username: true,
-				}
+				},
 			});
 
 			return users;
@@ -97,7 +98,7 @@ export const friendRepository = {
 					},
 				},
 			});
-			return requests.map(req => ({
+			return requests.map((req) => ({
 				...req,
 				status: "pending",
 			}));
@@ -126,7 +127,7 @@ export const friendRepository = {
 					},
 				},
 			});
-			return requests.map(req => ({
+			return requests.map((req) => ({
 				...req,
 				status: "pending",
 			}));
@@ -137,7 +138,7 @@ export const friendRepository = {
 	},
 	sendRequest: async function (
 		data: ICreateFriendRequest
-	): Promise<Result<IFriendRequest>> {
+	): Promise<IFriendRequest> {
 		try {
 			const request = await PrismaClient.friendRequest.create({
 				data: {
@@ -145,15 +146,11 @@ export const friendRepository = {
 					from: { connect: { id: data.fromId } },
 					to: { connect: { id: data.toId } },
 				},
-				include: {
-					from: true,
-					to: true,
-				},
 				omit: {
 					id: true,
 				},
 			});
-			return success(request);
+			return request;
 		} catch (err) {
 			console.log(err);
 			error("Error sending friend request");
@@ -162,7 +159,7 @@ export const friendRepository = {
 	},
 	acceptRequest: async function (
 		data: ICreateFriendRequest
-	): Promise<Result<IFriendRequest>> {
+	): Promise<IFriendRequest> {
 		try {
 			const request = await PrismaClient.friendRequest.update({
 				where: {
@@ -174,22 +171,20 @@ export const friendRepository = {
 				data: {
 					status: "accepted",
 				},
-				include: {
-					from: true,
-					to: true,
-				},
 				omit: {
 					id: true,
 				},
 			});
-			return success(request);
+			return request;
 		} catch (err) {
 			console.log(err);
 			error("Error accepting friend request");
 			throw err;
 		}
 	},
-	cancelRequest: async function (data: ICreateFriendRequest) {
+	cancelRequest: async function (
+		data: ICreateFriendRequest
+	): Promise<ICanceledRequest> {
 		try {
 			await PrismaClient.friendRequest.delete({
 				where: {
@@ -199,8 +194,10 @@ export const friendRepository = {
 					},
 				},
 			});
+			return { status: "canceled" };
 		} catch (err) {
 			console.log(err);
+			error("Erroo canceling friend request");
 			throw err;
 		}
 	},

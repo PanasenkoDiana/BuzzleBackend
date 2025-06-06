@@ -36,5 +36,5 @@ export const friendController = {
         const data = req.body
         const result = await friendService.cancelRequest(data)
         res.json(result)
-    },
+    }
 }

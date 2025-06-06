@@ -31,11 +31,11 @@ export interface ICreateFriendRequest {
 }
 
 export type IFriendRequest = Prisma.FriendRequestGetPayload<{
-	include: {
-		from: true;
-		to: true;
-	};
-	omit: {
-		id: true;
-	};
+	select: {
+		fromId: true,
+		toId: true,
+		status: true
+	}
 }>;
+
+export type ICanceledRequest = { status: "canceled" }
