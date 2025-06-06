@@ -43,7 +43,7 @@ export const UserRepositories = {
                 data: {
                     name: data.name,
                     surname: data.surname,
-                    username: data.surname
+                    username: data.username
                 },
             })
             return user

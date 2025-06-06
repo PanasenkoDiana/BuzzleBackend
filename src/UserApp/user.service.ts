@@ -119,7 +119,7 @@ export const UserService = {
 				data.profileImage.startsWith("data:image")
 			) {
 				const image = await base64ToImage(data.profileImage);
-				data.profileImage = image.name; // просто имя файла без префикса /media/
+				data.profileImage = image.name; 
 			}
 
 			const user = await UserRepositories.changeUserPartOne(data, id);

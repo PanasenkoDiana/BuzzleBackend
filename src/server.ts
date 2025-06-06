@@ -7,7 +7,7 @@ import tagRouter from "./TagApp/tag.router";
 import path from "path";
 
 const app = express();
-const HOST = "localhost";
+const HOST = "192.168.3.4";
 const PORT = 8000;
 
 dotenv.config();
