@@ -1,15 +1,16 @@
 import { Router } from "express";
 import { friendController } from "./friend.controller";
+import { authTokenMiddleware } from "../middlewares/authMiddlewares";
 
 const friendRouter = Router() 
 
-friendRouter.get("/", friendController.getAllFriends)
-friendRouter.get("/recommends", friendController.getRecommends)
-friendRouter.get("/requests", friendController.getRequests)
-friendRouter.get("/myRequests", friendController.getMyRequests)
+friendRouter.get("/", authTokenMiddleware, friendController.getAllFriends)
+friendRouter.get("/requests", authTokenMiddleware, friendController.getRequests)
+friendRouter.get("/myRequests", authTokenMiddleware, friendController.getMyRequests)
+friendRouter.get("/recommends", authTokenMiddleware, friendController.getRecommends)
 
-friendRouter.post("/send", friendController.sendRequest)
-friendRouter.post("/accept", friendController.acceptRequest)
-friendRouter.post("/cancel", friendController.cancelRequest)
+friendRouter.post("/send", authTokenMiddleware, friendController.sendRequest)
+friendRouter.post("/accept", authTokenMiddleware, friendController.acceptRequest)
+friendRouter.post("/cancel", authTokenMiddleware, friendController.cancelRequest)
 
 export default friendRouter

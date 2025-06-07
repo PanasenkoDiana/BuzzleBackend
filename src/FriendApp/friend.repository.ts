@@ -1,7 +1,9 @@
 import { PrismaClient } from "../prisma/client";
 import { error, Result, success } from "../tools/result";
 import {
+	IAcceptFriendRequest,
 	ICanceledRequest,
+	ICancelFriendRequest,
 	ICreateFriendRequest,
 	IFriendRequest,
 	IGetMyRequest,
@@ -56,9 +58,36 @@ export const friendRepository = {
 			throw err;
 		}
 	},
-	getRecommends: async function (): Promise<IUser[]> {
+	getRecommends: async function (id: number): Promise<IUser[]> {
 		try {
+			console.log(id)
+			const relatedUsers = await PrismaClient.friendRequest.findMany({
+				where: {
+					OR: [{ fromId: id }, { toId: id }],
+					status: { in: ["pending", "accepted"] },
+				},
+				select: {
+					fromId: true,
+					toId: true,
+				},
+			});
+
+			console.log(relatedUsers)
+
+			const excludedIds = relatedUsers
+				.map((user) => {
+					return user.fromId === id ? user.toId : user.fromId;
+				})
+				.filter((userId) => userId !== id);
+
+			console.log(excludedIds)
+
 			const users = await PrismaClient.user.findMany({
+				where: {
+					id: {
+						notIn: excludedIds,
+					},
+				},
 				orderBy: {
 					id: "desc",
 				},
@@ -144,7 +173,7 @@ export const friendRepository = {
 				data: {
 					status: "pending",
 					from: { connect: { id: data.fromId } },
-					to: { connect: { id: data.toId } },
+					to: { connect: { username: data.toUsername } },
 				},
 				omit: {
 					id: true,
@@ -153,68 +182,65 @@ export const friendRepository = {
 			return request;
 		} catch (err) {
 			console.log(err);
-			error("Error sending friend request");
 			throw err;
 		}
 	},
 	acceptRequest: async function (
-		data: ICreateFriendRequest
+		data: IAcceptFriendRequest
 	): Promise<IFriendRequest> {
 		try {
+			const fromUser = await PrismaClient.user.findUnique({
+				where: { username: data.fromUsername },
+				select: { id: true },
+			});
+
+			if (!fromUser) {
+				throw Error("User not found");
+			}
+
 			const request = await PrismaClient.friendRequest.update({
 				where: {
 					fromId_toId: {
-						fromId: data.fromId,
+						fromId: fromUser.id,
 						toId: data.toId,
 					},
 				},
 				data: {
 					status: "accepted",
 				},
-				omit: {
-					id: true,
-				},
 			});
 			return request;
 		} catch (err) {
 			console.log(err);
-			error("Error accepting friend request");
 			throw err;
 		}
 	},
 	cancelRequest: async function (
-		data: ICreateFriendRequest
+		data: ICancelFriendRequest
 	): Promise<ICanceledRequest> {
 		try {
+			const otherUser = await PrismaClient.user.findUnique({
+				where: { username: data.username },
+				select: { id: true },
+			});
+
+			if (!otherUser) {
+				throw Error("User not found");
+			}
+
+			const fromId = data.isIncoming ? otherUser.id : data.myId;
+			const toId = data.isIncoming ? data.myId : otherUser.id;
+
 			await PrismaClient.friendRequest.delete({
 				where: {
 					fromId_toId: {
-						fromId: data.fromId,
-						toId: data.toId,
+						fromId,
+						toId,
 					},
 				},
 			});
-			return { status: "canceled" };
-		} catch (err) {
-			console.log(err);
-			error("Erroo canceling friend request");
-			throw err;
-		}
-	},
-	getIdsFromUsernames: async function (
-		usernames: string[]
-	): Promise<number[]> {
-		try {
-			const users = await Promise.all(
-				usernames.map((username) =>
-					PrismaClient.user.findUnique({
-						where: { username },
-						select: { id: true },
-					})
-				)
-			);
 
-			return users.map((user) => user!.id);
+			return { status: "canceled" };
 		} catch (err) {
 			console.log(err);
 			throw err;

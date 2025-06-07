@@ -1,9 +1,10 @@
 import { error, Result, success } from "../tools/result";
 import { friendRepository } from "./friend.repository";
 import {
+	IAcceptFriendRequest,
 	ICanceledRequest,
+	ICancelFriendRequest,
 	ICreateFriendRequest,
-	ICreateFriendRequestUsernames,
 	IFriendRequest,
 	IGetMyRequest,
 	IGetRequest,
@@ -21,71 +22,13 @@ export const friendService = {
 			throw err;
 		}
 	},
-	getRecommends: async function (): Promise<Result<IUser[]>> {
+	getRecommends: async function (id: number): Promise<Result<IUser[]>> {
 		try {
-			const users = await friendRepository.getRecommends();
+			const users = await friendRepository.getRecommends(id);
 			return success(users);
 		} catch (err) {
 			console.log(err);
 			error("Error get recommends");
-			throw err;
-		}
-	},
-	sendRequest: async function (
-		data: ICreateFriendRequestUsernames
-	): Promise<Result<IFriendRequest>> {
-		try {
-			const ids = await friendRepository.getIdsFromUsernames([
-				data.fromUsername,
-				data.toUsername,
-			]);
-			const friendRequest = await friendRepository.sendRequest({
-				fromId: ids[0],
-				toId: ids[1],
-			});
-			return success(friendRequest);
-		} catch (err) {
-			console.log(err);
-			error("Error sending friend request");
-			throw err;
-		}
-	},
-
-	acceptRequest: async function (
-		data: ICreateFriendRequestUsernames
-	): Promise<Result<IFriendRequest>> {
-		try {
-			const ids = await friendRepository.getIdsFromUsernames([
-				data.fromUsername,
-				data.toUsername,
-			]);
-			const friendRequest = await friendRepository.acceptRequest({
-				fromId: ids[0],
-				toId: ids[1],
-			});
-			return success(friendRequest);
-		} catch (err) {
-			console.log(err);
-			error("Error sending friend request");
-			throw err;
-		}
-	},
-	cancelRequest: async function (
-		data: ICreateFriendRequestUsernames
-	): Promise<Result<ICanceledRequest>> {
-		try {
-			const ids = await friendRepository.getIdsFromUsernames([
-				data.fromUsername,
-				data.toUsername,
-			]);
-			const friendRequest = await friendRepository.cancelRequest({
-				fromId: ids[0],
-				toId: ids[1],
-			});
-			return success(friendRequest);
-		} catch (err) {
-			console.log(err);
-			error("Error sending friend request");
 			throw err;
 		}
 	},
@@ -108,6 +51,48 @@ export const friendService = {
 		} catch (err) {
 			console.log(err);
 			error("Error receiving my friend requests");
+			throw err;
+		}
+	},
+	sendRequest: async function (
+		data: ICreateFriendRequest
+	): Promise<Result<IFriendRequest>> {
+		try {
+			const friendRequest = await friendRepository.sendRequest({
+				fromId: data.fromId,
+				toUsername: data.toUsername,
+			});
+			return success(friendRequest);
+		} catch (err) {
+			console.log(err);
+			error("Error sending friend request");
+			throw err;
+		}
+	},
+	acceptRequest: async function (
+		data: IAcceptFriendRequest
+	): Promise<Result<IFriendRequest>> {
+		try {
+			const friendRequest = await friendRepository.acceptRequest({
+				fromUsername: data.fromUsername,
+				toId: data.toId
+			});
+			return success(friendRequest);
+		} catch (err) {
+			console.log(err);
+			error("Error sending friend request");
+			throw err;
+		}
+	},
+	cancelRequest: async function (
+		data: ICancelFriendRequest
+	): Promise<Result<ICanceledRequest>> {
+		try {
+			const friendRequest = await friendRepository.cancelRequest(data);
+			return success(friendRequest);
+		} catch (err) {
+			console.log(err);
+			error("Error sending friend request");
 			throw err;
 		}
 	},

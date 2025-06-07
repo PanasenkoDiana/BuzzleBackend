@@ -20,14 +20,25 @@ export interface IGetMyRequest {
 	to: IUser;
 }
 
-export interface ICreateFriendRequestUsernames {
-	fromUsername: string;
+export interface ICreateFriendRequest {
+	fromId: number;
 	toUsername: string;
 }
 
-export interface ICreateFriendRequest {
-	fromId: number;
+export interface IAcceptFriendRequest {
+	fromUsername: string;
 	toId: number;
+}
+
+export interface ICancelFriendRequest {
+	myId: number;
+	username: string,
+	isIncoming: boolean
+}
+
+export interface ICancelFriendRequestWithoutId {
+	username: string,
+	isIncoming: boolean
 }
 
 export type IFriendRequest = Prisma.FriendRequestGetPayload<{
