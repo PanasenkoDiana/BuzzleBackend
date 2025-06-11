@@ -117,6 +117,13 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.FriendRequestScalarFieldEnum = {
+  id: 'id',
+  fromId: 'fromId',
+  toId: 'toId',
+  status: 'status'
+};
+
 exports.Prisma.ImageScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -157,9 +164,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.FriendRequestStatus = exports.$Enums.FriendRequestStatus = {
+  accepted: 'accepted',
+  pending: 'pending'
+};
 
 exports.Prisma.ModelName = {
+  FriendRequest: 'FriendRequest',
   Image: 'Image',
   Tag: 'Tag',
   User: 'User',

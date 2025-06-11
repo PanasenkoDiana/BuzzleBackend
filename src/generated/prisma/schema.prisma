@@ -1,3 +1,19 @@
+model FriendRequest {
+  id     Int                 @id @default(autoincrement())
+  from   User                @relation("SentRequests", fields: [fromId], references: [id])
+  fromId Int
+  to     User                @relation("ReceivedRequests", fields: [toId], references: [id])
+  toId   Int
+  status FriendRequestStatus
+
+  @@unique([fromId, toId])
+}
+
+enum FriendRequestStatus {
+  accepted
+  pending
+}
+
 model Image {
   id   Int    @id @default(autoincrement())
   name String
@@ -19,7 +35,10 @@ model User {
   profileImage String?
   name         String?
   surname      String?
-  username     String?
+  username     String  @unique
+
+  sentRequests     FriendRequest[] @relation("SentRequests")
+  receivedRequests FriendRequest[] @relation("ReceivedRequests")
 }
 
 model User_Post {

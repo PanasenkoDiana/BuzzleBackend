@@ -6,4 +6,7 @@ model User {
   name         String?
   surname      String?
   username     String?
+
+  sentRequests     FriendRequest[] @relation("SentRequests")
+  receivedRequests FriendRequest[] @relation("ReceivedRequests")
 }
