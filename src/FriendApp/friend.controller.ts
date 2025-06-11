@@ -43,11 +43,20 @@ export const friendController = {
 	},
 	cancelRequest: async function (req: Request, res: Response) {
 		const id: number = Number(res.locals.userId);
-		const { friendUsername, isIncoming } = req.body;
+		const { username, isIncoming } = req.body;
 		const result = await friendService.cancelRequest({
 			myId: id,
-			username: friendUsername,
+			username: username,
 			isIncoming,
+		});
+		res.json(result);
+	},
+	deleteFriend: async function (req: Request, res: Response) {
+		const id: number = Number(res.locals.userId);
+		const { username } = req.body;
+		const result = await friendService.deleteFriend({
+			myId: id,
+			username: username
 		});
 		res.json(result);
 	},

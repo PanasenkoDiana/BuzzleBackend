@@ -9,6 +9,8 @@ import {
 	IGetMyRequest,
 	IGetRequest,
 	IUser,
+	IDeletedFriend,
+	IDeleteFriend
 } from "./friend.types";
 
 export const friendService = {
@@ -88,8 +90,20 @@ export const friendService = {
 		data: ICancelFriendRequest
 	): Promise<Result<ICanceledRequest>> {
 		try {
-			const friendRequest = await friendRepository.cancelRequest(data);
-			return success(friendRequest);
+			const status = await friendRepository.cancelRequest(data);
+			return success(status);
+		} catch (err) {
+			console.log(err);
+			error("Error sending friend request");
+			throw err;
+		}
+	},
+	deleteFriend: async function (
+		data: IDeleteFriend
+	): Promise<Result<IDeletedFriend>> {
+		try {
+			const status = await friendRepository.deleteFriend(data);
+			return success(status);
 		} catch (err) {
 			console.log(err);
 			error("Error sending friend request");

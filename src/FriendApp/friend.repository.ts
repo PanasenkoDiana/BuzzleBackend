@@ -5,6 +5,8 @@ import {
 	ICanceledRequest,
 	ICancelFriendRequest,
 	ICreateFriendRequest,
+	IDeletedFriend,
+	IDeleteFriend,
 	IFriendRequest,
 	IGetMyRequest,
 	IGetRequest,
@@ -60,7 +62,7 @@ export const friendRepository = {
 	},
 	getRecommends: async function (id: number): Promise<IUser[]> {
 		try {
-			console.log(id)
+			console.log(`My id: ${id}`);
 			const relatedUsers = await PrismaClient.friendRequest.findMany({
 				where: {
 					OR: [{ fromId: id }, { toId: id }],
@@ -72,15 +74,16 @@ export const friendRepository = {
 				},
 			});
 
-			console.log(relatedUsers)
+			console.log(relatedUsers);
 
-			const excludedIds = relatedUsers
-				.map((user) => {
+			const excludedIds = [
+				...relatedUsers.map((user) => {
 					return user.fromId === id ? user.toId : user.fromId;
-				})
-				.filter((userId) => userId !== id);
+				}),
+				id,
+			];
 
-			console.log(excludedIds)
+			console.log("excludedIds:", excludedIds);
 
 			const users = await PrismaClient.user.findMany({
 				where: {
@@ -91,7 +94,6 @@ export const friendRepository = {
 				orderBy: {
 					id: "desc",
 				},
-				take: 5,
 				select: {
 					id: true,
 					name: true,
@@ -241,6 +243,49 @@ export const friendRepository = {
 			});
 
 			return { status: "canceled" };
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
+	},
+	deleteFriend: async function (
+		data: IDeleteFriend
+	): Promise<IDeletedFriend> {
+		try {
+			const request = await PrismaClient.friendRequest.findFirst({
+				where: {
+					OR: [
+						{
+							from: { username: data.username },
+							toId: data.myId,
+						},
+						{
+							fromId: data.myId,
+							to: { username: data.username },
+						},
+					],
+					status: { in: ["pending", "accepted"] },
+				},
+				select: {
+					fromId: true,
+					toId: true,
+				},
+			});
+
+			if (!request) {
+				throw Error("Friend request not found");
+			}
+
+			await PrismaClient.friendRequest.delete({
+				where: {
+					fromId_toId: {
+						fromId: request.fromId,
+						toId: request.toId,
+					},
+				},
+			});
+
+			return { status: "deleted" };
 		} catch (err) {
 			console.log(err);
 			throw err;

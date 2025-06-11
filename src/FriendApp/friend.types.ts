@@ -36,6 +36,11 @@ export interface ICancelFriendRequest {
 	isIncoming: boolean
 }
 
+export interface IDeleteFriend {
+	myId: number;
+	username: string,
+}
+
 export interface ICancelFriendRequestWithoutId {
 	username: string,
 	isIncoming: boolean
@@ -50,3 +55,5 @@ export type IFriendRequest = Prisma.FriendRequestGetPayload<{
 }>;
 
 export type ICanceledRequest = { status: "canceled" }
+
+export type IDeletedFriend = { status: "deleted" }

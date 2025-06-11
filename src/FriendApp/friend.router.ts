@@ -12,5 +12,6 @@ friendRouter.get("/recommends", authTokenMiddleware, friendController.getRecomme
 friendRouter.post("/send", authTokenMiddleware, friendController.sendRequest)
 friendRouter.post("/accept", authTokenMiddleware, friendController.acceptRequest)
 friendRouter.post("/cancel", authTokenMiddleware, friendController.cancelRequest)
+friendRouter.post("/delete", authTokenMiddleware, friendController.deleteFriend)
 
 export default friendRouter
