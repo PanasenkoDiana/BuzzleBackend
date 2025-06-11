@@ -8,7 +8,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "npx nodemon src/server.ts",
-    "seed": "ts-node ./prisma/seed.ts"
+    "prisma:format": "prisma format",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "ts-node ./prisma/seed.ts"
   },
   "author": "",
   "license": "ISC",
