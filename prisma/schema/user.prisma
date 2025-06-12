@@ -6,4 +6,6 @@ model User {
   name         String?
   surname      String?
   username     String?
+  images       Image[]
+  albums       Album[]
 }

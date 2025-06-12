@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import userPostRouter from "./UserPostApp/userPost.router";
 import tagRouter from "./TagApp/tag.router";
+import albumRouter from './AlbumApp/album.router'
 import path from "path";
 
 const app = express();
@@ -21,6 +22,7 @@ app.use("/media", express.static(path.join(__dirname, "../", "media")))
 app.use("/api/user", userRouter);
 app.use("/api/posts", userPostRouter);
 app.use("/api/tags", tagRouter)
+app.use("/api/albums", albumRouter)
 
 app.listen(PORT, HOST, () => {
 	console.log(`Server running at http://${HOST}:${PORT}`);

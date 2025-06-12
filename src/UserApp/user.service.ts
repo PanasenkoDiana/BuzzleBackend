@@ -1,6 +1,7 @@
 import {
 	changeUserPartOne,
 	changeUserPartTwo,
+	createMyPhoto,
 	CreateUser,
 	IError,
 	ISuccess,
@@ -147,4 +148,31 @@ export const UserService = {
 
 		return { status: "success", data: user };
 	},
+
+	addMyPhoto: async function (
+		data: createMyPhoto,
+		id: number
+	): Promise<IError | ISuccess<string>> {
+		try {
+			if (
+				data.image &&
+				data.image.startsWith("data:image")
+			) {
+				const image = await base64ToImage(data.image);
+				data.image = image.name; // просто имя файла без префикса /media/
+			}
+
+			const user = await UserRepositories.addMyPhoto(data, id);
+			if (!user) {
+				return { status: "error", message: "photo don't created found" };
+			}
+
+			return { status: "success", data: user };
+		} catch {
+			return {
+				status: "error",
+				message: "create photo error",
+			};
+		}
+	}
 };

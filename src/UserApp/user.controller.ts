@@ -52,4 +52,11 @@ export const UserController = {
 
         res.json(result)
     },
+    addMyPhoto: async function(req: Request, res: Response) {
+        const id = res.locals.userId
+        const data = req.body
+        const result = await UserService.addMyPhoto(data, +id)
+
+        res.json(result)
+    }
 }
