@@ -30,7 +30,9 @@ export const AlbumController = {
 
     createAlbum: async function(req: Request, res: Response){
         const id = res.locals.userId
+        console.log(id)
         const data = req.body
+        console.log(data)
         const result = await AlbumService.createAlbum(data, +id)
 
         res.json(result)

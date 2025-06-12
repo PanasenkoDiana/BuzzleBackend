@@ -1,6 +1,7 @@
-import { Prisma, PrismaClient } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import { AddPhotoToAlbum, CreateAlbum } from "./album.type"
 import { create } from "ts-node"
+import { PrismaClient } from "../prisma/client"
 
 
 export const AlbumRepository = {
@@ -58,15 +59,20 @@ export const AlbumRepository = {
 
     createAlbum: async function(data: CreateAlbum, id: number) {
         try {
+            console.log("data:" + data.name)
+            console.log("data:" + data.theme)
+            console.log("data:" + data.year)
+            console.log("id:" + id)
+            // const prisma = new PrismaClient()
             const newAlbum = await PrismaClient.album.create({
                 data: {
                     userId: id,
                     name: data.name,
                     theme: data.theme,
-                    year: data.year,
+                    year: data.year
                 }
             })
-
+            console.log('bbb')
             return newAlbum
         } catch(error) {
             console.log(error)

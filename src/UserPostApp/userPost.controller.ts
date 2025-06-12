@@ -3,19 +3,22 @@ import { Request, Response } from "express";
 
 export const userPostController = {
 	createPost: async function (req: Request, res: Response) {
-		const data = req.body;
-		console.log(data)
-		const result = await userPostService.createPost(data, data.images)
+		const userId: number = Number(res.locals.userId);
+		const { images, ...data } = req.body;
+		console.log(data);
+		const result = await userPostService.createPost(userId, data, images);
 		res.json(result);
 	},
 	deletePost: async function (req: Request, res: Response) {
+		const userId: number = Number(res.locals.userId);
 		const data = req.body;
-		const result = await userPostService.deletePost(data.id);
+		const result = await userPostService.deletePost(userId, data.id);
 		res.json(result);
 	},
-	changePost: async function (req: Request, res: Response) {
-		const { id, ...postData } = req.body;
-		const result = await userPostService.updatePost(id, postData);
+	updatePost: async function (req: Request, res: Response) {
+		const userId: number = Number(res.locals.userId);
+		const { postId, images, ...data } = req.body;
+		const result = await userPostService.updatePost(userId, postId, data, images);
 		res.json(result);
 	},
 	getPostById: async function (req: Request, res: Response) {
@@ -25,6 +28,11 @@ export const userPostController = {
 	},
 	getAllPosts: async function (req: Request, res: Response) {
 		const result = await userPostService.getAllPosts();
+		res.json(result);
+	},
+	getMyPosts: async function (req: Request, res: Response) {
+		const id: number = Number(res.locals.userId);
+		const result = await userPostService.getMyPosts(id);
 		res.json(result);
 	},
 };

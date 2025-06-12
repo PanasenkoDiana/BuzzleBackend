@@ -1,14 +1,28 @@
 import { Prisma } from "../generated/prisma";
 
-// export type UserPost = Prisma.User_PostGetPayload<{}>;
+export type CreateUserPost = Prisma.User_PostGetPayload<{
+    include: {
+        tags: true
+    }
+    omit: {
+        id: true
+        userId: true,
+    }
+}>
+
 export type ImageCreateMany = Prisma.ImageCreateManyInput
+
 export type UserPost = Prisma.User_PostGetPayload<{
     include: {
         tags: true,
-        images: true
+        images: true,
+        user: true
+    },
+    omit: {
+        userId: true
     }
 }>
-export type CreateUserPost = Prisma.User_PostCreateInput;
+
 export type UpdateUserPost = Prisma.User_PostUpdateInput;
 
 export type CreateImage = Prisma.ImageCreateInput

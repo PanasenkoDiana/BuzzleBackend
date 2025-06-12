@@ -14,7 +14,7 @@ import { compare, hash } from "bcryptjs";
 import { SECRET_KEY } from "../config/token";
 import { EmailService } from "../core/email.service";
 import { VerificationService } from "../core/verification.service";
-import { base64ToImage } from "../tools/base64ToImage"; // путь зависит от структуры проекта
+import { base64ToImage } from "../tools/base64ToImage";
 
 const verificationService = new VerificationService(EmailService);
 

@@ -5,10 +5,12 @@ model User {
   profileImage String?
   name         String?
   surname      String?
-  username     String @unique
+  username     String? @unique
 
-  images       Image[]
-  albums       Album[]
+  images           Image[]
+  albums           Album[]
   sentRequests     FriendRequest[] @relation("SentRequests")
   receivedRequests FriendRequest[] @relation("ReceivedRequests")
+
+  posts User_Post[]
 }

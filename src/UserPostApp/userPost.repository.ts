@@ -1,8 +1,18 @@
 import { PrismaClient } from "../prisma/client";
-import { CreateUserPost, ImageCreateMany, UpdateUserPost, UserPost, Image } from "./userPost.type";
+import {
+	CreateUserPost,
+	ImageCreateMany,
+	UpdateUserPost,
+	UserPost,
+	Image,
+} from "./userPost.type";
 
 export const userPostRepository = {
-	createPost: async function (data: CreateUserPost, images: Image[]): Promise<UserPost> {
+	createPost: async function (
+		userId: number,
+		data: CreateUserPost,
+		images: Image[]
+	): Promise<UserPost> {
 		try {
 			const newPost = await PrismaClient.user_Post.create({
 				data: {
@@ -12,8 +22,13 @@ export const userPostRepository = {
 					link: data.link ?? null,
 					images: {
 						createMany: {
-							data: images
-						}
+							data: images,
+						},
+					},
+					user: {
+						connect: {
+							id: userId,
+						},
 					},
 
 					views: data.views ?? 0,
@@ -46,6 +61,7 @@ export const userPostRepository = {
 				include: {
 					tags: true,
 					images: true,
+					user: true,
 				},
 			});
 			return newPost;
@@ -55,12 +71,24 @@ export const userPostRepository = {
 		}
 	},
 
-	deletePost: async function (id: number) {
+	deletePost: async function (userId: number, postId: number) {
 		try {
-			const deletedPost = await PrismaClient.user_Post.delete({
-				where: { id },
+			const post = await PrismaClient.user_Post.findFirst({
+				where: {
+					id: postId
+				},
 			});
-			return deletedPost;
+
+			if (post?.userId !== userId) {
+				return "you`re not";
+			}
+
+			await PrismaClient.user_Post.delete({
+				where: {
+					id: postId
+				},
+			});
+			return `Post ${postId} succesfuly deleted`;
 		} catch (error) {
 			console.log(error);
 			throw error;
@@ -68,85 +96,42 @@ export const userPostRepository = {
 	},
 
 	updatePost: async function (
+		userId: number,
+		postId: number,
 		data: UpdateUserPost,
-		id: number
-	): Promise<UserPost> {
+		images: Image[]
+	) {
 		try {
-			const imagesArray = Array.isArray(data.images) ? data.images : [];
-			const tagsArray = Array.isArray(data.tags) ? data.tags : [];
+			await PrismaClient.image.deleteMany({
+				where: {
+					user_PostId: postId,
+				},
+			});
 
-			const updatedPost = await PrismaClient.user_Post.update({
-				where: { id },
+			const updatedPost = PrismaClient.user_Post.update({
+				where: {
+					id: postId,
+				},
 				data: {
-					name: data.name,
-					topic: data.topic ?? null,
-					text: data.text ?? null,
-					link: data.link ?? null,
-					views: data.views ?? 0,
-					likes: data.likes ?? 0,
-					images:
-						imagesArray.length > 0
-							? {
-									deleteMany: {},
-									createMany: {
-										data: imagesArray.map((path) => ({
-											name: path.split("/").pop()!,
-											path,
-										})),
-									},
-							  }
-							: undefined,
-					tags:
-						tagsArray.length > 0
-							? {
-									set: [],
-									connectOrCreate: tagsArray.map(
-										(tagName) => {
-											if (
-												typeof tagName === "string" &&
-												!tagName.startsWith("#")
-											) {
-												tagName = `#${tagName}`;
-											} else if (
-												typeof tagName === "object" &&
-												tagName.name &&
-												!tagName.name.startsWith("#")
-											) {
-												tagName = {
-													...tagName,
-													name: `#${tagName.name}`,
-												};
-											}
-											return {
-												where: {
-													name:
-														typeof tagName ===
-														"string"
-															? tagName
-															: tagName.name,
-												},
-												create: {
-													name:
-														typeof tagName ===
-														"string"
-															? tagName
-															: tagName.name,
-												},
-											};
-										}
-									),
-							  }
-							: undefined,
+					...data,
+					images: {
+						createMany: {
+							data: images,
+						},
+					},
 				},
 				include: {
-					tags: true,
+					user: true,
 					images: true,
+					tags: true,
+				},
+				omit: {
+					userId: true,
 				},
 			});
 			return updatedPost;
-		} catch (error) {
-			console.log(error);
-			throw error;
+		} catch (err) {
+			console.log(err);
 		}
 	},
 
@@ -157,6 +142,10 @@ export const userPostRepository = {
 				include: {
 					tags: true,
 					images: true,
+					user: true,
+				},
+				omit: {
+					userId: true,
 				},
 			});
 			return post;
@@ -172,9 +161,35 @@ export const userPostRepository = {
 				include: {
 					tags: true,
 					images: true,
+					user: true,
+				},
+				omit: {
+					userId: true,
 				},
 			});
 			return allPosts;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	},
+
+	getMyPosts: async function (id: number): Promise<UserPost[]> {
+		try {
+			const myPosts = await PrismaClient.user_Post.findMany({
+				where: {
+					userId: id
+				},
+				include: {
+					tags: true,
+					images: true,
+					user: true,
+				},
+				omit: {
+					userId: true,
+				},
+			});
+			return myPosts;
 		} catch (error) {
 			console.log(error);
 			throw error;

@@ -66,12 +66,13 @@ export const AlbumService = {
         data: CreateAlbum,
         id: number
     ): Promise<IError | ISuccess<Album>> {
+        console.log("service data:" + data)
         const newAlbum = await AlbumRepository.createAlbum(data, id)
-
+        console.log(newAlbum)
         if (!newAlbum) {
             return { status: "error", message: "Album don't create" };
         }
-
+        console.log(3)
         return { status: 'success', data: newAlbum }
     }
 }
