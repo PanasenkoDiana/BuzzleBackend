@@ -11,6 +11,8 @@ userRouter.post("/register/second/:id", UserController.secondRegister)
 userRouter.post("/change/part-one/:id", UserController.changeUserPartOne)
 userRouter.post("/change/part-two/:id", UserController.changeUserPartTwo)
 
+userRouter.get('photo/create', authTokenMiddleware, UserController.addMyPhoto)
+
 userRouter.get("/me", authTokenMiddleware, UserController.findUserById);
 
 export default userRouter;

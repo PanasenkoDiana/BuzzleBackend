@@ -1,5 +1,6 @@
+import { create } from "ts-node"
 import { PrismaClient } from "../prisma/client"
-import { changeUserPartOne, changeUserPartTwo, CreateUser, secondRegister } from "./user.type"
+import { changeUserPartOne, changeUserPartTwo, createMyPhoto, CreateUser, secondRegister } from "./user.type"
 
 export const UserRepositories = {
     createUser: async function(data: CreateUser) {
@@ -81,4 +82,22 @@ export const UserRepositories = {
             console.log(error)
         }
     },
+    addMyPhoto: async function(data: createMyPhoto, id: number){
+        try {
+            const newPhoto = await PrismaClient.user.update({
+                where: { id },
+                data: {
+                    images: {
+                        create: {
+                            name: data.image
+                        }
+                    }
+                }
+            }) 
+
+            return 'photo added'
+        } catch(error) {
+            console.log(error)
+        }
+    }
 }

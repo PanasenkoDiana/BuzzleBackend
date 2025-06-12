@@ -90,6 +90,14 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.AlbumScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  theme: 'theme',
+  year: 'year',
+  userId: 'userId'
+};
+
 exports.Prisma.FriendRequestScalarFieldEnum = {
   id: 'id',
   fromId: 'fromId',
@@ -100,7 +108,9 @@ exports.Prisma.FriendRequestScalarFieldEnum = {
 exports.Prisma.ImageScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  user_PostId: 'user_PostId'
+  user_PostId: 'user_PostId',
+  user_Id: 'user_Id',
+  album_Id: 'album_Id'
 };
 
 exports.Prisma.TagScalarFieldEnum = {
@@ -143,6 +153,7 @@ exports.FriendRequestStatus = exports.$Enums.FriendRequestStatus = {
 };
 
 exports.Prisma.ModelName = {
+  Album: 'Album',
   FriendRequest: 'FriendRequest',
   Image: 'Image',
   Tag: 'Tag',
@@ -178,7 +189,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
+    "rootEnvPath": "../../../.env",
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
