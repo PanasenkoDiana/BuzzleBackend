@@ -10,6 +10,9 @@ export const AlbumRepository = {
             const albums = await PrismaClient.album.findMany({
                 where: {
                     userId: id
+                },
+                include: {
+                    images: true
                 }
             })
             return albums
@@ -27,6 +30,9 @@ export const AlbumRepository = {
                     theme: data.theme,
                     year: data.year,
                 },
+                include: {
+                    images: true
+                }
             })
 
             return changedAlbum
@@ -69,7 +75,10 @@ export const AlbumRepository = {
                     userId: id,
                     name: data.name,
                     theme: data.theme,
-                    year: data.year
+                    year: new Date(`${data.year}-01-01`)
+                },
+                include: {
+                    images: true
                 }
             })
             console.log('bbb')

@@ -23,16 +23,16 @@ export const AlbumController = {
     addPhotoToAlbum: async function(req: Request, res: Response){
         const id = req.params.id
         const data = req.body
-        const result = await AlbumService.changeAlbum(data, +id)
+        console.log('standoff 2')
+        const result = await AlbumService.addPhotoToAlbum(data, +id)
+        console.log('result:' + result)
 
         res.json(result)
     },
 
     createAlbum: async function(req: Request, res: Response){
         const id = res.locals.userId
-        console.log(id)
         const data = req.body
-        console.log(data)
         const result = await AlbumService.createAlbum(data, +id)
 
         res.json(result)
