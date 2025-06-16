@@ -1,0 +1,10 @@
+model Avatar {
+  id         Int     @id @default(autoincrement())
+  image Image[] @relation("AvatarImages")
+  profile    Profile @relation(fields: [profile_id], references: [id])
+  profile_id Int
+  active     Boolean @default(true)
+  shown      Boolean @default(true)
+
+  @@map("app_avatar") // можно убрать или переименовать под свою таблицу
+}

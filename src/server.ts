@@ -2,7 +2,7 @@ import express from "express";
 import userRouter from "./UserApp/user.router";
 import cors from "cors";
 import dotenv from "dotenv";
-import userPostRouter from "./UserPostApp/userPost.router";
+import userPostRouter from "./PostApp/Post.router";
 import tagRouter from "./TagApp/tag.router";
 import albumRouter from './AlbumApp/album.router'
 import path from "path";

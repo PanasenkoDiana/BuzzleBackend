@@ -36,7 +36,7 @@ export const AlbumService = {
     },
 
     addPhotoToAlbum: async function(
-        data: AddPhotoToAlbum,
+        data: AddPhotoToAlbumCredentials,
         id: number
     ): Promise<IError | ISuccess<Album>> {
         try {

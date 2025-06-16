@@ -1,124 +1,77 @@
-import { create } from "ts-node";
 import { PrismaClient } from "../prisma/client";
+
 import {
+	CreateUser,
+	secondRegister,
 	changeUserPartOne,
 	changeUserPartTwo,
 	createMyPhoto,
-	CreateUser,
-	secondRegister,
 } from "./user.type";
 
 export const UserRepositories = {
-	createUser: async function (data: CreateUser) {
-		try {
-			const newUser = await PrismaClient.user.create({
-				data: data,
-			});
-			return newUser;
-		} catch (error) {
-			console.log(error);
-		}
-	},
-	findUserById: async function (id: number) {
-		try {
-			const user = await PrismaClient.user.findUnique({
-				where: { id },
-				include: {
-					images: true,
-					albums: true,
-				},
-			});
-			return user;
-		} catch (error) {
-			console.log(error);
-		}
-	},
+	createUser: async (data: CreateUser) => PrismaClient.user.create({ data }),
 
-	findUserByEmail: async function (email: string) {
-		try {
-			const user = await PrismaClient.user.findUnique({
-				where: {
-					email: email,
-				},
-			});
-			return user;
-		} catch (error) {
-			console.log(error);
-		}
-	},
-	secondRegister: async function (data: secondRegister, id: number) {
-		try {
-			const user = await PrismaClient.user.update({
-				where: { id },
-				data: {
-					name: data.name,
-					surname: data.surname,
-					username: data.username,
-				},
-				include: {
-					images: true,
-					albums: true,
-				},
-			});
-			return user;
-		} catch (error) {
-			console.log(error);
-		}
-	},
-	changeUserPartOne: async function (data: changeUserPartOne, id: number) {
-		try {
-			const user = await PrismaClient.user.update({
-				where: { id },
-				data: {
-					profileImage: data.profileImage,
-				},
-				include: {
-					images: true,
-					albums: true,
-				},
-			});
-			return user;
-		} catch (error) {
-			console.log(error);
-		}
-	},
-	changeUserPartTwo: async function (data: changeUserPartTwo, id: number) {
-		try {
-			const user = await PrismaClient.user.update({
-				where: { id },
-				data: {
-					name: data.name,
-					surname: data.surname,
-					email: data.email,
-					username: data.username,
-					password: data.password,
-				},
-				include: {
-					images: true,
-					albums: true,
-				},
-			});
-			return user;
-		} catch (error) {
-			console.log(error);
-		}
-	},
-	addMyPhoto: async function (data: createMyPhoto, id: number) {
-		try {
-			const newPhoto = await PrismaClient.user.update({
-				where: { id },
-				data: {
-					images: {
-						create: {
-							name: data.image,
-						},
-					},
-				},
-			});
+	findUserById: async (id: number) =>
+		PrismaClient.user.findUnique({
+			where: { id },
+			include: { images: true, albums: true },
+		}),
 
-			return "photo added";
-		} catch (error) {
-			console.log(error);
-		}
-	},
+	findUserByEmail: async (email: string) =>
+		PrismaClient.user.findUnique({ where: { email } }),
+
+	secondRegister: async (data: secondRegister, id: number) =>
+		PrismaClient.user.update({
+			where: { id },
+			data: {
+				name: data.name,
+				surname: data.surname,
+				username: data.username,
+			},
+			include: { images: true, albums: true },
+		}),
+
+	changeUserPartOne: async (data: changeUserPartOne, id: number) =>
+		PrismaClient.user.update({
+			where: { id },
+			data: { profileImage: data.profileImage },
+			include: { images: true, albums: true },
+		}),
+
+	changeUserPartTwo: async (data: changeUserPartTwo, id: number) =>
+		PrismaClient.user.update({
+			where: { id },
+			data: {
+				name: data.name,
+				surname: data.surname,
+				email: data.email,
+				username: data.username,
+				password: data.password,
+			},
+			include: { images: true, albums: true },
+		}),
+
+	addMyPhoto: async (data: createMyPhoto, id: number) => {
+		const profile = await PrismaClient.profile.findUnique({
+			where: { user_id: id },
+			select: { id: true },
+		});
+
+		if (!profile) throw new Error("Profile not found");
+
+		return PrismaClient.avatar.create({
+			data: {
+				image: {
+					create: {
+						filename: data.filename,
+						file: data.file,
+					}
+				},
+				profile: { connect: { id: profile.id } },
+				active: true,
+				shown: true,
+			},
+		});
+	}
+		
 };

@@ -11,12 +11,12 @@ export type IUser = Prisma.UserGetPayload<{
 }>;
 
 export interface IGetRequest {
-	status: "pending";
+	status: false;
 	from: IUser;
 }
 
 export interface IGetMyRequest {
-	status: "pending";
+	status: false;
 	to: IUser;
 }
 
@@ -54,6 +54,4 @@ export type IFriendRequest = Prisma.FriendRequestGetPayload<{
 	}
 }>;
 
-export type ICanceledRequest = { status: "canceled" }
-
-export type IDeletedFriend = { status: "deleted" }
+export type IDeletedFriend = { status: false }

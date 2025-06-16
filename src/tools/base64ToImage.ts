@@ -1,33 +1,28 @@
 import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import { Image } from "../UserPostApp/userPost.type";
+import { Prisma } from "../generated/prisma";
+
+type Image = Partial<Prisma.ImageGetPayload<{}>>;
 
 export async function base64ToImage(base64: string): Promise<Image> {
-    // Из data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAEWAgMAAAAGL
-    // Возвращает image/png и iVBORw0KGgoAAAANSUhEUgAAAXIAAAEWAgMAAAAGL
-	const info = base64.split(";base64,")
+  const extension = "png";
+  const buffer = Buffer.from(base64, "base64");
 
-	// Хранит тип файла
-	const extension = info[0].split("/")[1];
-	// Хранит информацию о файле (base64)
-	const imageData = info[1];
+  const fileName = `${uuidv4()}.${extension}`;
 
-	const buffer = Buffer.from(imageData, "base64");
-	const fileName = `${uuidv4()}.${extension}`;
+  const mediaDir = path.join(__dirname, "..", "..", "media");
 
-	const mediaDir = path.join(__dirname, "..", "..", "media");
-    // Проверяем наличие папки media, если нет — создаём
-    if (!fs.existsSync(mediaDir)) {
-        fs.mkdirSync(mediaDir, { recursive: true });
-    }
+  if (!fs.existsSync(mediaDir)) {
+    fs.mkdirSync(mediaDir, { recursive: true });
+  }
 
-    const filePath = path.join(mediaDir, fileName)
+  const filePath = path.join(mediaDir, fileName);
 
-	await fs.promises.writeFile(filePath, buffer);
-	if (!fs.existsSync(filePath)) {
-		console.log("Ошибка создания изображения");
-	}
+  await fs.promises.writeFile(filePath, buffer);
 
-	return {name: fileName};
+  return {
+    filename: fileName,
+    file: fileName,
+  };
 }

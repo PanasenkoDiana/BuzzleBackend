@@ -2,7 +2,6 @@ import { PrismaClient } from "../prisma/client";
 import { error, Result, success } from "../tools/result";
 import {
 	IAcceptFriendRequest,
-	ICanceledRequest,
 	ICancelFriendRequest,
 	ICreateFriendRequest,
 	IDeletedFriend,
@@ -18,7 +17,7 @@ export const friendRepository = {
 		try {
 			const fromMyRequests = await PrismaClient.friendRequest.findMany({
 				where: {
-					status: "accepted",
+					status: true,
 					from: { id: id },
 				},
 				select: {
@@ -35,7 +34,7 @@ export const friendRepository = {
 			});
 			const toMeRequests = await PrismaClient.friendRequest.findMany({
 				where: {
-					status: "accepted",
+					status: true,
 					to: { id: id },
 				},
 				select: {
@@ -65,8 +64,7 @@ export const friendRepository = {
 			console.log(`My id: ${id}`);
 			const relatedUsers = await PrismaClient.friendRequest.findMany({
 				where: {
-					OR: [{ fromId: id }, { toId: id }],
-					status: { in: ["pending", "accepted"] },
+					OR: [{ fromId: id }, { toId: id }]
 				},
 				select: {
 					fromId: true,
@@ -113,7 +111,6 @@ export const friendRepository = {
 		try {
 			const requests = await PrismaClient.friendRequest.findMany({
 				where: {
-					status: "pending",
 					toId: id,
 				},
 				select: {
@@ -131,7 +128,7 @@ export const friendRepository = {
 			});
 			return requests.map((req) => ({
 				...req,
-				status: "pending",
+				status: false
 			}));
 		} catch (err) {
 			console.log(err);
@@ -142,7 +139,6 @@ export const friendRepository = {
 		try {
 			const requests = await PrismaClient.friendRequest.findMany({
 				where: {
-					status: "pending",
 					fromId: id,
 				},
 				select: {
@@ -160,7 +156,7 @@ export const friendRepository = {
 			});
 			return requests.map((req) => ({
 				...req,
-				status: "pending",
+				status: false
 			}));
 		} catch (err) {
 			console.log(err);
@@ -173,7 +169,6 @@ export const friendRepository = {
 		try {
 			const request = await PrismaClient.friendRequest.create({
 				data: {
-					status: "pending",
 					from: { connect: { id: data.fromId } },
 					to: { connect: { username: data.toUsername } },
 				},
@@ -208,7 +203,7 @@ export const friendRepository = {
 					},
 				},
 				data: {
-					status: "accepted",
+					status: true,
 				},
 			});
 			return request;
@@ -219,7 +214,7 @@ export const friendRepository = {
 	},
 	cancelRequest: async function (
 		data: ICancelFriendRequest
-	): Promise<ICanceledRequest> {
+	): Promise<IDeletedFriend> {
 		try {
 			const otherUser = await PrismaClient.user.findUnique({
 				where: { username: data.username },
@@ -242,7 +237,7 @@ export const friendRepository = {
 				},
 			});
 
-			return { status: "canceled" };
+			return { status: false };
 		} catch (err) {
 			console.log(err);
 			throw err;
@@ -263,8 +258,7 @@ export const friendRepository = {
 							fromId: data.myId,
 							to: { username: data.username },
 						},
-					],
-					status: { in: ["pending", "accepted"] },
+					]
 				},
 				select: {
 					fromId: true,
@@ -285,7 +279,7 @@ export const friendRepository = {
 				},
 			});
 
-			return { status: "deleted" };
+			return { status: false };
 		} catch (err) {
 			console.log(err);
 			throw err;

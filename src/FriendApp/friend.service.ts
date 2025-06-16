@@ -2,7 +2,6 @@ import { error, Result, success } from "../tools/result";
 import { friendRepository } from "./friend.repository";
 import {
 	IAcceptFriendRequest,
-	ICanceledRequest,
 	ICancelFriendRequest,
 	ICreateFriendRequest,
 	IFriendRequest,
@@ -88,7 +87,7 @@ export const friendService = {
 	},
 	cancelRequest: async function (
 		data: ICancelFriendRequest
-	): Promise<Result<ICanceledRequest>> {
+	): Promise<Result<IDeletedFriend>> {
 		try {
 			const status = await friendRepository.cancelRequest(data);
 			return success(status);
