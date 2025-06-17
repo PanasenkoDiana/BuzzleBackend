@@ -1,0 +1,14 @@
+model Post {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String
+
+  authorId Int
+  author   User @relation("PostsAuthored", fields: [authorId], references: [id])
+
+  images Image[] @relation("PostImages")
+  views  Profile[]  @relation("PostViews")
+  likes  Profile[]  @relation("PostLikes")
+  tags   Tag[]   @relation("PostTags")
+  links  Link[]
+}

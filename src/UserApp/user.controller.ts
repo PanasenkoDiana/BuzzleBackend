@@ -57,6 +57,49 @@ export const UserController = {
         const data = req.body
         const result = await UserService.addMyPhoto(data, +id)
 
+<<<<<<< Updated upstream
         res.json(result)
     }
 }
+=======
+			const data = { ...rest, profileImage };
+
+			const result = await UserService.changeUserPartOne(
+				data,
+				+req.params.id
+			);
+			res.json(result);
+		} catch (err) {
+			next(err);
+		}
+	},
+
+	changeUserPartTwo: async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const result = await UserService.changeUserPartTwo(
+				req.body,
+				+req.params.id
+			);
+			res.json(result);
+		} catch (err) {
+			next(err);
+		}
+	},
+
+	addMyPhoto: async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const result = await UserService.addMyPhoto(
+				req.body,
+				+res.locals.userId
+			);
+			res.json(result);
+		} catch (err) {
+			next(err);
+		}
+	},
+};
+>>>>>>> Stashed changes

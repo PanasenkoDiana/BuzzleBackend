@@ -1,7 +1,8 @@
 import { Prisma } from "@prisma/client"
-import { AddPhotoToAlbum, CreateAlbum } from "./album.type"
+import { AddPhotoToAlbum, AddPhotoToAlbumCredentials, Album, CreateAlbum, CreateAlbumInput } from "./album.type"
 import { create } from "ts-node"
 import { PrismaClient } from "../prisma/client"
+import { connect } from "http2"
 
 
 export const AlbumRepository = {
@@ -27,8 +28,8 @@ export const AlbumRepository = {
                 where: { id: id },
                 data: {
                     name: data.name,
-                    theme: data.theme,
-                    year: data.year,
+                    // theme: data.theme,
+                    // year: data.year,
                 },
                 include: {
                     images: true
@@ -41,14 +42,15 @@ export const AlbumRepository = {
         }
     },
 
-    addPhotoToAlbum: async function(data: AddPhotoToAlbum, id: number) {
+    addPhotoToAlbum: async function(data: { file: string, filename: string }, id: number) {
         try {
             const album = await PrismaClient.album.update({
                 where: { id },
                 data: {
                     images: {
                         create: {
-                            name: data.image
+                            file: data.file,
+                            filename: data.filename,
                         }
                     }
                 },
@@ -63,28 +65,43 @@ export const AlbumRepository = {
         }
     },
 
-    createAlbum: async function(data: CreateAlbum, id: number) {
+    createAlbum: async function (data: CreateAlbumInput, userId: number) {
         try {
-            console.log("data:" + data.name)
-            console.log("data:" + data.theme)
-            console.log("data:" + data.year)
-            console.log("id:" + id)
-            // const prisma = new PrismaClient()
-            const newAlbum = await PrismaClient.album.create({
+            // const tagNameRaw = typeof data.topic === "string" ? data.topic : dat;
+            // const tagName = tagNameRaw ? (tagNameRaw.startsWith("#") ? tagNameRaw : `#${tagNameRaw}`) : undefined;
+
+            const album = await PrismaClient.album.create({
                 data: {
-                    userId: id,
+                    userId: userId,
                     name: data.name,
+<<<<<<< Updated upstream
                     theme: data.theme,
                     year: new Date(`${data.year}-01-01`)
                 },
                 include: {
                     images: true
+=======
+                    // topic: {
+                    //     create: {
+
+                    //     }
+                    // }
+                },
+                include: {
+                    topic: true,
+>>>>>>> Stashed changes
                 }
-            })
-            console.log('bbb')
-            return newAlbum
-        } catch(error) {
-            console.log(error)
+            });
+
+
+
+            return album;
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     }
+
+
+
 }

@@ -16,6 +16,10 @@ export type User = Prisma.UserGetPayload<{
         albums: true,
     }
 }>
+export type UserWithoutIncludes = Prisma.UserGetPayload<{}>
+
+type Image = Prisma.ImageGetPayload<{}>
+
 export type CreateUser = Prisma.UserCreateInput
 export type secondRegister = Pick<User, 'name' | 'surname' | 'username'>
 export type changeUserPartOne = Pick<User, 'profileImage'>

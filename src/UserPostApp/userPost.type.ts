@@ -28,4 +28,4 @@ export type UpdateUserPost = Prisma.User_PostUpdateInput;
 export type CreateImage = Prisma.ImageCreateInput
 export type Tag = Prisma.TagGetPayload<{}>;
 export type CreateTag = Prisma.TagCreateInput;
-export type Image = {name: string}
+export type Image = Prisma.ImageGetPayload<{}>

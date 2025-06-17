@@ -1,4 +1,5 @@
 model Album {
+<<<<<<< Updated upstream
   id     Int      @id @default(autoincrement())
   name   String
   theme  String
@@ -6,6 +7,69 @@ model Album {
   images Image[]
   User   User?    @relation(fields: [userId], references: [id])
   userId Int?
+=======
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+
+  previewImageId Int?   @unique
+  previewImage   Image? @relation("PreviewImage", fields: [previewImageId], references: [id])
+
+  shown Boolean @default(true)
+
+  topic   Tag? @relation(fields: [topicId], references: [id])
+  topicId Int?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  images Image[] @relation("AlbumImages")
+}
+
+model Avatar {
+  id Int @id @default(autoincrement())
+
+  image      Image   @relation("AvatarImages", fields: [imageId], references: [id])
+  imageId    Int
+  profile    Profile @relation(fields: [profile_id], references: [id])
+  profile_id Int
+  active     Boolean @default(true)
+  shown      Boolean @default(true)
+
+  @@map("app_avatar") // можно убрать или переименовать под свою таблицу
+}
+
+model ChatGroup {
+  id               Int     @id @default(autoincrement())
+  name             String
+  is_personal_chat Boolean @default(false)
+
+  adminId Int
+  admin   User @relation("AdminGroup", fields: [adminId], references: [id])
+
+  members User[]  @relation("Members")
+  avatar  String?
+
+  messages ChatMessage[]
+
+  @@map("chat_group")
+}
+
+model ChatMessage {
+  id      Int    @id @default(autoincrement())
+  content String
+
+  authorId Int
+  author   User @relation(fields: [authorId], references: [id])
+
+  chatGroupId Int
+  chat_group  ChatGroup @relation(fields: [chatGroupId], references: [id])
+
+  sent_at        DateTime @default(now())
+  attached_image String?
+
+  @@map("chat_message")
+>>>>>>> Stashed changes
 }
 
 model FriendRequest {
@@ -31,11 +95,46 @@ model Image {
   User_Post   User_Post? @relation(fields: [user_PostId], references: [id])
   user_PostId Int?
 
+<<<<<<< Updated upstream
   User    User? @relation(fields: [user_Id], references: [id])
   user_Id Int?
 
   Album    Album? @relation(fields: [album_Id], references: [id])
   album_Id Int?
+=======
+  albumPreviewOf Album? @relation("PreviewImage")
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id])
+
+  posts  Post[]  @relation("PostImages")
+  albums Album[] @relation("AlbumImages")
+}
+
+model Link {
+  id  Int    @id @default(autoincrement())
+  url String
+
+  postId Int
+  post   Post @relation(fields: [postId], references: [id])
+}
+
+model Profile {
+  id Int @id @default(autoincrement())
+
+  user_id Int  @unique
+  user    User @relation("userProfile", fields: [user_id], references: [id])
+
+  date_of_birth DateTime
+  signature     String? // путь к изображению или null
+
+  avatars Avatar[]
+
+  posts_viewed Post[] @relation("PostViews")
+  posts_liked  Post[] @relation("PostLikes")
+
+  @@map("app_profile") // если хочешь сохранить имя как в Django
+>>>>>>> Stashed changes
 }
 
 model Tag {
@@ -58,7 +157,28 @@ model User {
   sentRequests     FriendRequest[] @relation("SentRequests")
   receivedRequests FriendRequest[] @relation("ReceivedRequests")
 
+<<<<<<< Updated upstream
   posts User_Post[]
+=======
+  last_login   DateTime?
+  is_staff     Boolean   @default(false)
+  is_active    Boolean   @default(true)
+  is_superuser Boolean   @default(false)
+  date_joined  DateTime  @default(now())
+
+  groups           UserGroup[]
+  user_permissions UserPermission[]
+
+  profile Profile? @relation("userProfile")
+
+  // Profile  Profile @relation("userProfile")
+
+  ChatGroup      ChatGroup[]   @relation("Members")
+  ChatMessage    ChatMessage[]
+  AdminChatGroup ChatGroup[]   @relation("AdminGroup")
+
+  @@map("auth_user")
+>>>>>>> Stashed changes
 }
 
 model User_Post {

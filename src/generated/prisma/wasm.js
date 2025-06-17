@@ -120,11 +120,46 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.AlbumScalarFieldEnum = {
   id: 'id',
   name: 'name',
+<<<<<<< Updated upstream
   theme: 'theme',
   year: 'year',
   userId: 'userId'
 };
 
+=======
+  createdAt: 'createdAt',
+  previewImageId: 'previewImageId',
+  shown: 'shown',
+  topicId: 'topicId',
+  userId: 'userId'
+};
+
+exports.Prisma.AvatarScalarFieldEnum = {
+  id: 'id',
+  imageId: 'imageId',
+  profile_id: 'profile_id',
+  active: 'active',
+  shown: 'shown'
+};
+
+exports.Prisma.ChatGroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  is_personal_chat: 'is_personal_chat',
+  adminId: 'adminId',
+  avatar: 'avatar'
+};
+
+exports.Prisma.ChatMessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  authorId: 'authorId',
+  chatGroupId: 'chatGroupId',
+  sent_at: 'sent_at',
+  attached_image: 'attached_image'
+};
+
+>>>>>>> Stashed changes
 exports.Prisma.FriendRequestScalarFieldEnum = {
   id: 'id',
   fromId: 'fromId',

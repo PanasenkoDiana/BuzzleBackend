@@ -7,6 +7,7 @@ import {
 	ISuccess,
 	secondRegister,
 	User,
+	UserWithoutIncludes,
 } from "./user.type";
 import { UserRepositories } from "./user.repository";
 import { sign } from "jsonwebtoken";
@@ -113,28 +114,19 @@ export const UserService = {
 	changeUserPartOne: async function (
 		data: changeUserPartOne,
 		id: number
-	): Promise<IError | ISuccess<User>> {
-		try {
-			if (
-				data.profileImage &&
-				data.profileImage.startsWith("data:image")
-			) {
-				const image = await base64ToImage(data.profileImage);
-				data.profileImage = image.name; 
-			}
-
-			const user = await UserRepositories.changeUserPartOne(data, id);
-			if (!user) {
-				return { status: "error", message: "User not found" };
-			}
-
-			return { status: "success", data: user };
-		} catch {
-			return {
-				status: "error",
-				message: "Ошибка при обновлении пользователя",
-			};
+	): Promise<IError | ISuccess<UserWithoutIncludes>> {
+		if (!data.profileImage?.startsWith("data:image")) {
+			return { status: "error", message: "Invalid image data" };
 		}
+
+		const { file, filename } = await base64ToImage(data.profileImage);
+		if (!file || !filename) {
+			return { status: "error", message: "Invalid image data" };
+		}
+
+		const user = await UserRepositories.changeUserPartOne({file, filename}, id);
+		if (!user) return { status: "error", message: "User not found" };
+		return { status: "success", data: user };
 	},
 
 	changeUserPartTwo: async function (
@@ -154,15 +146,16 @@ export const UserService = {
 		id: number
 	): Promise<IError | ISuccess<string>> {
 		try {
-			if (
-				data.image &&
-				data.image.startsWith("data:image")
-			) {
-				const image = await base64ToImage(data.image);
-				data.image = image.name; // просто имя файла без префикса /media/
-			}
+			if (!data.image.startsWith("data:image")) {
+                return { status: "error", message: "image not in format" }
+            }
+            const { file, filename } = await base64ToImage(data.image);
 
-			const user = await UserRepositories.addMyPhoto(data, id);
+            if (!file || !filename) {
+                return { status: "error", message: "Invalid image data" };
+            }
+
+			const user = await UserRepositories.addMyPhoto({file, filename}, id);
 			if (!user) {
 				return { status: "error", message: "photo don't created found" };
 			}

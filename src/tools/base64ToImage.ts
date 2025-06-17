@@ -3,7 +3,7 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import { Image } from "../UserPostApp/userPost.type";
 
-export async function base64ToImage(base64: string): Promise<Image> {
+export async function base64ToImage(base64: string): Promise<{file: string, filename: string}> {
     // Из data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAEWAgMAAAAGL
     // Возвращает image/png и iVBORw0KGgoAAAANSUhEUgAAAXIAAAEWAgMAAAAGL
 	const info = base64.split(";base64,")
@@ -29,5 +29,5 @@ export async function base64ToImage(base64: string): Promise<Image> {
 		console.log("Ошибка создания изображения");
 	}
 
-	return {name: fileName};
+	return {file: fileName, filename: fileName};
 }

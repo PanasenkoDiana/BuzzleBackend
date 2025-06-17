@@ -2,7 +2,7 @@ import { base64ToImage } from "../tools/base64ToImage";
 import { error } from "../tools/result";
 import { IError, ISuccess } from "../UserApp/user.type";
 import { AlbumRepository } from "./album.repository";
-import { AddPhotoToAlbum, Album, CreateAlbum } from "./album.type";
+import { AddPhotoToAlbum, AddPhotoToAlbumCredentials, Album, CreateAlbum, CreateAlbumInput } from "./album.type";
 
 
 
@@ -36,19 +36,21 @@ export const AlbumService = {
     },
 
     addPhotoToAlbum: async function(
-        data: AddPhotoToAlbum,
+        data: { image: string },
         id: number
     ): Promise<IError | ISuccess<Album>> {
         try {
-            if (
-                data.image &&
-                data.image.startsWith("data:image")
-            ) {
-                const image = await base64ToImage(data.image);
-                data.image = image.name; // просто имя файла без префикса /media/
+            if (!data.image.startsWith("data:image")) {
+                return { status: "error", message: "image not in format" }
+            }
+            const { file, filename } = await base64ToImage(data.image);
+
+            if (!file || !filename) {
+                return { status: "error", message: "Invalid image data" };
             }
 
-            const album = await AlbumRepository.addPhotoToAlbum(data, id);
+            const album = await AlbumRepository.addPhotoToAlbum({ file, filename }, id);
+            
             if (!album) {
                 return { status: "error", message: "Album not found" };
             }
@@ -63,7 +65,7 @@ export const AlbumService = {
     },
 
     createAlbum: async function(
-        data: CreateAlbum,
+        data: CreateAlbumInput,
         id: number
     ): Promise<IError | ISuccess<Album>> {
         console.log("service data:" + data)
