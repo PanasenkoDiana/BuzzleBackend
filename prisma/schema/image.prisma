@@ -6,15 +6,14 @@ model Image {
 
   avatar Avatar[] @relation("AvatarImages")
 
-
-  albumPreviewOf  Album?   @relation("PreviewImage")
-
-
-
+  albumPreviewOf Album? @relation("PreviewImage")
 
   userId Int?
   user   User? @relation(fields: [userId], references: [id])
 
-  posts  Post[]  @relation("PostImages")
-  albums Album[] @relation("AlbumImages")
+  post  Post?  @relation("PostImages", fields: [postId], references: [id])
+  postId Int?
+
+  album Album? @relation("AlbumImages", fields: [albumId], references: [id])
+  albumId Int?
 }

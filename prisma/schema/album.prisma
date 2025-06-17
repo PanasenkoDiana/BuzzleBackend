@@ -1,18 +1,18 @@
 model Album {
-  id           Int      @id @default(autoincrement())
-  name         String
-  createdAt    DateTime @default(now())
- 
-  previewImageId Int? @unique
-  previewImage Image? @relation("PreviewImage", fields: [previewImageId], references: [id])
- 
-  shown        Boolean  @default(true)
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
 
-  topic  Tag?   @relation(fields: [topicId], references: [id])
-	topicId Int?
+  previewImageId Int?   @unique
+  previewImage   Image? @relation("PreviewImage", fields: [previewImageId], references: [id])
+
+  shown Boolean @default(true)
+
+  topic   Tag? @relation(fields: [topicId], references: [id])
+  topicId Int?
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  images Image[] @relation("AlbumImages")
+  images Image[]   @relation("AlbumImages")
 }

@@ -23,13 +23,7 @@ export const AlbumController = {
     addPhotoToAlbum: async function(req: Request, res: Response){
         const id = req.params.id
         const data = req.body
-<<<<<<< Updated upstream
-        console.log('standoff 2')
         const result = await AlbumService.addPhotoToAlbum(data, +id)
-        console.log('result:' + result)
-=======
-        const result = await AlbumService.addPhotoToAlbum(data, +id)
->>>>>>> Stashed changes
 
         res.json(result)
     },

@@ -23,11 +23,11 @@ model User {
 
   groups           UserGroup[]
   user_permissions UserPermission[]
-  Profile     Profile?
+  Profile          Profile?
 
-  ChatGroup   ChatGroup[]   @relation("Members")
-  ChatMessage ChatMessage[]
-  AdminChatGroup ChatGroup[] @relation("AdminGroup")
+  ChatGroup      ChatGroup[]   @relation("Members")
+  ChatMessage    ChatMessage[]
+  AdminChatGroup ChatGroup[]   @relation("AdminGroup")
 
   @@map("auth_user")
 }

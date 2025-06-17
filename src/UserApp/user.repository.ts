@@ -1,3 +1,4 @@
+// import { PrismaClient } from "../prisma/client";
 import { PrismaClient } from "../prisma/client";
 import {
     changeUserPartOne,
@@ -6,6 +7,8 @@ import {
     CreateUser,
     secondRegister,
 } from "./user.type";
+
+
 
 export const UserRepositories = {
     createUser: async (data: CreateUser) => {
@@ -28,7 +31,7 @@ export const UserRepositories = {
             include: {
                 images: true,
                 albums: { include: { images: true } },
-                profile: {
+                Profile: {
                     include: {
                         avatars: {
                             include: {
@@ -88,7 +91,7 @@ export const UserRepositories = {
             },
         });
 
-        return updatedProfile;
+        return 'avatar changed';
     },
 
     changeUserPartTwo: async (data: changeUserPartTwo, id: number) =>
@@ -127,6 +130,6 @@ export const UserRepositories = {
             include: { image: true },
         });
 
-        return newAvatar;
+        return 'new photo added';
     },
 };

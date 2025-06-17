@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client"
 import { AddPhotoToAlbum, AddPhotoToAlbumCredentials, Album, CreateAlbum, CreateAlbumInput } from "./album.type"
 import { create } from "ts-node"
 import { PrismaClient } from "../prisma/client"
@@ -51,19 +50,20 @@ export const AlbumRepository = {
                         create: {
                             file: data.file,
                             filename: data.filename,
-                        }
-                    }
+                        },
+                    },
                 },
                 include: {
-                    images: true
+                    images: true,
                 },
-            })
+            });
 
-            return album
-        } catch(error) {
-            console.log(error)
+            return album;
+        } catch (error) {
+            console.log(error);
         }
     },
+
 
     createAlbum: async function (data: CreateAlbumInput, userId: number) {
         try {
@@ -74,13 +74,6 @@ export const AlbumRepository = {
                 data: {
                     userId: userId,
                     name: data.name,
-<<<<<<< Updated upstream
-                    theme: data.theme,
-                    year: new Date(`${data.year}-01-01`)
-                },
-                include: {
-                    images: true
-=======
                     // topic: {
                     //     create: {
 
@@ -89,7 +82,6 @@ export const AlbumRepository = {
                 },
                 include: {
                     topic: true,
->>>>>>> Stashed changes
                 }
             });
 

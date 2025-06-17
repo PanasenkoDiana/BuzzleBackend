@@ -1,15 +1,15 @@
 model ChatGroup {
-    id               Int     @id @default(autoincrement())
-    name             String
-    is_personal_chat Boolean @default(false)
+  id               Int     @id @default(autoincrement())
+  name             String
+  is_personal_chat Boolean @default(false)
 
-    adminId Int
-    admin   User @relation("AdminGroup", fields: [adminId], references: [id])
+  adminId Int
+  admin   User @relation("AdminGroup", fields: [adminId], references: [id])
 
-    members User[]  @relation("Members")
-    avatar  String?
+  members User[]  @relation("Members")
+  avatar  String?
 
-    messages ChatMessage[]
+  messages ChatMessage[]
 
-    @@map("chat_group")
+  @@map("chat_group")
 }

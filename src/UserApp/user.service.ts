@@ -90,7 +90,7 @@ export const UserService = {
 		return { status: "success", data: token };
 	},
 
-	getUserByid: async function (id: number): Promise<IError | ISuccess<User>> {
+	getUserByid: async function (id: number): Promise<IError | ISuccess<UserWithoutIncludes>> {
 		const user = await UserRepositories.findUserById(id);
 		if (!user) {
 			return { status: "error", message: "User not found" };
@@ -114,7 +114,7 @@ export const UserService = {
 	changeUserPartOne: async function (
 		data: changeUserPartOne,
 		id: number
-	): Promise<IError | ISuccess<UserWithoutIncludes>> {
+	): Promise<IError | ISuccess<string>> {
 		if (!data.profileImage?.startsWith("data:image")) {
 			return { status: "error", message: "Invalid image data" };
 		}

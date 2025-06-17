@@ -8,6 +8,7 @@ import {
 	UpdateUserPost,
 	UserPost,
 	Image,
+	UserPostWithoutIncludes,
 } from "./userPost.type";
 import { base64ToImage } from "../tools/base64ToImage";
 
@@ -16,7 +17,7 @@ export const userPostService = {
 		userId: number,
 		data: CreateUserPost,
 		images: string[] = []
-	): Promise<Result<UserPost>> {
+	): Promise<Result<UserPostWithoutIncludes>> {
 		const fileNames = Promise.all(
 			images.map((base64) => base64ToImage(base64))
 		);
@@ -32,7 +33,7 @@ export const userPostService = {
 			data,
 			imagesData
 		);
-		return success<UserPost>(newPost);
+		return success<UserPostWithoutIncludes>(newPost);
 	},
 
 	deletePost: async function (userId: number, postId: number): Promise<Result<string>> {
@@ -51,7 +52,7 @@ export const userPostService = {
 		postId: number,
 		data: UpdateUserPost,
 		images: string[]
-	): Promise<Result<UserPost>> {
+	): Promise<Result<UserPostWithoutIncludes>> {
 		try {
 			const fileNames = Promise.all(
 				images.map((base64) => base64ToImage(base64))
