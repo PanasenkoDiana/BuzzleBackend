@@ -14,5 +14,5 @@ model Album {
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  images Image[]   @relation("AlbumImages")
+  images Image[] @relation("AlbumImages")
 }

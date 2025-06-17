@@ -28,11 +28,11 @@ export const AlbumController = {
         res.json(result)
     },
 
-    createAlbum: async function(req: Request, res: Response){
-        const id = res.locals.userId
-        const data = req.body
-        const result = await AlbumService.createAlbum(data, +id)
+    // createAlbum: async function(req: Request, res: Response){
+    //     const id = res.locals.userId
+    //     const data = req.body
+    //     const result = await AlbumService.createAlbum(data, +id)
 
-        res.json(result)
-    }
+    //     res.json(result)
+    // }
 }

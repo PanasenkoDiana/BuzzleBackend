@@ -21,25 +21,33 @@ export const AlbumRepository = {
         }
     },
 
-    changeAlbum: async function(data: CreateAlbum, id: number) {
+    changeAlbum: async function(data: CreateAlbumInput, id: number) {
         try {
             const changedAlbum = await PrismaClient.album.update({
-                where: { id: id },
+                where: { id },
                 data: {
                     name: data.name,
-                    // theme: data.theme,
-                    // year: data.year,
+                    topic: data.topic
+                        ? {
+                                connectOrCreate: {
+                                    where: { name: data.topic as string }, // <- string
+                                    create: { name: data.topic as string }, // <- string
+                                },
+                        }
+                        : undefined,
                 },
                 include: {
-                    images: true
-                }
-            })
+                    images: true,
+                    topic: true, // если нужно вернуть
+                },
+            });
 
-            return changedAlbum
-        } catch(error) {
-            console.log(error)
+            return changedAlbum;
+        } catch (error) {
+            console.log(error);
         }
     },
+
 
     addPhotoToAlbum: async function(data: { file: string, filename: string }, id: number) {
         try {
@@ -65,34 +73,43 @@ export const AlbumRepository = {
     },
 
 
-    createAlbum: async function (data: CreateAlbumInput, userId: number) {
-        try {
+    // createAlbum: async function (data: CreateAlbumInput, userId: number) {
+    //     try {
             // const tagNameRaw = typeof data.topic === "string" ? data.topic : dat;
             // const tagName = tagNameRaw ? (tagNameRaw.startsWith("#") ? tagNameRaw : `#${tagNameRaw}`) : undefined;
 
-            const album = await PrismaClient.album.create({
-                data: {
-                    userId: userId,
-                    name: data.name,
-                    // topic: {
-                    //     create: {
-
+            // const album = await PrismaClient.album.create({
+            //     data: {
+            //         userId: userId,
+            //         name: data.name,
+            //         topic: {
+            //             connectOrCreate: {
+            //                 where: { name: data.topic as string }, 
+            //                 create: { name: data.topic as string },
+            //             }
+            //         }
+                    // topic: data.topic
+                    //     ? {
+                    //             connectOrCreate: {
+                    //                 where: { name: data.topic as string }, // <- string
+                    //                 create: { name: data.topic as string }, // <- string
+                    //             },
                     //     }
-                    // }
-                },
-                include: {
-                    topic: true,
-                }
-            });
+                    //     : undefined,
+            //     },
+            //     include: {
+            //         topic: true,
+            //     }
+            // });
 
 
 
-            return album;
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    }
+    //         return album;
+    //     } catch (error) {
+    //         console.error(error);
+    //         throw error;
+    //     }
+    // }
 
 
 

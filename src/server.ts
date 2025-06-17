@@ -9,7 +9,7 @@ import path from "path";
 import friendRouter from "./FriendApp/friend.router";
 
 const app = express();
-const HOST = "localhost";
+const HOST = "192.168.3.4";
 const PORT = 8000;
 
 dotenv.config();

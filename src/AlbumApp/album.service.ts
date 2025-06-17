@@ -23,7 +23,7 @@ export const AlbumService = {
     },
 
     changeAlbum: async function(
-        data: CreateAlbum,
+        data: CreateAlbumInput,
         id: number
     ): Promise<IError | ISuccess<Album>> {
         const changedAlbum  = await AlbumRepository.changeAlbum(data, id)
@@ -64,17 +64,23 @@ export const AlbumService = {
         }
     },
 
-    createAlbum: async function(
-        data: CreateAlbumInput,
-        id: number
-    ): Promise<IError | ISuccess<Album>> {
-        console.log("service data:" + data)
-        const newAlbum = await AlbumRepository.createAlbum(data, id)
-        console.log(newAlbum)
-        if (!newAlbum) {
-            return { status: "error", message: "Album don't create" };
-        }
-        console.log(3)
-        return { status: 'success', data: newAlbum }
-    }
+    // createAlbum: async function(
+    //     data: CreateAlbumInput,
+    //     id: number
+    // ): Promise<IError | ISuccess<Album>> {
+        // if (!data.topic.startsWith('#')) {
+        //     data = {
+        //         ...data,
+        //         topic: `#${data.topic}`
+        //     }
+        // }
+        
+        // const newAlbum = await AlbumRepository.createAlbum(data, id)
+
+
+        // if (!newAlbum) {
+        //     return { status: "error", message: "Album don't create" };
+        // }
+        // return { status: 'success', data: newAlbum }
+    // }
 }
