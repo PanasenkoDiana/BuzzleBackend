@@ -133,6 +133,12 @@ export const UserService = {
 		data: changeUserPartTwo,
 		id: number
 	): Promise<IError | ISuccess<User>> {
+
+
+		if (data.password) {
+			data.password = await hash(data.password, 10);
+		}
+
 		const user = await UserRepositories.changeUserPartTwo(data, id);
 		if (!user) {
 			return { status: "error", message: "User not found" };
@@ -167,5 +173,25 @@ export const UserService = {
 				message: "create photo error",
 			};
 		}
-	}
+	},
+
+	deleteMyPhoto: async function (
+		// photoId: number,
+		id: number
+	): Promise<IError | ISuccess<string>> {
+		try {
+
+			const user = await UserRepositories.deleteMyPhoto(id);
+			if (!user) {
+				return { status: "error", message: "photo don't created found" };
+			}
+
+			return { status: "success", data: user };
+		} catch {
+			return {
+				status: "error",
+				message: "create photo error",
+			};
+		}
+	},
 };

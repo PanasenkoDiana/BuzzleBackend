@@ -132,4 +132,20 @@ export const UserRepositories = {
 
         return 'new photo added';
     },
+
+    deleteMyPhoto: async (id: number) => {
+        const avatar = await PrismaClient.avatar.findUnique({
+            where: { id },
+            include: { image: true },
+        });
+        if (!avatar) throw new Error("Avatar not found");
+
+        // Удаляем аватар и связанное изображение
+        await PrismaClient.avatar.delete({
+            where: { id },
+        });
+
+        // Возвращаем имя файла удалённого изображения
+        return avatar.image.filename;
+    },
 };

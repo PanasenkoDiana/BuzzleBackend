@@ -23,5 +23,5 @@ type Image = Prisma.ImageGetPayload<{}>
 export type CreateUser = Prisma.UserCreateInput
 export type secondRegister = Pick<User, 'name' | 'surname' | 'username'>
 export type changeUserPartOne = Pick<User, 'profileImage'>
-export type changeUserPartTwo = Omit<User, 'profileImage' | 'id'>
+export type changeUserPartTwo = Omit<UserWithoutIncludes, 'profileImage' | 'id'>
 export type createMyPhoto = { image: string }

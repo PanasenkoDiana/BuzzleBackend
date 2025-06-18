@@ -71,5 +71,16 @@ export const UserController = {
         } catch (err) {
             next(err);
         }
+    },
+
+    deleteMyPhoto: async function(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = +res.locals.userId;
+            const data = req.body;
+            const result = await UserService.deleteMyPhoto(data.id);
+            res.json(result);
+        } catch (err) {
+            next(err);
+        }
     }
 };

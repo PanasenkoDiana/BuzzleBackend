@@ -14,6 +14,7 @@ userRouter.post("/change/part-two/:id", UserController.changeUserPartTwo)
 userRouter.post('/photo/create', authTokenMiddleware, UserController.addMyPhoto)
 
 userRouter.post("/photo/create", authTokenMiddleware, UserController.addMyPhoto);
+userRouter.delete("/photo/delete", authTokenMiddleware, UserController.deleteMyPhoto);
 userRouter.get("/me", authTokenMiddleware, UserController.findUserById);
 
 export default userRouter;

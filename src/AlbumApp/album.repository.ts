@@ -107,6 +107,19 @@ export const AlbumRepository = {
             console.error(error);
             throw error;
         }
+    },
+
+    deleteAlbum: async function(id: number) {
+        try {
+            const deletedAlbum = await PrismaClient.image.delete({
+                where: { id },
+            });
+
+            return deletedAlbum;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
 

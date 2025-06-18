@@ -65,22 +65,34 @@ export const AlbumService = {
     },
 
     createAlbum: async function (
-    data: CreateAlbumInput,
-    id: number
-): Promise<IError | ISuccess<Album>> {
-    if (data.topic && typeof data.topic === "string" && !data.topic.startsWith("#")) {
-        data = {
-            ...data,
-            topic: `#${data.topic}`,
-        };
-    }
+        data: CreateAlbumInput,
+        id: number
+    ): Promise<IError | ISuccess<Album>> {
+        if (data.topic && typeof data.topic === "string" && !data.topic.startsWith("#")) {
+            data = {
+                ...data,
+                topic: `#${data.topic}`,
+            };
+        }
 
-    const newAlbum = await AlbumRepository.createAlbum(data, id);
+        const newAlbum = await AlbumRepository.createAlbum(data, id);
 
-    if (!newAlbum) {
-        return { status: "error", message: "Album don't create" };
+        if (!newAlbum) {
+            return { status: "error", message: "Album don't create" };
+        }
+        return { status: "success", data: newAlbum };
+    },
+
+    deleteAlbum: async function(
+        id: number
+    ) : Promise<IError | ISuccess<string>> {
+        const deletedAlbum = await AlbumRepository.deleteAlbum(id);
+
+        if (!deletedAlbum) {
+            return { status: "error", message: "Album not found" };
+        }
+
+        return { status: 'success', data: 'Photo in album deleted' }
     }
-    return { status: "success", data: newAlbum };
-}
 
 }

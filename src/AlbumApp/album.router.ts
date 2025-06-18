@@ -8,5 +8,6 @@ albumRouter.get("/all", authTokenMiddleware, AlbumController.getAllAlbums ) // �
 albumRouter.patch("/change/:id", AlbumController.changeAlbum ) // надо id альбома
 albumRouter.post("/add/:id", AlbumController.addPhotoToAlbum ) //надо id альбома
 albumRouter.post("/create", authTokenMiddleware, AlbumController.createAlbum )  // надо id пользователя
+albumRouter.delete("/delete", AlbumController.deleteAlbum ) // надо id альбома
 
 export default albumRouter

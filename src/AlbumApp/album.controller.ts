@@ -34,5 +34,12 @@ export const AlbumController = {
         const result = await AlbumService.createAlbum(data, +id)
 
         res.json(result)
+    },
+
+    deleteAlbum: async function(req: Request, res: Response){
+        const id = req.body.id
+        const result = await AlbumService.deleteAlbum(+id)
+
+        res.json(result)
     }
 }
