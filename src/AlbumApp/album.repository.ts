@@ -12,7 +12,8 @@ export const AlbumRepository = {
                     userId: id
                 },
                 include: {
-                    images: true
+                    images: true,
+                    topic: true,
                 }
             })
             return albums
@@ -63,6 +64,7 @@ export const AlbumRepository = {
                 },
                 include: {
                     images: true,
+                    topic: true,
                 },
             });
 
@@ -73,43 +75,42 @@ export const AlbumRepository = {
     },
 
 
-    // createAlbum: async function (data: CreateAlbumInput, userId: number) {
-    //     try {
-            // const tagNameRaw = typeof data.topic === "string" ? data.topic : dat;
-            // const tagName = tagNameRaw ? (tagNameRaw.startsWith("#") ? tagNameRaw : `#${tagNameRaw}`) : undefined;
+    createAlbum: async function(data: CreateAlbumInput, userId: number) {
+        try {
+            // topic — это string или undefined из input
+            const topicName = typeof data.topic === "string" ? data.topic : undefined;
 
-            // const album = await PrismaClient.album.create({
-            //     data: {
-            //         userId: userId,
-            //         name: data.name,
-            //         topic: {
-            //             connectOrCreate: {
-            //                 where: { name: data.topic as string }, 
-            //                 create: { name: data.topic as string },
-            //             }
-            //         }
-                    // topic: data.topic
-                    //     ? {
-                    //             connectOrCreate: {
-                    //                 where: { name: data.topic as string }, // <- string
-                    //                 create: { name: data.topic as string }, // <- string
-                    //             },
-                    //     }
-                    //     : undefined,
-            //     },
-            //     include: {
-            //         topic: true,
-            //     }
-            // });
+            // Формируем объект связи с Tag, если topicName есть
+            const topicConnectOrCreate = topicName
+                ? {
+                    connectOrCreate: {
+                        where: { name: topicName },
+                        create: { name: topicName },
+                    }
+                }
+                : undefined;
+
+            const album = await PrismaClient.album.create({
+                data: {
+                    user: { connect: { id: userId } },  // связываем пользователя через вложенный объект
+                    name: data.name,
+                    topic: topicConnectOrCreate,       // используем сформированный объект
+                },
+                include: {
+                    topic: true,
+                    images: true,
+                },
+            });
+
+            return album;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 
 
 
-    //         return album;
-    //     } catch (error) {
-    //         console.error(error);
-    //         throw error;
-    //     }
-    // }
 
 
 

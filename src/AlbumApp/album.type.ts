@@ -5,7 +5,10 @@ import { Prisma } from "../generated/prisma";
 
 
 type Image = Prisma.ImageGetPayload<{}>
-export type Album = Prisma.AlbumGetPayload<{}>
+export type Album = Prisma.AlbumGetPayload<{
+	include: { topic: true, images: true }
+}>
+
 export type CreateAlbumInput = {
 	name: string;
 	userId: number;

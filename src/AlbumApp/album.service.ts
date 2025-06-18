@@ -64,23 +64,23 @@ export const AlbumService = {
         }
     },
 
-    // createAlbum: async function(
-    //     data: CreateAlbumInput,
-    //     id: number
-    // ): Promise<IError | ISuccess<Album>> {
-        // if (!data.topic.startsWith('#')) {
-        //     data = {
-        //         ...data,
-        //         topic: `#${data.topic}`
-        //     }
-        // }
-        
-        // const newAlbum = await AlbumRepository.createAlbum(data, id)
+    createAlbum: async function (
+    data: CreateAlbumInput,
+    id: number
+): Promise<IError | ISuccess<Album>> {
+    if (data.topic && typeof data.topic === "string" && !data.topic.startsWith("#")) {
+        data = {
+            ...data,
+            topic: `#${data.topic}`,
+        };
+    }
 
+    const newAlbum = await AlbumRepository.createAlbum(data, id);
 
-        // if (!newAlbum) {
-        //     return { status: "error", message: "Album don't create" };
-        // }
-        // return { status: 'success', data: newAlbum }
-    // }
+    if (!newAlbum) {
+        return { status: "error", message: "Album don't create" };
+    }
+    return { status: "success", data: newAlbum };
+}
+
 }
