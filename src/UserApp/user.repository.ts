@@ -10,7 +10,13 @@ import {
 
 export const UserRepositories = {
 	createUser: async (data: CreateUser) => {
-		const user = await PrismaClient.user.create({ data });
+		const id = (await PrismaClient.user.count()) + 1;
+		const user = await PrismaClient.user.create({
+			data: {
+				username: `user${id}`,
+				...data,
+			},
+		});
 
 		// Создаём профиль после создания пользователя
 		await PrismaClient.profile.create({
@@ -65,35 +71,35 @@ export const UserRepositories = {
 		if (!profile) throw new Error("Profile not found");
 
 		const updatedProfile = await PrismaClient.profile.update({
-		    where: { id: profile.id },
-		    data: {
-		        avatars: {
-		            create: {
-                        image: {
-                            create: {
-                                filename,
-                                file: filename
-                            }
-                        }
-		            }
-		        },
-		    },
-		    include: {
-		        avatars: {
-		            include: { image: true },
-		        },
-		    },
+			where: { id: profile.id },
+			data: {
+				avatars: {
+					create: {
+						image: {
+							create: {
+								filename,
+								file: filename,
+							},
+						},
+					},
+				},
+			},
+			include: {
+				avatars: {
+					include: { image: true },
+				},
+			},
 		});
 
 		// const newAvatar = await PrismaClient.avatar.create({
 		// 	// where: { profile_id: profile.id },
 		// 	data: {
-        //         profile_id: profile.id,
-        //         // profile: profile.id,
+		//         profile_id: profile.id,
+		//         // profile: profile.id,
 		// 		image: {
 		// 			create: {
-        //                 filename,
-        //                 file: filename,
+		//                 filename,
+		//                 file: filename,
 		// 			}
 		// 		},
 		// 	},
@@ -102,7 +108,7 @@ export const UserRepositories = {
 		return "avatar changed";
 	},
 
-	changeUserPartTwo: async (data: changeUserPartTwo, id: number) =>{
+	changeUserPartTwo: async (data: changeUserPartTwo, id: number) => {
 		const uupdatedUser = await PrismaClient.user.update({
 			where: { id },
 			data: {
@@ -124,15 +130,12 @@ export const UserRepositories = {
 					},
 				},
 			},
-		})
+		});
 
-        return "changed part two"
-    },
+		return "changed part two";
+	},
 
-	addMyPhoto: async (
-		data: string,
-		id: number
-	) => {
+	addMyPhoto: async (data: string, id: number) => {
 		// Находим профиль по user_id
 		const profile = await PrismaClient.profile.findUnique({
 			where: { user_id: id },
@@ -153,30 +156,30 @@ export const UserRepositories = {
 		// 	},
 		// 	include: { image: true },
 		// });
-        const newAvatar = await PrismaClient.profile.update({
-            where: { user_id: id },
-            
-            data: {
-                avatars: {
-                    create: {
-                        image: {
-                            create: {
-                                filename: data,
-                                file: data
-                            }
-                        }
-                    }
-                }
-            },
+		const newAvatar = await PrismaClient.profile.update({
+			where: { user_id: id },
 
-            include: {
-                avatars: {
-                    include: {
-                        image: true
-                    }
-                }
-            }
-        })
+			data: {
+				avatars: {
+					create: {
+						image: {
+							create: {
+								filename: data,
+								file: data,
+							},
+						},
+					},
+				},
+			},
+
+			include: {
+				avatars: {
+					include: {
+						image: true,
+					},
+				},
+			},
+		});
 
 		return "new photo added";
 	},
@@ -197,14 +200,14 @@ export const UserRepositories = {
 		return avatar.image.filename;
 	},
 
-	changePassword: async (password:string, userId: number) => {
+	changePassword: async (password: string, userId: number) => {
 		const newPassword = await PrismaClient.user.update({
 			where: {
-				id: userId
+				id: userId,
 			},
 			data: {
-				password
-			}
-		})
-	}
+				password,
+			},
+		});
+	},
 };

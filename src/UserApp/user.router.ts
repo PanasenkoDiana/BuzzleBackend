@@ -16,7 +16,7 @@ userRouter.post('/photo/create', authTokenMiddleware, UserController.addMyPhoto)
 userRouter.post("/photo/create", authTokenMiddleware, UserController.addMyPhoto);
 userRouter.delete("/photo/delete", UserController.deleteMyPhoto);
 userRouter.get("/me", authTokenMiddleware, UserController.findUserById);
-userRouter.post("change-password/one", authTokenMiddleware, UserController.changePasswordPartOne)
-userRouter.post("change-password/two", authTokenMiddleware, UserController.changePasswordPartTwo)
+userRouter.post("/change-password/one", authTokenMiddleware, UserController.changePasswordPartOne)
+userRouter.post("/change-password/two", authTokenMiddleware, UserController.changePasswordPartTwo)
 
 export default userRouter;
