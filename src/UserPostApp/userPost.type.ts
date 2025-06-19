@@ -15,18 +15,29 @@ export type ImageCreateMany = Prisma.ImageCreateManyInput
 export type UserPost = Prisma.PostGetPayload<{
     include: {
         tags: true,
-        images: true,
+        images: true,   
         author: true,
+        userId: number;  
     },
     omit: {
         authorId: true,
     }
 }>
 
-
+export type UpdateUserPost = {
+    title?: string;
+    content?: string;
+    images?: {
+        create?: {
+            filename: string;
+            file: string;
+            userId?: number;
+        }[];
+    };
+};
 export type UserPostWithoutIncludes = Prisma.PostGetPayload<{}>
 
-export type UpdateUserPost = Prisma.PostUpdateInput;
+//export type UpdateUserPost = Prisma.PostUpdateInput;
 
 export type CreateImage = Prisma.ImageCreateInput
 export type Tag = Prisma.TagGetPayload<{}>;

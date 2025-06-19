@@ -36,7 +36,7 @@ export const UserService = {
 		const emailSent = await verificationService.generateAndSendCode(
 			data.email,
 			data
-		);
+		);	
 		if (!emailSent) {
 			return {
 				status: "error",
@@ -45,6 +45,18 @@ export const UserService = {
 		}
 
 		return { status: "success", data: "Verification code sent" };
+	},
+
+	secondRegister: async function (
+		data: secondRegister,
+		id: number
+	): Promise<IError | ISuccess<User>> {
+		const user = await UserRepositories.secondRegister(data, id);
+		if (!user) {
+			return { status: "error", message: "User not found" };
+		}
+		
+		return { status: "success", data: user };
 	},
 
 	verifyUser: async function (
@@ -99,18 +111,6 @@ export const UserService = {
 		return { status: "success", data: user };
 	},
 
-	secondRegister: async function (
-		data: secondRegister,
-		id: number
-	): Promise<IError | ISuccess<User>> {
-		const user = await UserRepositories.secondRegister(data, id);
-		if (!user) {
-			return { status: "error", message: "User not found" };
-		}
-
-		return { status: "success", data: user };
-	},
-
 	changeUserPartOne: async function (
 		data: changeUserPartOne,
 		id: number
@@ -119,12 +119,12 @@ export const UserService = {
 			return { status: "error", message: "Invalid image data" };
 		}
 
-		const { file, filename } = await base64ToImage(data.profileImage);
-		if (!file || !filename) {
+		const {filename}  = await base64ToImage(data.profileImage);
+		if (!filename) {
 			return { status: "error", message: "Invalid image data" };
 		}
 
-		const user = await UserRepositories.changeUserPartOne({file, filename}, id);
+		const user = await UserRepositories.changeUserPartOne(filename, id);
 		if (!user) return { status: "error", message: "User not found" };
 		return { status: "success", data: user };
 	},
@@ -132,7 +132,7 @@ export const UserService = {
 	changeUserPartTwo: async function (
 		data: changeUserPartTwo,
 		id: number
-	): Promise<IError | ISuccess<User>> {
+	): Promise<IError | ISuccess<string>> {
 
 
 		if (data.password) {
@@ -155,13 +155,13 @@ export const UserService = {
 			if (!data.image.startsWith("data:image")) {
                 return { status: "error", message: "image not in format" }
             }
-            const { file, filename } = await base64ToImage(data.image);
+            const {filename} = await base64ToImage(data.image);
 
-            if (!file || !filename) {
+            if (!filename) {
                 return { status: "error", message: "Invalid image data" };
             }
 
-			const user = await UserRepositories.addMyPhoto({file, filename}, id);
+			const user = await UserRepositories.addMyPhoto(filename, id);
 			if (!user) {
 				return { status: "error", message: "photo don't created found" };
 			}

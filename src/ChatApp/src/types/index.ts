@@ -1,0 +1,20 @@
+export interface User {
+    id: string;
+    username: string;
+    email: string;
+}
+
+export interface Message {
+    id: string;
+    senderId: string;
+    recipientId?: string; 
+    groupId?: string; 
+    content: string;
+    timestamp: Date;
+}
+
+export interface Group {
+    id: string;
+    name: string;
+    members: User[];
+}

@@ -1,151 +1,199 @@
 // import { PrismaClient } from "../prisma/client";
 import { PrismaClient } from "../prisma/client";
 import {
-    changeUserPartOne,
-    changeUserPartTwo,
-    createMyPhoto,
-    CreateUser,
-    secondRegister,
+	changeUserPartOne,
+	changeUserPartTwo,
+	createMyPhoto,
+	CreateUser,
+	secondRegister,
 } from "./user.type";
 
-
-
 export const UserRepositories = {
-    createUser: async (data: CreateUser) => {
-        const user = await PrismaClient.user.create({ data });
+	createUser: async (data: CreateUser) => {
+		const user = await PrismaClient.user.create({ data });
 
-        // Создаём профиль после создания пользователя
-        await PrismaClient.profile.create({
-            data: {
-                user: { connect: { id: user.id } },
-                date_of_birth: new Date(),
-            },
-        });
+		// Создаём профиль после создания пользователя
+		await PrismaClient.profile.create({
+			data: {
+				user: { connect: { id: user.id } },
+				date_of_birth: new Date(),
+			},
+		});
 
-        return user;
-    },
+		return user;
+	},
 
-    findUserById: async (id: number) =>
-        PrismaClient.user.findUnique({
-            where: { id },
-            include: {
-                images: true,
-                albums: { include: { images: true } },
-                Profile: {
-                    include: {
-                        avatars: {
-                            include: {
-                                image: true,
-                            },
-                        },
-                    },
-                },
-            },
-        }),
+	findUserById: async (id: number) =>
+		PrismaClient.user.findUnique({
+			where: { id },
+			include: {
+				images: true,
+				albums: { include: { images: true } },
+				Profile: {
+					include: {
+						avatars: {
+							include: {
+								image: true,
+							},
+						},
+					},
+				},
+			},
+		}),
 
-    findUserByEmail: async (email: string) =>
-        PrismaClient.user.findUnique({
-            where: { email },
-        }),
+	findUserByEmail: async (email: string) =>
+		PrismaClient.user.findUnique({
+			where: { email },
+		}),
 
-    secondRegister: async (data: secondRegister, id: number) =>
-        PrismaClient.user.update({
-            where: { id },
-            data: {
-                name: data.name,
-                surname: data.surname,
-                username: data.username,
-            },
-            include: { images: true, albums: true },
-        }),
+	secondRegister: async (data: secondRegister, id: number) =>
+		PrismaClient.user.update({
+			where: { id },
+			data: {
+				name: data.name,
+				surname: data.surname,
+				username: data.username,
+			},
+			include: { images: true, albums: true },
+		}),
 
-    changeUserPartOne: async (data: { file: string; filename: string }, id: number) => {
-        // Найдём профиль пользователя
-        const profile = await PrismaClient.profile.findUnique({
-            where: { user_id: id },
-        });
-        if (!profile) throw new Error("Profile not found");
+	changeUserPartOne: async (filename: string, id: number) => {
+		// Найдём профиль пользователя
+		const profile = await PrismaClient.profile.findUnique({
+			where: { user_id: id },
+		});
+		if (!profile) throw new Error("Profile not found");
 
-        // Создаём новый аватар с изображением
-        const updatedProfile = await PrismaClient.profile.update({
-            where: { id: profile.id },
-            data: {
-                avatars: {
-                    create: {
-                        active: true,
-                        shown: true,
+		const updatedProfile = await PrismaClient.profile.update({
+		    where: { id: profile.id },
+		    data: {
+		        avatars: {
+		            create: {
                         image: {
                             create: {
-                                filename: data.filename,
-                                file: data.file,
-                                // uploadedAt: по умолчанию теперь()
-                            },
-                        },
-                    },
-                },
+                                filename,
+                                file: filename
+                            }
+                        }
+		            }
+		        },
+		    },
+		    include: {
+		        avatars: {
+		            include: { image: true },
+		        },
+		    },
+		});
+
+		// const newAvatar = await PrismaClient.avatar.create({
+		// 	// where: { profile_id: profile.id },
+		// 	data: {
+        //         profile_id: profile.id,
+        //         // profile: profile.id,
+		// 		image: {
+		// 			create: {
+        //                 filename,
+        //                 file: filename,
+		// 			}
+		// 		},
+		// 	},
+		// });
+
+		return "avatar changed";
+	},
+
+	changeUserPartTwo: async (data: changeUserPartTwo, id: number) =>{
+		const uupdatedUser = await PrismaClient.user.update({
+			where: { id },
+			data: {
+				name: data.name,
+				surname: data.surname,
+				email: data.email,
+				username: data.username,
+				password: data.password,
+			},
+			include: {
+				albums: true,
+				Profile: {
+					include: {
+						avatars: {
+							include: {
+								image: true,
+							},
+						},
+					},
+				},
+			},
+		})
+
+        return "changed part two"
+    },
+
+	addMyPhoto: async (
+		data: string,
+		id: number
+	) => {
+		// Находим профиль по user_id
+		const profile = await PrismaClient.profile.findUnique({
+			where: { user_id: id },
+		});
+		if (!profile) throw new Error("Profile not found");
+
+		// Создаём новый аватар с изображением
+		// const newAvatar = await PrismaClient.avatar.create({
+		// 	data: {
+		// 		profile: { connect: { id: profile.id } },
+		// 		active: true,
+		// 		shown: true,
+		// 		image: {
+		// 			create: {
+		// 				filename: data,
+		// 			},
+		// 		},
+		// 	},
+		// 	include: { image: true },
+		// });
+        const newAvatar = await PrismaClient.profile.update({
+            where: { user_id: id },
+            
+            data: {
+                avatars: {
+                    create: {
+                        image: {
+                            create: {
+                                filename: data,
+                                file: data
+                            }
+                        }
+                    }
+                }
             },
+
             include: {
                 avatars: {
-                    include: { image: true },
-                },
-            },
-        });
+                    include: {
+                        image: true
+                    }
+                }
+            }
+        })
 
-        return 'avatar changed';
-    },
+		return "new photo added";
+	},
 
-    changeUserPartTwo: async (data: changeUserPartTwo, id: number) =>
-        PrismaClient.user.update({
-            where: { id },
-            data: {
-                name: data.name,
-                surname: data.surname,
-                email: data.email,
-                username: data.username,
-                password: data.password,
-            },
-            include: { images: true, albums: true },
-        }),
+	deleteMyPhoto: async (id: number) => {
+		const avatar = await PrismaClient.avatar.findUnique({
+			where: { id },
+			include: { image: true },
+		});
+		if (!avatar) throw new Error("Avatar not found");
 
-    addMyPhoto: async (data: { file: string; filename: string }, id: number) => {
-        // Находим профиль по user_id
-        const profile = await PrismaClient.profile.findUnique({
-            where: { user_id: id },
-        });
-        if (!profile) throw new Error("Profile not found");
+		// Удаляем аватар и связанное изображение
+		await PrismaClient.avatar.delete({
+			where: { id },
+		});
 
-        // Создаём новый аватар с изображением
-        const newAvatar = await PrismaClient.avatar.create({
-            data: {
-                profile: { connect: { id: profile.id } },
-                active: true,
-                shown: true,
-                image: {
-                    create: {
-                        filename: data.filename,
-                        file: data.file,
-                    },
-                },
-            },
-            include: { image: true },
-        });
-
-        return 'new photo added';
-    },
-
-    deleteMyPhoto: async (id: number) => {
-        const avatar = await PrismaClient.avatar.findUnique({
-            where: { id },
-            include: { image: true },
-        });
-        if (!avatar) throw new Error("Avatar not found");
-
-        // Удаляем аватар и связанное изображение
-        await PrismaClient.avatar.delete({
-            where: { id },
-        });
-
-        // Возвращаем имя файла удалённого изображения
-        return avatar.image.filename;
-    },
+		// Возвращаем имя файла удалённого изображения
+		return avatar.image.filename;
+	},
 };

@@ -11,7 +11,7 @@ export const userPostRepository = {
 	createPost: async function (
 		userId: number,
 		data: CreateUserPost,
-		images: Image[]
+		imagesData: {filename: string; file: string}[]
 	): Promise<UserPostWithoutIncludes> {
 		try {
 			const newPost = await PrismaClient.post.create({
@@ -32,8 +32,19 @@ export const userPostRepository = {
 						},
 					},
 
+
+					// ...(data.)
+					// images: imagesData.map(()=>{
+					// 	return create: {
+							
+					// 	}
+					// })
+					// ,
+
 					images: {
-						create: images,
+						createMany: {
+							data: imagesData
+						}
 					},
 
 					...(data.tags
@@ -56,7 +67,19 @@ export const userPostRepository = {
 				include: {
 					tags: true,
 					images: true,
-					author: true,
+					author: {
+						include: {
+							Profile: {
+								include: {
+									avatars: {
+										include: {
+											image: true
+										}
+									}
+								}
+							}
+						}
+					},
 				},
 			});
 			return newPost;
@@ -94,7 +117,7 @@ export const userPostRepository = {
 		userId: number,
 		postId: number,
 		data: UpdateUserPost,
-		images: Image[]
+		imagesData: {filename: string; file: string}[]
 	) {
 		try {
 			await PrismaClient.image.deleteMany({
@@ -111,7 +134,7 @@ export const userPostRepository = {
 					...data,
 					images: {
 						createMany: {
-							data: images,
+							data: imagesData,
 						},
 					},
 				},

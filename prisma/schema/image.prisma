@@ -4,7 +4,7 @@ model Image {
   file       String
   uploadedAt DateTime @default(now())
 
-  avatar Avatar[] @relation("AvatarImages")
+  avatar Avatar? @relation("AvatarImages")
 
   albumPreviewOf Album? @relation("PreviewImage")
 

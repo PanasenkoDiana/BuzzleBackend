@@ -36,7 +36,7 @@ model Avatar {
   id Int @id @default(autoincrement())
 
   image      Image   @relation("AvatarImages", fields: [imageId], references: [id])
-  imageId    Int
+  imageId    Int     @unique
   profile    Profile @relation(fields: [profile_id], references: [id])
   profile_id Int
   active     Boolean @default(true)
@@ -99,7 +99,7 @@ model Image {
   file       String
   uploadedAt DateTime @default(now())
 
-  avatar Avatar[] @relation("AvatarImages")
+  avatar Avatar? @relation("AvatarImages")
 
   albumPreviewOf Album? @relation("PreviewImage")
 

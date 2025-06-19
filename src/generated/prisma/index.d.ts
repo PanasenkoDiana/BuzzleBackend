@@ -2294,37 +2294,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type ImageCountOutputType
-   */
-
-  export type ImageCountOutputType = {
-    avatar: number
-  }
-
-  export type ImageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    avatar?: boolean | ImageCountOutputTypeCountAvatarArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * ImageCountOutputType without action
-   */
-  export type ImageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ImageCountOutputType
-     */
-    select?: ImageCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ImageCountOutputType without action
-   */
-  export type ImageCountOutputTypeCountAvatarArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AvatarWhereInput
-  }
-
-
-  /**
    * Count Type ProfileCountOutputType
    */
 
@@ -9727,7 +9696,6 @@ export namespace Prisma {
     user?: boolean | Image$userArgs<ExtArgs>
     post?: boolean | Image$postArgs<ExtArgs>
     album?: boolean | Image$albumArgs<ExtArgs>
-    _count?: boolean | ImageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["image"]>
 
   export type ImageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9773,7 +9741,6 @@ export namespace Prisma {
     user?: boolean | Image$userArgs<ExtArgs>
     post?: boolean | Image$postArgs<ExtArgs>
     album?: boolean | Image$albumArgs<ExtArgs>
-    _count?: boolean | ImageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ImageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Image$userArgs<ExtArgs>
@@ -9789,7 +9756,7 @@ export namespace Prisma {
   export type $ImagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Image"
     objects: {
-      avatar: Prisma.$AvatarPayload<ExtArgs>[]
+      avatar: Prisma.$AvatarPayload<ExtArgs> | null
       albumPreviewOf: Prisma.$AlbumPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs> | null
       post: Prisma.$PostPayload<ExtArgs> | null
@@ -10197,7 +10164,7 @@ export namespace Prisma {
    */
   export interface Prisma__ImageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    avatar<T extends Image$avatarArgs<ExtArgs> = {}>(args?: Subset<T, Image$avatarArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvatarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    avatar<T extends Image$avatarArgs<ExtArgs> = {}>(args?: Subset<T, Image$avatarArgs<ExtArgs>>): Prisma__AvatarClient<$Result.GetResult<Prisma.$AvatarPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     albumPreviewOf<T extends Image$albumPreviewOfArgs<ExtArgs> = {}>(args?: Subset<T, Image$albumPreviewOfArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends Image$userArgs<ExtArgs> = {}>(args?: Subset<T, Image$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     post<T extends Image$postArgs<ExtArgs> = {}>(args?: Subset<T, Image$postArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -10648,11 +10615,6 @@ export namespace Prisma {
      */
     include?: AvatarInclude<ExtArgs> | null
     where?: AvatarWhereInput
-    orderBy?: AvatarOrderByWithRelationInput | AvatarOrderByWithRelationInput[]
-    cursor?: AvatarWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AvatarScalarFieldEnum | AvatarScalarFieldEnum[]
   }
 
   /**
@@ -20248,16 +20210,16 @@ export namespace Prisma {
 
   export type AvatarWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    imageId?: number
     AND?: AvatarWhereInput | AvatarWhereInput[]
     OR?: AvatarWhereInput[]
     NOT?: AvatarWhereInput | AvatarWhereInput[]
-    imageId?: IntFilter<"Avatar"> | number
     profile_id?: IntFilter<"Avatar"> | number
     active?: BoolFilter<"Avatar"> | boolean
     shown?: BoolFilter<"Avatar"> | boolean
     image?: XOR<ImageScalarRelationFilter, ImageWhereInput>
     profile?: XOR<ProfileScalarRelationFilter, ProfileWhereInput>
-  }, "id">
+  }, "id" | "imageId">
 
   export type AvatarOrderByWithAggregationInput = {
     id?: SortOrder
@@ -20478,7 +20440,7 @@ export namespace Prisma {
     userId?: IntNullableFilter<"Image"> | number | null
     postId?: IntNullableFilter<"Image"> | number | null
     albumId?: IntNullableFilter<"Image"> | number | null
-    avatar?: AvatarListRelationFilter
+    avatar?: XOR<AvatarNullableScalarRelationFilter, AvatarWhereInput> | null
     albumPreviewOf?: XOR<AlbumNullableScalarRelationFilter, AlbumWhereInput> | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     post?: XOR<PostNullableScalarRelationFilter, PostWhereInput> | null
@@ -20493,7 +20455,7 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     postId?: SortOrderInput | SortOrder
     albumId?: SortOrderInput | SortOrder
-    avatar?: AvatarOrderByRelationAggregateInput
+    avatar?: AvatarOrderByWithRelationInput
     albumPreviewOf?: AlbumOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     post?: PostOrderByWithRelationInput
@@ -20511,7 +20473,7 @@ export namespace Prisma {
     userId?: IntNullableFilter<"Image"> | number | null
     postId?: IntNullableFilter<"Image"> | number | null
     albumId?: IntNullableFilter<"Image"> | number | null
-    avatar?: AvatarListRelationFilter
+    avatar?: XOR<AvatarNullableScalarRelationFilter, AvatarWhereInput> | null
     albumPreviewOf?: XOR<AlbumNullableScalarRelationFilter, AlbumWhereInput> | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     post?: XOR<PostNullableScalarRelationFilter, PostWhereInput> | null
@@ -21362,7 +21324,7 @@ export namespace Prisma {
     filename: string
     file: string
     uploadedAt?: Date | string
-    avatar?: AvatarCreateNestedManyWithoutImageInput
+    avatar?: AvatarCreateNestedOneWithoutImageInput
     albumPreviewOf?: AlbumCreateNestedOneWithoutPreviewImageInput
     user?: UserCreateNestedOneWithoutImagesInput
     post?: PostCreateNestedOneWithoutImagesInput
@@ -21377,7 +21339,7 @@ export namespace Prisma {
     userId?: number | null
     postId?: number | null
     albumId?: number | null
-    avatar?: AvatarUncheckedCreateNestedManyWithoutImageInput
+    avatar?: AvatarUncheckedCreateNestedOneWithoutImageInput
     albumPreviewOf?: AlbumUncheckedCreateNestedOneWithoutPreviewImageInput
   }
 
@@ -21385,7 +21347,7 @@ export namespace Prisma {
     filename?: StringFieldUpdateOperationsInput | string
     file?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    avatar?: AvatarUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUpdateOneWithoutImageNestedInput
     albumPreviewOf?: AlbumUpdateOneWithoutPreviewImageNestedInput
     user?: UserUpdateOneWithoutImagesNestedInput
     post?: PostUpdateOneWithoutImagesNestedInput
@@ -21400,7 +21362,7 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     postId?: NullableIntFieldUpdateOperationsInput | number | null
     albumId?: NullableIntFieldUpdateOperationsInput | number | null
-    avatar?: AvatarUncheckedUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUncheckedUpdateOneWithoutImageNestedInput
     albumPreviewOf?: AlbumUncheckedUpdateOneWithoutPreviewImageNestedInput
   }
 
@@ -22354,10 +22316,9 @@ export namespace Prisma {
     _max?: NestedEnumFriendRequestStatusFilter<$PrismaModel>
   }
 
-  export type AvatarListRelationFilter = {
-    every?: AvatarWhereInput
-    some?: AvatarWhereInput
-    none?: AvatarWhereInput
+  export type AvatarNullableScalarRelationFilter = {
+    is?: AvatarWhereInput | null
+    isNot?: AvatarWhereInput | null
   }
 
   export type AlbumNullableScalarRelationFilter = {
@@ -22373,10 +22334,6 @@ export namespace Prisma {
   export type PostNullableScalarRelationFilter = {
     is?: PostWhereInput | null
     isNot?: PostWhereInput | null
-  }
-
-  export type AvatarOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type ImageCountOrderByAggregateInput = {
@@ -22456,10 +22413,20 @@ export namespace Prisma {
     postId?: SortOrder
   }
 
+  export type AvatarListRelationFilter = {
+    every?: AvatarWhereInput
+    some?: AvatarWhereInput
+    none?: AvatarWhereInput
+  }
+
   export type PostListRelationFilter = {
     every?: PostWhereInput
     some?: PostWhereInput
     none?: PostWhereInput
+  }
+
+  export type AvatarOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PostOrderByRelationAggregateInput = {
@@ -23296,11 +23263,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivedRequestsInput, UserUpdateWithoutReceivedRequestsInput>, UserUncheckedUpdateWithoutReceivedRequestsInput>
   }
 
-  export type AvatarCreateNestedManyWithoutImageInput = {
-    create?: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput> | AvatarCreateWithoutImageInput[] | AvatarUncheckedCreateWithoutImageInput[]
-    connectOrCreate?: AvatarCreateOrConnectWithoutImageInput | AvatarCreateOrConnectWithoutImageInput[]
-    createMany?: AvatarCreateManyImageInputEnvelope
-    connect?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
+  export type AvatarCreateNestedOneWithoutImageInput = {
+    create?: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput>
+    connectOrCreate?: AvatarCreateOrConnectWithoutImageInput
+    connect?: AvatarWhereUniqueInput
   }
 
   export type AlbumCreateNestedOneWithoutPreviewImageInput = {
@@ -23327,11 +23293,10 @@ export namespace Prisma {
     connect?: AlbumWhereUniqueInput
   }
 
-  export type AvatarUncheckedCreateNestedManyWithoutImageInput = {
-    create?: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput> | AvatarCreateWithoutImageInput[] | AvatarUncheckedCreateWithoutImageInput[]
-    connectOrCreate?: AvatarCreateOrConnectWithoutImageInput | AvatarCreateOrConnectWithoutImageInput[]
-    createMany?: AvatarCreateManyImageInputEnvelope
-    connect?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
+  export type AvatarUncheckedCreateNestedOneWithoutImageInput = {
+    create?: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput>
+    connectOrCreate?: AvatarCreateOrConnectWithoutImageInput
+    connect?: AvatarWhereUniqueInput
   }
 
   export type AlbumUncheckedCreateNestedOneWithoutPreviewImageInput = {
@@ -23340,18 +23305,14 @@ export namespace Prisma {
     connect?: AlbumWhereUniqueInput
   }
 
-  export type AvatarUpdateManyWithoutImageNestedInput = {
-    create?: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput> | AvatarCreateWithoutImageInput[] | AvatarUncheckedCreateWithoutImageInput[]
-    connectOrCreate?: AvatarCreateOrConnectWithoutImageInput | AvatarCreateOrConnectWithoutImageInput[]
-    upsert?: AvatarUpsertWithWhereUniqueWithoutImageInput | AvatarUpsertWithWhereUniqueWithoutImageInput[]
-    createMany?: AvatarCreateManyImageInputEnvelope
-    set?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
-    disconnect?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
-    delete?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
-    connect?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
-    update?: AvatarUpdateWithWhereUniqueWithoutImageInput | AvatarUpdateWithWhereUniqueWithoutImageInput[]
-    updateMany?: AvatarUpdateManyWithWhereWithoutImageInput | AvatarUpdateManyWithWhereWithoutImageInput[]
-    deleteMany?: AvatarScalarWhereInput | AvatarScalarWhereInput[]
+  export type AvatarUpdateOneWithoutImageNestedInput = {
+    create?: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput>
+    connectOrCreate?: AvatarCreateOrConnectWithoutImageInput
+    upsert?: AvatarUpsertWithoutImageInput
+    disconnect?: AvatarWhereInput | boolean
+    delete?: AvatarWhereInput | boolean
+    connect?: AvatarWhereUniqueInput
+    update?: XOR<XOR<AvatarUpdateToOneWithWhereWithoutImageInput, AvatarUpdateWithoutImageInput>, AvatarUncheckedUpdateWithoutImageInput>
   }
 
   export type AlbumUpdateOneWithoutPreviewImageNestedInput = {
@@ -23394,18 +23355,14 @@ export namespace Prisma {
     update?: XOR<XOR<AlbumUpdateToOneWithWhereWithoutImagesInput, AlbumUpdateWithoutImagesInput>, AlbumUncheckedUpdateWithoutImagesInput>
   }
 
-  export type AvatarUncheckedUpdateManyWithoutImageNestedInput = {
-    create?: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput> | AvatarCreateWithoutImageInput[] | AvatarUncheckedCreateWithoutImageInput[]
-    connectOrCreate?: AvatarCreateOrConnectWithoutImageInput | AvatarCreateOrConnectWithoutImageInput[]
-    upsert?: AvatarUpsertWithWhereUniqueWithoutImageInput | AvatarUpsertWithWhereUniqueWithoutImageInput[]
-    createMany?: AvatarCreateManyImageInputEnvelope
-    set?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
-    disconnect?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
-    delete?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
-    connect?: AvatarWhereUniqueInput | AvatarWhereUniqueInput[]
-    update?: AvatarUpdateWithWhereUniqueWithoutImageInput | AvatarUpdateWithWhereUniqueWithoutImageInput[]
-    updateMany?: AvatarUpdateManyWithWhereWithoutImageInput | AvatarUpdateManyWithWhereWithoutImageInput[]
-    deleteMany?: AvatarScalarWhereInput | AvatarScalarWhereInput[]
+  export type AvatarUncheckedUpdateOneWithoutImageNestedInput = {
+    create?: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput>
+    connectOrCreate?: AvatarCreateOrConnectWithoutImageInput
+    upsert?: AvatarUpsertWithoutImageInput
+    disconnect?: AvatarWhereInput | boolean
+    delete?: AvatarWhereInput | boolean
+    connect?: AvatarWhereUniqueInput
+    update?: XOR<XOR<AvatarUpdateToOneWithWhereWithoutImageInput, AvatarUpdateWithoutImageInput>, AvatarUncheckedUpdateWithoutImageInput>
   }
 
   export type AlbumUncheckedUpdateOneWithoutPreviewImageNestedInput = {
@@ -24512,7 +24469,7 @@ export namespace Prisma {
     filename: string
     file: string
     uploadedAt?: Date | string
-    avatar?: AvatarCreateNestedManyWithoutImageInput
+    avatar?: AvatarCreateNestedOneWithoutImageInput
     albumPreviewOf?: AlbumCreateNestedOneWithoutPreviewImageInput
     user?: UserCreateNestedOneWithoutImagesInput
     album?: AlbumCreateNestedOneWithoutImagesInput
@@ -24525,7 +24482,7 @@ export namespace Prisma {
     uploadedAt?: Date | string
     userId?: number | null
     albumId?: number | null
-    avatar?: AvatarUncheckedCreateNestedManyWithoutImageInput
+    avatar?: AvatarUncheckedCreateNestedOneWithoutImageInput
     albumPreviewOf?: AlbumUncheckedCreateNestedOneWithoutPreviewImageInput
   }
 
@@ -24800,7 +24757,7 @@ export namespace Prisma {
     filename: string
     file: string
     uploadedAt?: Date | string
-    avatar?: AvatarCreateNestedManyWithoutImageInput
+    avatar?: AvatarCreateNestedOneWithoutImageInput
     user?: UserCreateNestedOneWithoutImagesInput
     post?: PostCreateNestedOneWithoutImagesInput
     album?: AlbumCreateNestedOneWithoutImagesInput
@@ -24814,7 +24771,7 @@ export namespace Prisma {
     userId?: number | null
     postId?: number | null
     albumId?: number | null
-    avatar?: AvatarUncheckedCreateNestedManyWithoutImageInput
+    avatar?: AvatarUncheckedCreateNestedOneWithoutImageInput
   }
 
   export type ImageCreateOrConnectWithoutAlbumPreviewOfInput = {
@@ -24896,7 +24853,7 @@ export namespace Prisma {
     filename: string
     file: string
     uploadedAt?: Date | string
-    avatar?: AvatarCreateNestedManyWithoutImageInput
+    avatar?: AvatarCreateNestedOneWithoutImageInput
     albumPreviewOf?: AlbumCreateNestedOneWithoutPreviewImageInput
     user?: UserCreateNestedOneWithoutImagesInput
     post?: PostCreateNestedOneWithoutImagesInput
@@ -24909,7 +24866,7 @@ export namespace Prisma {
     uploadedAt?: Date | string
     userId?: number | null
     postId?: number | null
-    avatar?: AvatarUncheckedCreateNestedManyWithoutImageInput
+    avatar?: AvatarUncheckedCreateNestedOneWithoutImageInput
     albumPreviewOf?: AlbumUncheckedCreateNestedOneWithoutPreviewImageInput
   }
 
@@ -24937,7 +24894,7 @@ export namespace Prisma {
     filename?: StringFieldUpdateOperationsInput | string
     file?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    avatar?: AvatarUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUpdateOneWithoutImageNestedInput
     user?: UserUpdateOneWithoutImagesNestedInput
     post?: PostUpdateOneWithoutImagesNestedInput
     album?: AlbumUpdateOneWithoutImagesNestedInput
@@ -24951,7 +24908,7 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     postId?: NullableIntFieldUpdateOperationsInput | number | null
     albumId?: NullableIntFieldUpdateOperationsInput | number | null
-    avatar?: AvatarUncheckedUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUncheckedUpdateOneWithoutImageNestedInput
   }
 
   export type TagUpsertWithoutAlbumsInput = {
@@ -25824,10 +25781,6 @@ export namespace Prisma {
     create: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput>
   }
 
-  export type AvatarCreateManyImageInputEnvelope = {
-    data: AvatarCreateManyImageInput | AvatarCreateManyImageInput[]
-  }
-
   export type AlbumCreateWithoutPreviewImageInput = {
     name: string
     createdAt?: Date | string
@@ -25956,31 +25909,28 @@ export namespace Prisma {
     create: XOR<AlbumCreateWithoutImagesInput, AlbumUncheckedCreateWithoutImagesInput>
   }
 
-  export type AvatarUpsertWithWhereUniqueWithoutImageInput = {
-    where: AvatarWhereUniqueInput
+  export type AvatarUpsertWithoutImageInput = {
     update: XOR<AvatarUpdateWithoutImageInput, AvatarUncheckedUpdateWithoutImageInput>
     create: XOR<AvatarCreateWithoutImageInput, AvatarUncheckedCreateWithoutImageInput>
+    where?: AvatarWhereInput
   }
 
-  export type AvatarUpdateWithWhereUniqueWithoutImageInput = {
-    where: AvatarWhereUniqueInput
+  export type AvatarUpdateToOneWithWhereWithoutImageInput = {
+    where?: AvatarWhereInput
     data: XOR<AvatarUpdateWithoutImageInput, AvatarUncheckedUpdateWithoutImageInput>
   }
 
-  export type AvatarUpdateManyWithWhereWithoutImageInput = {
-    where: AvatarScalarWhereInput
-    data: XOR<AvatarUpdateManyMutationInput, AvatarUncheckedUpdateManyWithoutImageInput>
+  export type AvatarUpdateWithoutImageInput = {
+    active?: BoolFieldUpdateOperationsInput | boolean
+    shown?: BoolFieldUpdateOperationsInput | boolean
+    profile?: ProfileUpdateOneRequiredWithoutAvatarsNestedInput
   }
 
-  export type AvatarScalarWhereInput = {
-    AND?: AvatarScalarWhereInput | AvatarScalarWhereInput[]
-    OR?: AvatarScalarWhereInput[]
-    NOT?: AvatarScalarWhereInput | AvatarScalarWhereInput[]
-    id?: IntFilter<"Avatar"> | number
-    imageId?: IntFilter<"Avatar"> | number
-    profile_id?: IntFilter<"Avatar"> | number
-    active?: BoolFilter<"Avatar"> | boolean
-    shown?: BoolFilter<"Avatar"> | boolean
+  export type AvatarUncheckedUpdateWithoutImageInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    profile_id?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    shown?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AlbumUpsertWithoutPreviewImageInput = {
@@ -26397,6 +26347,17 @@ export namespace Prisma {
     data: XOR<AvatarUpdateManyMutationInput, AvatarUncheckedUpdateManyWithoutProfileInput>
   }
 
+  export type AvatarScalarWhereInput = {
+    AND?: AvatarScalarWhereInput | AvatarScalarWhereInput[]
+    OR?: AvatarScalarWhereInput[]
+    NOT?: AvatarScalarWhereInput | AvatarScalarWhereInput[]
+    id?: IntFilter<"Avatar"> | number
+    imageId?: IntFilter<"Avatar"> | number
+    profile_id?: IntFilter<"Avatar"> | number
+    active?: BoolFilter<"Avatar"> | boolean
+    shown?: BoolFilter<"Avatar"> | boolean
+  }
+
   export type PostUpsertWithWhereUniqueWithoutViewsInput = {
     where: PostWhereUniqueInput
     update: XOR<PostUpdateWithoutViewsInput, PostUncheckedUpdateWithoutViewsInput>
@@ -26542,7 +26503,7 @@ export namespace Prisma {
     filename: string
     file: string
     uploadedAt?: Date | string
-    avatar?: AvatarCreateNestedManyWithoutImageInput
+    avatar?: AvatarCreateNestedOneWithoutImageInput
     albumPreviewOf?: AlbumCreateNestedOneWithoutPreviewImageInput
     post?: PostCreateNestedOneWithoutImagesInput
     album?: AlbumCreateNestedOneWithoutImagesInput
@@ -26555,7 +26516,7 @@ export namespace Prisma {
     uploadedAt?: Date | string
     postId?: number | null
     albumId?: number | null
-    avatar?: AvatarUncheckedCreateNestedManyWithoutImageInput
+    avatar?: AvatarUncheckedCreateNestedOneWithoutImageInput
     albumPreviewOf?: AlbumUncheckedCreateNestedOneWithoutPreviewImageInput
   }
 
@@ -27409,7 +27370,7 @@ export namespace Prisma {
     filename?: StringFieldUpdateOperationsInput | string
     file?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    avatar?: AvatarUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUpdateOneWithoutImageNestedInput
     albumPreviewOf?: AlbumUpdateOneWithoutPreviewImageNestedInput
     user?: UserUpdateOneWithoutImagesNestedInput
     album?: AlbumUpdateOneWithoutImagesNestedInput
@@ -27422,7 +27383,7 @@ export namespace Prisma {
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     albumId?: NullableIntFieldUpdateOperationsInput | number | null
-    avatar?: AvatarUncheckedUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUncheckedUpdateOneWithoutImageNestedInput
     albumPreviewOf?: AlbumUncheckedUpdateOneWithoutPreviewImageNestedInput
   }
 
@@ -27526,7 +27487,7 @@ export namespace Prisma {
     filename?: StringFieldUpdateOperationsInput | string
     file?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    avatar?: AvatarUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUpdateOneWithoutImageNestedInput
     albumPreviewOf?: AlbumUpdateOneWithoutPreviewImageNestedInput
     user?: UserUpdateOneWithoutImagesNestedInput
     post?: PostUpdateOneWithoutImagesNestedInput
@@ -27539,7 +27500,7 @@ export namespace Prisma {
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     postId?: NullableIntFieldUpdateOperationsInput | number | null
-    avatar?: AvatarUncheckedUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUncheckedUpdateOneWithoutImageNestedInput
     albumPreviewOf?: AlbumUncheckedUpdateOneWithoutPreviewImageNestedInput
   }
 
@@ -27645,33 +27606,6 @@ export namespace Prisma {
     authorId?: IntFieldUpdateOperationsInput | number
     sent_at?: DateTimeFieldUpdateOperationsInput | Date | string
     attached_image?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type AvatarCreateManyImageInput = {
-    id?: number
-    profile_id: number
-    active?: boolean
-    shown?: boolean
-  }
-
-  export type AvatarUpdateWithoutImageInput = {
-    active?: BoolFieldUpdateOperationsInput | boolean
-    shown?: BoolFieldUpdateOperationsInput | boolean
-    profile?: ProfileUpdateOneRequiredWithoutAvatarsNestedInput
-  }
-
-  export type AvatarUncheckedUpdateWithoutImageInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    profile_id?: IntFieldUpdateOperationsInput | number
-    active?: BoolFieldUpdateOperationsInput | boolean
-    shown?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type AvatarUncheckedUpdateManyWithoutImageInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    profile_id?: IntFieldUpdateOperationsInput | number
-    active?: BoolFieldUpdateOperationsInput | boolean
-    shown?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AvatarCreateManyProfileInput = {
@@ -27887,7 +27821,7 @@ export namespace Prisma {
     filename?: StringFieldUpdateOperationsInput | string
     file?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    avatar?: AvatarUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUpdateOneWithoutImageNestedInput
     albumPreviewOf?: AlbumUpdateOneWithoutPreviewImageNestedInput
     post?: PostUpdateOneWithoutImagesNestedInput
     album?: AlbumUpdateOneWithoutImagesNestedInput
@@ -27900,7 +27834,7 @@ export namespace Prisma {
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     postId?: NullableIntFieldUpdateOperationsInput | number | null
     albumId?: NullableIntFieldUpdateOperationsInput | number | null
-    avatar?: AvatarUncheckedUpdateManyWithoutImageNestedInput
+    avatar?: AvatarUncheckedUpdateOneWithoutImageNestedInput
     albumPreviewOf?: AlbumUncheckedUpdateOneWithoutPreviewImageNestedInput
   }
 

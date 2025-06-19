@@ -3,7 +3,7 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import { Image } from "../UserPostApp/userPost.type";
 
-export async function base64ToImage(base64: string): Promise<{file: string, filename: string}> {
+export async function base64ToImage(base64: string): Promise<{ filename: string; file: string }> {
     // Из data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAEWAgMAAAAGL
     // Возвращает image/png и iVBORw0KGgoAAAANSUhEUgAAAXIAAAEWAgMAAAAGL
 	const info = base64.split(";base64,")
@@ -16,7 +16,7 @@ export async function base64ToImage(base64: string): Promise<{file: string, file
 	const buffer = Buffer.from(imageData, "base64");
 	const fileName = `${uuidv4()}.${extension}`;
 
-	const mediaDir = path.join(__dirname, "..", "..", "media");
+	const mediaDir = path.join(__dirname, "..", "..", "media", "images");
     // Проверяем наличие папки media, если нет — создаём
     if (!fs.existsSync(mediaDir)) {
         fs.mkdirSync(mediaDir, { recursive: true });
@@ -29,5 +29,8 @@ export async function base64ToImage(base64: string): Promise<{file: string, file
 		console.log("Ошибка создания изображения");
 	}
 
-	return {file: fileName, filename: fileName};
+	return {
+		filename: fileName,
+		file: fileName,
+	};
 }
