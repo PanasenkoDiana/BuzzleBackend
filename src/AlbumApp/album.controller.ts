@@ -36,10 +36,18 @@ export const AlbumController = {
         res.json(result)
     },
 
-    deleteAlbum: async function(req: Request, res: Response){
+    deleteAlbumImage: async function(req: Request, res: Response){
         const id = req.body.id
-        const result = await AlbumService.deleteAlbum(+id)
+        const result = await AlbumService.deleteAlbumImage(+id)
 
         res.json(result)
-    }
+    },
+
+    deleteAlbum: async function(req: Request, res: Response){
+        const id = res.locals.userId
+        const data = req.body
+        const result = await AlbumService.deleteAlbum(+data.id)
+
+        res.json(result)
+    },
 }

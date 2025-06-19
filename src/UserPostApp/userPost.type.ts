@@ -17,7 +17,7 @@ export type UserPost = Prisma.PostGetPayload<{
         tags: true,
         images: true,   
         author: true,
-        userId: number;  
+        // userId: number;  
     },
     omit: {
         authorId: true,

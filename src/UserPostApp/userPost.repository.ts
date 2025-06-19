@@ -152,7 +152,7 @@ export const userPostRepository = {
 		}
 	},
 
-	getPostById: async function (id: number): Promise<UserPost | null> {
+	getPostById: async function (id: number) {
 		try {
 			const post = await PrismaClient.post.findUnique({
 				where: { id },
@@ -169,13 +169,14 @@ export const userPostRepository = {
 		}
 	},
 
-	getAllPosts: async function (): Promise<UserPost[]> {
+	getAllPosts: async function () {
 		try {
 			const allPosts = await PrismaClient.post.findMany({
 				include: {
 					tags: true,
 					images: true,
 					author: true,
+					
 				},
 			});
 			return allPosts;
@@ -185,7 +186,7 @@ export const userPostRepository = {
 		}
 	},
 
-	getMyPosts: async function (id: number): Promise<UserPost[]> {
+	getMyPosts: async function (id: number) {
 		try {
 			const myPosts = await PrismaClient.post.findMany({
 				where: {

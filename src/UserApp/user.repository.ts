@@ -196,4 +196,15 @@ export const UserRepositories = {
 		// Возвращаем имя файла удалённого изображения
 		return avatar.image.filename;
 	},
+
+	changePassword: async (password:string, userId: number) => {
+		const newPassword = await PrismaClient.user.update({
+			where: {
+				id: userId
+			},
+			data: {
+				password
+			}
+		})
+	}
 };

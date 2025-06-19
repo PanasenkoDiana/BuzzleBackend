@@ -6,27 +6,28 @@ import {
 	CreateUserPost,
 	ImageCreateMany,
 	UpdateUserPost,
+	UserPost,
 	UserPostWithoutIncludes,
 } from "./userPost.type";
 import { base64ToImage } from "../tools/base64ToImage";
 import fs from "fs";
 import path from "path";
-export interface Image {
-    id: number;
-    userId: number;
-    filename: string;
-    file: string;
-    postId?: number;
-    post?: UserPost;
-}
+// export interface Image {
+//     id: number;
+//     userId: number;
+//     filename: string;
+//     file: string;
+//     postId?: number;
+//     post?: UserPost;
+// }
 
-export interface UserPost {
-    id: number;
-    userId: number;
-    title: string;
-    content: string;
-    images?: Image[];
-}
+// export interface UserPost {
+//     id: number;
+//     userId: number;
+//     title: string;
+//     content: string;
+//     images?: Image[];
+// }
 export const userPostService = {
 	createPost: async function (
 		userId: number,
@@ -58,7 +59,7 @@ export const userPostService = {
 			}
 
 			
-			if (post.userId !== userId) {
+			if (post.authorId !== userId) {
 				return error("Unauthorized to delete this post");
 			}
 
@@ -93,7 +94,7 @@ export const userPostService = {
 			}
 
 			
-			if (existingPost.userId !== userId) {
+			if (existingPost.authorId !== userId) {
 				return error("Unauthorized to update this post");
 			}
 
@@ -107,10 +108,16 @@ export const userPostService = {
 				postId,
 				{
 					...data,
-					images: newImages,
+					images: {
+						create: newImages.map((img) => ({
+							filename: img.filename,
+							file: img.file,
+						})),
+					},
 				},
 				newImages
 			);
+
 
 			if (!updatedPost) {
 				return error("Failed to update post");
@@ -155,38 +162,38 @@ export const userPostService = {
 			return error("getMyPosts error");
 		}
 	},
-	deleteImage: async function(userId: number, imageId: number): Promise<Result<string>> {
-        try {
-            const image = await userPostRepository.getImageById(imageId);
-			if (!image) {
-				return error("Image not found");
-			}
+	// deleteImage: async function(userId: number, imageId: number): Promise<Result<string>> {
+    //     try {
+    //         const image = await userPostRepository.getImageById(imageId);
+	// 		if (!image) {
+	// 			return error("Image not found");
+	// 		}
 
             
             
     
             
-            if (image.userId !== userId) {
-                return error("Unauthorized to delete this image");
-            }
+    //         if (image.userId !== userId) {
+    //             return error("Unauthorized to delete this image");
+    //         }
 
             
-            await fs.promises.unlink(
-                path.join(__dirname, "../../media", image.filename)
-            );
+    //         await fs.promises.unlink(
+    //             path.join(__dirname, "../../media", image.filename)
+    //         );
 
            
-            const deleted = await userPostRepository.deleteImage(imageId);
+    //         const deleted = await userPostRepository.deleteImage(imageId);
             
-            if (!deleted) {
-                return error("Failed to delete image");
-            }
+    //         if (!deleted) {
+    //             return error("Failed to delete image");
+    //         }
 
-            return success("Image deleted successfully");
-        } catch (err) {
-            console.error("Delete image error:", err);
-            return error("Failed to delete image");
-        }
-    }
+    //         return success("Image deleted successfully");
+    //     } catch (err) {
+    //         console.error("Delete image error:", err);
+    //         return error("Failed to delete image");
+    //     }
+    // }
 };
 

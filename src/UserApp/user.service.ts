@@ -16,6 +16,7 @@ import { SECRET_KEY } from "../config/token";
 import { EmailService } from "../core/email.service";
 import { VerificationService } from "../core/verification.service";
 import { base64ToImage } from "../tools/base64ToImage";
+import { userPostRepository } from "../UserPostApp/userPost.repository";
 
 const verificationService = new VerificationService(EmailService);
 
@@ -194,4 +195,65 @@ export const UserService = {
 			};
 		}
 	},
+
+	changePasswordPartOne: async function (
+		userId: number
+
+	): Promise<IError | ISuccess<string>> {
+
+		const user  = await UserRepositories.findUserById(userId) 
+
+
+		if (!user) {
+			return {
+				status: "error",
+				message: "user don't found",
+			}
+		}
+
+		const emailSent = await verificationService.generateAndSendCode(
+			user.email,
+			user
+		);	
+		if (!emailSent) {
+			return {
+				status: "error",
+				message: "Failed to send verification email",
+			};
+		}
+
+		return { status: "success", data: "Verification code sent" };
+	},
+
+	changePasswordPartTwo: async function (
+		code: string,
+		userId : number,
+		password: string,
+	) {
+
+		const user  = await UserRepositories.findUserById(userId) 
+
+
+		if (!user) {
+			return {
+				status: "error",
+				message: "user don't found",
+			}
+		}
+
+
+		const userData = await verificationService.verifyCode(user.email, code);
+		if (!userData) {
+			return {
+				status: "error",
+				message: "Invalid or expired verification code",
+			};
+		}
+
+		const hashedPassword = await hash(password, 10);
+		const changePassword = await UserRepositories.changePassword(hashedPassword, userId)
+
+		return { status: "success", data: "Verification code sent" };
+		
+	}
 };

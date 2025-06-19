@@ -77,24 +77,19 @@ export const AlbumRepository = {
 
     createAlbum: async function(data: CreateAlbumInput, userId: number) {
         try {
-            // topic — это string или undefined из input
-            const topicName = typeof data.topic === "string" ? data.topic : undefined;
-
-            // Формируем объект связи с Tag, если topicName есть
-            const topicConnectOrCreate = topicName
-                ? {
-                    connectOrCreate: {
-                        where: { name: topicName },
-                        create: { name: topicName },
-                    }
-                }
-                : undefined;
 
             const album = await PrismaClient.album.create({
                 data: {
                     user: { connect: { id: userId } },  // связываем пользователя через вложенный объект
                     name: data.name,
-                    topic: topicConnectOrCreate,       // используем сформированный объект
+                    topic: data.topic
+                        ? {
+                                connectOrCreate: {
+                                    where: { name: data.topic as string }, // <- string
+                                    create: { name: data.topic as string }, // <- string
+                                },
+                        }
+                        : undefined,    // используем сформированный объект
                 },
                 include: {
                     topic: true,
@@ -109,7 +104,7 @@ export const AlbumRepository = {
         }
     },
 
-    deleteAlbum: async function(id: number) {
+    deleteAlbumImage: async function(id: number) {
         try {
             const deletedAlbum = await PrismaClient.image.delete({
                 where: { id },
@@ -120,6 +115,19 @@ export const AlbumRepository = {
             console.error(error);
             throw error;
         }
+    },
+
+    deleteAlbum: async function(id: number) {
+        try {
+            const deletedAlbum = await PrismaClient.album.delete({
+                where: { id: id },
+            });
+
+            return 'album deleted';
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }   
     }
 
 

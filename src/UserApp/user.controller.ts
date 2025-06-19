@@ -82,5 +82,29 @@ export const UserController = {
         } catch (err) {
             next(err);
         }
-    }
+    },
+
+    changePasswordPartOne: async function(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = +res.locals.userId
+
+            const result = await UserService.changePasswordPartOne(id)
+            res.json(result);
+        } catch(err){
+            next(err);
+        }
+    },
+
+    changePasswordPartTwo: async function(req: Request, res: Response, next: NextFunction) {
+        try {
+            const code = req.body.code
+            const password = req.body.password
+            const id = +res.locals.userId
+
+            const result = await UserService.changePasswordPartTwo(code, id, password)
+            res.json(result);
+        } catch(err){
+            next(err);
+        }
+    },
 };
