@@ -1,13 +1,13 @@
 import { AddPhotoToAlbum, AddPhotoToAlbumCredentials, Album, CreateAlbum, CreateAlbumInput } from "./album.type"
 import { create } from "ts-node"
-import { PrismaClient } from "../prisma/client"
+import { prismaClient } from "../prisma/client"
 import { connect } from "http2"
 
 
 export const AlbumRepository = {
     getAllAlbums: async function(id: number) {
         try {
-            const albums = await PrismaClient.album.findMany({
+            const albums = await prismaClient.album.findMany({
                 where: {
                     userId: id
                 },
@@ -24,7 +24,7 @@ export const AlbumRepository = {
 
     changeAlbum: async function(data: CreateAlbumInput, id: number) {
         try {
-            const changedAlbum = await PrismaClient.album.update({
+            const changedAlbum = await prismaClient.album.update({
                 where: { id },
                 data: {
                     name: data.name,
@@ -52,7 +52,7 @@ export const AlbumRepository = {
 
     addPhotoToAlbum: async function(data: { file: string, filename: string }, id: number) {
         try {
-            const album = await PrismaClient.album.update({
+            const album = await prismaClient.album.update({
                 where: { id },
                 data: {
                     images: {
@@ -78,7 +78,7 @@ export const AlbumRepository = {
     createAlbum: async function(data: CreateAlbumInput, userId: number) {
         try {
 
-            const album = await PrismaClient.album.create({
+            const album = await prismaClient.album.create({
                 data: {
                     user: { connect: { id: userId } },  // связываем пользователя через вложенный объект
                     name: data.name,
@@ -106,7 +106,7 @@ export const AlbumRepository = {
 
     deleteAlbumImage: async function(id: number) {
         try {
-            const deletedAlbum = await PrismaClient.image.delete({
+            const deletedAlbum = await prismaClient.image.delete({
                 where: { id },
             });
 
@@ -119,7 +119,7 @@ export const AlbumRepository = {
 
     deleteAlbum: async function(id: number) {
         try {
-            const deletedAlbum = await PrismaClient.album.delete({
+            const deletedAlbum = await prismaClient.album.delete({
                 where: { id: id },
             });
 

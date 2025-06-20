@@ -8,6 +8,7 @@ import {
 	secondRegister,
 	User,
 	UserWithoutIncludes,
+	Avatar
 } from "./user.type";
 import { UserRepositories } from "./user.repository";
 import { sign } from "jsonwebtoken";
@@ -116,18 +117,33 @@ export const UserService = {
 		data: changeUserPartOne,
 		id: number
 	): Promise<IError | ISuccess<string>> {
-		if (!data.profileImage?.startsWith("data:image")) {
-			return { status: "error", message: "Invalid image data" };
+
+		if (data.profileImage) {
+
+			if (!data.profileImage?.startsWith("data:image")) {
+				return { status: "error", message: "Invalid image data" };
+			}
+
+
+
+			const {filename}  = await base64ToImage(data.profileImage);
+			// if (!filename) {
+			// 	return { status: "error", message: "Invalid image data" };
+			// }
+
+			const user = await UserRepositories.changeUserPartOne(filename, id);
+
+			if (!user) return { status: "error", message: "User not found" };
 		}
 
-		const {filename}  = await base64ToImage(data.profileImage);
-		if (!filename) {
-			return { status: "error", message: "Invalid image data" };
+		if (data.username) {
+			const user = await UserRepositories.changeUsername(id, data.username)
+
+			if (!user) return { status: "error", message: "User not found" };
+			
 		}
 
-		const user = await UserRepositories.changeUserPartOne(filename, id);
-		if (!user) return { status: "error", message: "User not found" };
-		return { status: "success", data: user };
+		return { status: "success", data: 'changed user' };
 	},
 
 	changeUserPartTwo: async function (
@@ -255,5 +271,29 @@ export const UserService = {
 
 		return { status: "success", data: "Verification code sent" };
 		
+	},
+
+	getMyPhotos: async function(userId: number): Promise<ISuccess<Avatar[]> | IError> {
+		const user  = await UserRepositories.findUserById(userId) 
+
+		if (!user) {
+			return {
+				status: "error",
+				message: "user don't found",
+			}
+		}
+
+		const userAvatars = user.Profile?.avatars
+
+		if (!userAvatars){
+			return {
+				status: "error",
+				message: "avatars don't found",
+			}
+		}
+
+
+
+		return { status: "success", data: userAvatars };
 	}
 };

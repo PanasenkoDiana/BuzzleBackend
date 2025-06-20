@@ -4,9 +4,17 @@ export type IUser = Prisma.UserGetPayload<{
 	select: {
 		id: true;
 		name: true;
-		profileImage: true;
 		surname: true;
 		username: true;
+		Profile: {
+			include: {
+				avatars: {
+					include: {
+						image: true;
+					}
+				}
+			}
+		}
 	};
 }>;
 

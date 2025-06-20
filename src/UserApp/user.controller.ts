@@ -42,7 +42,7 @@ export const UserController = {
 
     changeUserPartOne: async function(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = +req.params.id;
+            const id = res.locals.userId;
             const data = req.body;
             const result = await UserService.changeUserPartOne(data, id);
             res.json(result);
@@ -53,7 +53,7 @@ export const UserController = {
 
     changeUserPartTwo: async function(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = +req.params.id;
+            const id = res.locals.userId;
             const data = req.body;
             const result = await UserService.changeUserPartTwo(data, id);
             res.json(result);
@@ -103,6 +103,18 @@ export const UserController = {
 
             const result = await UserService.changePasswordPartTwo(code, id, password)
             res.json(result);
+        } catch(err){
+            next(err);
+        }
+    },
+
+    getMyPhotos: async function(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = +res.locals.userId
+            const result = await UserService.getMyPhotos(id)
+
+            res.json(result)
+            
         } catch(err){
             next(err);
         }

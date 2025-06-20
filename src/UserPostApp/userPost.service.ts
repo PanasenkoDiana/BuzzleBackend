@@ -1,5 +1,3 @@
-import { Tag } from "../generated/prisma";
-import { PrismaClient } from "../prisma/client";
 import { error, Result, success } from "../tools/result";
 import { userPostRepository } from "./userPost.repository";
 import {

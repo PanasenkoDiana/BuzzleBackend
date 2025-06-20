@@ -1,11 +1,11 @@
-import { PrismaClient } from "../prisma/client";
+import { prismaClient } from "../prisma/client";
 import { Result } from "../tools/result";
 import { CreateTag, Tag, TagWithoutId } from "./tag.type";
 
 export const tagRepository = {
 	createTag: async function (name: string): Promise<Tag> {
 		try {
-			const tag = PrismaClient.tag.create({
+			const tag = prismaClient.tag.create({
 				data: {
 					name
 				}
@@ -18,7 +18,7 @@ export const tagRepository = {
 	},
 	findTagByNane: async function (name: string): Promise<Tag | null> {
 		try {
-			const tag = PrismaClient.tag.findUnique({
+			const tag = prismaClient.tag.findUnique({
 				where: {
 					name: name,
 				},
@@ -31,7 +31,7 @@ export const tagRepository = {
 	},
 	getAllTags: async function (): Promise<TagWithoutId[] | null> {
 		try {
-			const tags = PrismaClient.tag.findMany({
+			const tags = prismaClient.tag.findMany({
 				select: {
 					name: true,
 				},
