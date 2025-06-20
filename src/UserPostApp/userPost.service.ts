@@ -38,6 +38,8 @@ export const userPostService = {
 			images.map((base64) => base64ToImage(base64))
 		);
 
+		console.log("images dataghhgfghfghfghfghfggh:", imagesData[0].file)
+
 		const newPost = await userPostRepository.createPost(
 			userId,
 			data,
