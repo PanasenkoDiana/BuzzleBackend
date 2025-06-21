@@ -142,4 +142,52 @@ export class ChatController {
 			res.status(500).json({ error: "Failed to fetch messages" });
 		}
 	};
+
+	public getAllChats = async (
+		req: Request,
+		res: Response
+	) => {
+		try {
+			const userId = res.locals.userId;
+
+
+
+			const chats = await prismaClient.chatGroup.findMany({
+				where: {
+					members: {
+						some: {
+							id: +userId
+						}
+					},
+					// adminId: +chatId
+				},
+
+				include: {
+					members: {
+						include: {
+							Profile: {
+								include: {
+									avatars: {
+										include: {
+											image: true
+										}
+									}
+								}
+							}
+						}
+					},
+					messages: true,
+				}
+
+			})
+
+			// const allChats = [...chatsWereAdmin, ...chatsWereMember]
+
+			res.json(chats)
+
+		} catch(error) {
+			// console.log(error)
+			res.status(500).json({ error: "Failed to fetch chats" });
+		}
+	}
 }

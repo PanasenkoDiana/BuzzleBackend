@@ -22,4 +22,6 @@ userRouter.get("/me", authTokenMiddleware, UserController.findUserById);
 userRouter.post("/change-password/one", authTokenMiddleware, UserController.changePasswordPartOne)
 userRouter.post("/change-password/two", authTokenMiddleware, UserController.changePasswordPartTwo)
 
+userRouter.post("/recipient", UserController.getRecipient)
+
 export default userRouter;

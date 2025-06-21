@@ -119,4 +119,19 @@ export const UserController = {
             next(err);
         }
     },
+
+    getRecipient: async function(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.body.id
+
+            console.log(id)
+
+            const result = await UserService.getUserByid(id)
+
+            res.json(result)
+
+        } catch(err){
+            next(err)
+        }
+    } 
 };

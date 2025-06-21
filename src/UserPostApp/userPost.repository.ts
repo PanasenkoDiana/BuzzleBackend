@@ -11,47 +11,37 @@ export const userPostRepository = {
 	createPost: async function (
 		userId: number,
 		data: CreateUserPost,
-		imagesData: {filename: string; file: string}[]
-	): Promise<UserPostWithoutIncludes> {
+		imagesData: { filename: string; file: string }[],
+		links: { url: string }[]
+	): Promise<UserPost> {
 		try {
 			const newPost = await prismaClient.post.create({
 				data: {
-					// title: data.name,
 					title: data.title,
 					content: data.content,
-					
-					// topic: data.topic ?? null,
-					// content: data.text ?? null,
-					// links: data.link ?? null,
-					// views: data.views ?? 0,
-					// likes: data.likes ?? 0,
-
+					links: {
+						createMany: {
+							data: links,
+						},
+					},
 					author: {
 						connect: {
 							id: userId,
 						},
 					},
-
-
-					// ...(data.)
-					// images: imagesData.map(()=>{
-					// 	return create: {
-							
-					// 	}
-					// })
-					// ,
-
 					images: {
 						createMany: {
-							data: imagesData
-						}
+							data: imagesData,
+						},
 					},
-
 					...(data.tags
 						? {
 								tags: {
 									connectOrCreate: data.tags.map((tag) => {
-										let tagName = typeof tag === "string" ? tag : tag.name;
+										let tagName =
+											typeof tag === "string"
+												? tag
+												: tag.name;
 										if (!tagName.startsWith("#")) {
 											tagName = `#${tagName}`;
 										}
@@ -66,6 +56,7 @@ export const userPostRepository = {
 				},
 				include: {
 					tags: true,
+					links: true,
 					images: true,
 					author: {
 						include: {
@@ -73,12 +64,12 @@ export const userPostRepository = {
 								include: {
 									avatars: {
 										include: {
-											image: true
-										}
-									}
-								}
-							}
-						}
+											image: true,
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			});
@@ -117,7 +108,7 @@ export const userPostRepository = {
 		userId: number,
 		postId: number,
 		data: UpdateUserPost,
-		imagesData: {filename: string; file: string}[]
+		imagesData: { filename: string; file: string }[]
 	) {
 		try {
 			await prismaClient.image.deleteMany({
@@ -158,6 +149,7 @@ export const userPostRepository = {
 				where: { id },
 				include: {
 					tags: true,
+					links: true,
 					images: true,
 					author: {
 						omit: {
@@ -169,13 +161,13 @@ export const userPostRepository = {
 								include: {
 									avatars: {
 										include: {
-											image: true
-										}
-									}
-								}
-							}
-						}
-					}
+											image: true,
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			});
 			return post;
@@ -190,23 +182,24 @@ export const userPostRepository = {
 			const allPosts = await prismaClient.post.findMany({
 				include: {
 					tags: true,
+					links: true,
 					images: true,
 					author: {
 						omit: {
 							password: true,
-							email: true
+							email: true,
 						},
 						include: {
 							Profile: {
 								include: {
 									avatars: {
 										include: {
-											image: true
-										}
-									}
-								}
-							}
-						}
+											image: true,
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			});
@@ -225,6 +218,7 @@ export const userPostRepository = {
 				},
 				include: {
 					tags: true,
+					links: true,
 					images: true,
 					author: {
 						omit: {
@@ -236,13 +230,13 @@ export const userPostRepository = {
 								include: {
 									avatars: {
 										include: {
-											image: true
-										}
-									}
-								}
-							}
-						}
-					}
+											image: true,
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			});
 			return myPosts;
