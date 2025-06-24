@@ -18,7 +18,6 @@ dotenv.config();
 
 const startServer = async () => {
 	try {
-		// Test database connection
 		await prismaClient.$connect();
 		console.log("Successfully connected to database");
 
@@ -31,7 +30,7 @@ const startServer = async () => {
 			}
 		});
 
-		const HOST = "192.168.0.117";
+		const HOST = "192.168.3.4";
 		const PORT = 8000;
 
 		chatSocket(io);

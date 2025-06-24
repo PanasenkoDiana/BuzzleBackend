@@ -124,8 +124,6 @@ export const UserController = {
         try {
             const id = req.body.id
 
-            console.log(id)
-
             const result = await UserService.getUserByid(id)
 
             res.json(result)

@@ -7,7 +7,7 @@ export const userPostController = {
 		const { images, links, ...data } = req.body;
 		console.log(data);
 		console.log(`Create post links: ${links}`);
-		const result = await userPostService.createPost(userId, data, images, links);
+		const result = await userPostService.createPost(userId, data, images ? images : [], links);
 		res.json(result);
 	},
 	deletePost: async function (req: Request, res: Response) {

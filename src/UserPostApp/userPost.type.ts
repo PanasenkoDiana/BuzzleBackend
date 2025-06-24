@@ -16,6 +16,7 @@ export type ImageCreateMany = Prisma.ImageCreateManyInput
 export type UserPost = Prisma.PostGetPayload<{
     include: {
         tags: true,
+        topic: true,
         links: true,
         images: true,
         author: {

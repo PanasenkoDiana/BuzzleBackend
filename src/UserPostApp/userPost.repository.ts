@@ -19,6 +19,7 @@ export const userPostRepository = {
 				data: {
 					title: data.title,
 					content: data.content,
+					topic: data.topic,
 					links: {
 						createMany: {
 							data: links,

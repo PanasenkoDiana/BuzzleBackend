@@ -30,14 +30,14 @@ export const userPostService = {
 	createPost: async function (
 		userId: number,
 		data: CreateUserPost,
-		images: string[] = [],
+		images: string[],
 		links: string[]
 	): Promise<Result<UserPost>> {
 		const imagesData = await Promise.all(
 			images.map((base64) => base64ToImage(base64))
 		);
 
-		console.log("images dataghhgfghfghfghfghfggh:", imagesData[0].file);
+		console.log("images dataghhgfghfghfghfghfggh:", imagesData[0]?.file);
 
 		const linksWithUrl = (links || []).map(link => ({ url: link }));
 
