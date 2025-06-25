@@ -1,5 +1,4 @@
-// import { PrismaClient } from "../prisma/client";
-import { PrismaClient } from "../prisma/client";
+import { prismaClient } from "../prisma/client";
 import {
 	changeUserPartOne,
 	changeUserPartTwo,
@@ -10,8 +9,8 @@ import {
 
 export const UserRepositories = {
 	createUser: async (data: CreateUser) => {
-		const id = (await PrismaClient.user.count()) + 1;
-		const user = await PrismaClient.user.create({
+		const id = (await prismaClient.user.count()) + 1;
+		const user = await prismaClient.user.create({
 			data: {
 				username: `user${id}`,
 				...data,
@@ -19,7 +18,7 @@ export const UserRepositories = {
 		});
 
 		// Создаём профиль после создания пользователя
-		await PrismaClient.profile.create({
+		await prismaClient.profile.create({
 			data: {
 				user: { connect: { id: user.id } },
 				date_of_birth: new Date(),
@@ -30,7 +29,7 @@ export const UserRepositories = {
 	},
 
 	findUserById: async (id: number) =>
-		PrismaClient.user.findUnique({
+		prismaClient.user.findUnique({
 			where: { id },
 			include: {
 				images: true,
@@ -48,12 +47,12 @@ export const UserRepositories = {
 		}),
 
 	findUserByEmail: async (email: string) =>
-		PrismaClient.user.findUnique({
+		prismaClient.user.findUnique({
 			where: { email },
 		}),
 
 	secondRegister: async (data: secondRegister, id: number) =>
-		PrismaClient.user.update({
+		prismaClient.user.update({
 			where: { id },
 			data: {
 				name: data.name,
@@ -63,14 +62,14 @@ export const UserRepositories = {
 			include: { images: true, albums: true },
 		}),
 
-	changeUserPartOne: async (filename: string, id: number) => {
+	changeUserPartOne: async (filename: string, id: number,) => {
 		// Найдём профиль пользователя
-		const profile = await PrismaClient.profile.findUnique({
+		const profile = await prismaClient.profile.findUnique({
 			where: { user_id: id },
 		});
 		if (!profile) throw new Error("Profile not found");
 
-		const updatedProfile = await PrismaClient.profile.update({
+		const updatedProfile = await prismaClient.profile.update({
 			where: { id: profile.id },
 			data: {
 				avatars: {
@@ -96,8 +95,12 @@ export const UserRepositories = {
 		// 	data: {
 		//         profile_id: profile.id,
 		//         // profile: profile.id,
+		//         profile_id: profile.id,
+		//         // profile: profile.id,
 		// 		image: {
 		// 			create: {
+		//                 filename,
+		//                 file: filename,
 		//                 filename,
 		//                 file: filename,
 		// 			}
@@ -109,7 +112,7 @@ export const UserRepositories = {
 	},
 
 	changeUserPartTwo: async (data: changeUserPartTwo, id: number) => {
-		const uupdatedUser = await PrismaClient.user.update({
+		const uupdatedUser = await prismaClient.user.update({
 			where: { id },
 			data: {
 				name: data.name,
@@ -131,13 +134,17 @@ export const UserRepositories = {
 				},
 			},
 		});
+		});
 
+		return "changed part two";
+	},
 		return "changed part two";
 	},
 
 	addMyPhoto: async (data: string, id: number) => {
+	addMyPhoto: async (data: string, id: number) => {
 		// Находим профиль по user_id
-		const profile = await PrismaClient.profile.findUnique({
+		const profile = await prismaClient.profile.findUnique({
 			where: { user_id: id },
 		});
 		if (!profile) throw new Error("Profile not found");
@@ -156,7 +163,7 @@ export const UserRepositories = {
 		// 	},
 		// 	include: { image: true },
 		// });
-		const newAvatar = await PrismaClient.profile.update({
+		const newAvatar = await prismaClient.profile.update({
 			where: { user_id: id },
 
 			data: {
@@ -180,19 +187,27 @@ export const UserRepositories = {
 				},
 			},
 		});
+			include: {
+				avatars: {
+					include: {
+						image: true,
+					},
+				},
+			},
+		});
 
 		return "new photo added";
 	},
 
 	deleteMyPhoto: async (id: number) => {
-		const avatar = await PrismaClient.avatar.findUnique({
+		const avatar = await prismaClient.avatar.findUnique({
 			where: { id },
 			include: { image: true },
 		});
 		if (!avatar) throw new Error("Avatar not found");
 
 		// Удаляем аватар и связанное изображение
-		await PrismaClient.avatar.delete({
+		await prismaClient.avatar.delete({
 			where: { id },
 		});
 
@@ -201,13 +216,24 @@ export const UserRepositories = {
 	},
 
 	changePassword: async (password: string, userId: number) => {
-		const newPassword = await PrismaClient.user.update({
+		const newPassword = await prismaClient.user.update({
 			where: {
+				id: userId,
 				id: userId,
 			},
 			data: {
 				password,
 			},
 		});
+	},
+	changeUsername: async (userId: number, username: string) => {
+		const newUsername = await prismaClient.user.update({
+			where: {id: userId},
+			data: {
+				username
+			}
+		})
+
+		return 'username '
 	},
 };

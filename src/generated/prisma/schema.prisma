@@ -1,7 +1,8 @@
 model Post {
-  id      Int    @id @default(autoincrement())
+  id      Int     @id @default(autoincrement())
   title   String
-  content String
+  content String?
+  topic   String?
 
   authorId Int
   author   User @relation("PostsAuthored", fields: [authorId], references: [id])
@@ -23,8 +24,8 @@ model Album {
 
   shown Boolean @default(true)
 
-  topic   Tag? @relation(fields: [topicId], references: [id])
   topicId Int?
+  topic   Tag? @relation(fields: [topicId], references: [id])
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
@@ -42,7 +43,7 @@ model Avatar {
   active     Boolean @default(true)
   shown      Boolean @default(true)
 
-  @@map("app_avatar") // можно убрать или переименовать под свою таблицу
+  @@map("app_avatar")
 }
 
 model ChatGroup {
@@ -145,13 +146,12 @@ model Tag {
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  email        String  @unique
-  password     String
-  profileImage String?
-  name         String?
-  surname      String?
-  username     String? @unique
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  name     String?
+  surname  String?
+  username String? @unique
 
   images Image[]
   albums Album[]

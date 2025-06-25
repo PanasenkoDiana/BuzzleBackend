@@ -18,3 +18,9 @@ export interface Group {
     name: string;
     members: User[];
 }
+
+export interface CreateGroup {
+    name: string;
+    members: number[];
+    avatar: string
+}

@@ -1,3 +1,4 @@
+import type { PrismaClient } from '@prisma/client'
 import { Prisma } from "../generated/prisma";
 
 export interface IError {
@@ -16,12 +17,17 @@ export type User = Prisma.UserGetPayload<{
         albums: true,
     }
 }>
+
+export type UserWithAllIncludes = Prisma.UserGetPayload<{}>
+
 export type UserWithoutIncludes = Prisma.UserGetPayload<{}>
 
-type Image = Prisma.ImageGetPayload<{}>
+export type Avatar = Prisma.AvatarGetPayload<{}>
+
+export type Image = Prisma.ImageGetPayload<{}>
 
 export type CreateUser = Prisma.UserCreateInput
 export type secondRegister = Pick<User, 'name' | 'surname' | 'username'>
-export type changeUserPartOne = Pick<User, 'profileImage'>
+export type changeUserPartOne = { profileImage?: string, username?: string }
 export type changeUserPartTwo = Omit<UserWithoutIncludes, 'profileImage' | 'id'>
 export type createMyPhoto = { image: string }

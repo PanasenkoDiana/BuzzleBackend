@@ -1,4 +1,4 @@
-import { PrismaClient } from "../prisma/client";
+import { prismaClient } from "../prisma/client";
 import {
 	CreateUserPost,
 	UpdateUserPost,
@@ -11,47 +11,38 @@ export const userPostRepository = {
 	createPost: async function (
 		userId: number,
 		data: CreateUserPost,
-		imagesData: {filename: string; file: string}[]
-	): Promise<UserPostWithoutIncludes> {
+		imagesData: { filename: string; file: string }[],
+		links: { url: string }[]
+	): Promise<UserPost> {
 		try {
-			const newPost = await PrismaClient.post.create({
+			const newPost = await prismaClient.post.create({
 				data: {
-					// title: data.name,
 					title: data.title,
 					content: data.content,
-					
-					// topic: data.topic ?? null,
-					// content: data.text ?? null,
-					// links: data.link ?? null,
-					// views: data.views ?? 0,
-					// likes: data.likes ?? 0,
-
+					topic: data.topic,
+					links: {
+						createMany: {
+							data: links,
+						},
+					},
 					author: {
 						connect: {
 							id: userId,
 						},
 					},
-
-
-					// ...(data.)
-					// images: imagesData.map(()=>{
-					// 	return create: {
-							
-					// 	}
-					// })
-					// ,
-
 					images: {
 						createMany: {
-							data: imagesData
-						}
+							data: imagesData,
+						},
 					},
-
 					...(data.tags
 						? {
 								tags: {
 									connectOrCreate: data.tags.map((tag) => {
-										let tagName = typeof tag === "string" ? tag : tag.name;
+										let tagName =
+											typeof tag === "string"
+												? tag
+												: tag.name;
 										if (!tagName.startsWith("#")) {
 											tagName = `#${tagName}`;
 										}
@@ -66,6 +57,7 @@ export const userPostRepository = {
 				},
 				include: {
 					tags: true,
+					links: true,
 					images: true,
 					author: {
 						include: {
@@ -73,12 +65,12 @@ export const userPostRepository = {
 								include: {
 									avatars: {
 										include: {
-											image: true
-										}
-									}
-								}
-							}
-						}
+											image: true,
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			});
@@ -91,7 +83,7 @@ export const userPostRepository = {
 
 	deletePost: async function (userId: number, postId: number) {
 		try {
-			const post = await PrismaClient.post.findFirst({
+			const post = await prismaClient.post.findFirst({
 				where: {
 					id: postId,
 				},
@@ -101,7 +93,7 @@ export const userPostRepository = {
 				return "you're not the owner";
 			}
 
-			await PrismaClient.post.delete({
+			await prismaClient.post.delete({
 				where: {
 					id: postId,
 				},
@@ -117,16 +109,16 @@ export const userPostRepository = {
 		userId: number,
 		postId: number,
 		data: UpdateUserPost,
-		imagesData: {filename: string; file: string}[]
+		imagesData: { filename: string; file: string }[]
 	) {
 		try {
-			await PrismaClient.image.deleteMany({
+			await prismaClient.image.deleteMany({
 				where: {
 					postId: postId,
 				},
 			});
 
-			const updatedPost = await PrismaClient.post.update({
+			const updatedPost = await prismaClient.post.update({
 				where: {
 					id: postId,
 				},
@@ -154,12 +146,29 @@ export const userPostRepository = {
 
 	getPostById: async function (id: number) {
 		try {
-			const post = await PrismaClient.post.findUnique({
+			const post = await prismaClient.post.findUnique({
 				where: { id },
 				include: {
 					tags: true,
+					links: true,
 					images: true,
-					author: true,
+					author: {
+						omit: {
+							password: true,
+							email: true,
+						},
+						include: {
+							Profile: {
+								include: {
+									avatars: {
+										include: {
+											image: true,
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			});
 			return post;
@@ -171,12 +180,28 @@ export const userPostRepository = {
 
 	getAllPosts: async function () {
 		try {
-			const allPosts = await PrismaClient.post.findMany({
+			const allPosts = await prismaClient.post.findMany({
 				include: {
 					tags: true,
+					links: true,
 					images: true,
-					author: true,
-					
+					author: {
+						omit: {
+							password: true,
+							email: true,
+						},
+						include: {
+							Profile: {
+								include: {
+									avatars: {
+										include: {
+											image: true,
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			});
 			return allPosts;
@@ -188,14 +213,31 @@ export const userPostRepository = {
 
 	getMyPosts: async function (id: number) {
 		try {
-			const myPosts = await PrismaClient.post.findMany({
+			const myPosts = await prismaClient.post.findMany({
 				where: {
 					authorId: id,
 				},
 				include: {
 					tags: true,
+					links: true,
 					images: true,
-					author: true,
+					author: {
+						omit: {
+							password: true,
+							email: true,
+						},
+						include: {
+							Profile: {
+								include: {
+									avatars: {
+										include: {
+											image: true,
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			});
 			return myPosts;

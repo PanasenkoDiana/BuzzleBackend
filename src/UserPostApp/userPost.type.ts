@@ -2,7 +2,8 @@ import { Prisma } from "../generated/prisma";
 
 export type CreateUserPost = Prisma.PostGetPayload<{
     include: {
-        tags: true
+        links: true,
+        tags: true,
     }
     omit: {
         id: true
@@ -15,8 +16,26 @@ export type ImageCreateMany = Prisma.ImageCreateManyInput
 export type UserPost = Prisma.PostGetPayload<{
     include: {
         tags: true,
-        images: true,   
-        author: true,
+        topic: true,
+        links: true,
+        images: true,
+        author: {
+            omit: {
+                password: true,
+                email: true,
+            },
+            include: {
+                Profile: {
+                    include: {
+                        avatars: {
+                            include: {
+                                image: true
+                            }
+                        }
+                    }
+                }
+            }
+        }
         // userId: number;  
     },
     omit: {

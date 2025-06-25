@@ -11,9 +11,9 @@ model Image {
   userId Int?
   user   User? @relation(fields: [userId], references: [id])
 
-  post  Post?  @relation("PostImages", fields: [postId], references: [id])
+  post   Post? @relation("PostImages", fields: [postId], references: [id])
   postId Int?
 
-  album Album? @relation("AlbumImages", fields: [albumId], references: [id])
+  album   Album? @relation("AlbumImages", fields: [albumId], references: [id])
   albumId Int?
 }

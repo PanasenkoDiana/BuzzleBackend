@@ -8,8 +8,8 @@ model Album {
 
   shown Boolean @default(true)
 
-  topic   Tag? @relation(fields: [topicId], references: [id])
   topicId Int?
+  topic   Tag? @relation(fields: [topicId], references: [id])
 
   userId Int
   user   User @relation(fields: [userId], references: [id])

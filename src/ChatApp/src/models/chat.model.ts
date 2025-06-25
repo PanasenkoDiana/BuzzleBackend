@@ -24,3 +24,12 @@ export interface Chat {
     participants: User[];
     messages: Message[];
 }
+
+export interface ChatMessage {
+    id: number;
+    content: string;
+    authorId: number;
+    chatGroupId: number;
+    sent_at: Date;
+    attached_image?: string;
+}
