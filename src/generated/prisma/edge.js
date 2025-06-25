@@ -246,7 +246,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\deesh\\OneDrive\\Рабочий стол\\BuzzleBackend\\src\\generated\\prisma",
+      "value": "D:\\Work\\BuzzleBackend\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -260,7 +260,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\deesh\\OneDrive\\Рабочий стол\\BuzzleBackend\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\Work\\BuzzleBackend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -274,7 +274,6 @@ const config = {
     "db"
   ],
   "activeProvider": "sqlite",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

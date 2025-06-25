@@ -10,6 +10,6 @@ chatRouter.post('/messages', authenticate, chatController.sendMessage);
 chatRouter.get('/messages/:chatId', authenticate, chatController.getChatHistory);
 chatRouter.post('/get-or-create-group', authenticate, chatController.getOrCreateChatGroup);
 chatRouter.get('/all', authTokenMiddleware, chatController.getAllChats)
-
+chatRouter.post('/create-group', authenticate, chatController.createGroup);
 
 export default chatRouter;

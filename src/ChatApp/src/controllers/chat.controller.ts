@@ -1,5 +1,7 @@
 import { prismaClient } from "../../../prisma/client";
 import { Request, Response } from "express";
+import { base64ToImage } from "../../../tools/base64ToImage";
+import { CreateGroup } from "../types";
 
 export class ChatController {
 	public sendMessage = async (req: Request, res: Response): Promise<void> => {
@@ -143,21 +145,16 @@ export class ChatController {
 		}
 	};
 
-	public getAllChats = async (
-		req: Request,
-		res: Response
-	) => {
+	public getAllChats = async (req: Request, res: Response) => {
 		try {
 			const userId = res.locals.userId;
-
-
 
 			const chats = await prismaClient.chatGroup.findMany({
 				where: {
 					members: {
 						some: {
-							id: +userId
-						}
+							id: +userId,
+						},
 					},
 					// adminId: +chatId
 				},
@@ -169,25 +166,50 @@ export class ChatController {
 								include: {
 									avatars: {
 										include: {
-											image: true
-										}
-									}
-								}
-							}
-						}
+											image: true,
+										},
+									},
+								},
+							},
+						},
 					},
 					messages: true,
-				}
-
-			})
+				},
+			});
 
 			// const allChats = [...chatsWereAdmin, ...chatsWereMember]
 
-			res.json(chats)
-
-		} catch(error) {
+			res.json(chats);
+		} catch (error) {
 			// console.log(error)
 			res.status(500).json({ error: "Failed to fetch chats" });
 		}
-	}
+	};
+
+	public createGroup = async (req: Request, res: Response) => {
+		try {
+			const userId = res.locals.userId;
+			const data: CreateGroup = req.body;
+
+			const avatarData = await base64ToImage(data.avatar);
+
+			const group = await prismaClient.chatGroup.create({
+				data: {
+					name: data.name,
+					avatar: avatarData.filename,
+					is_personal_chat: true,
+					admin: {
+						connect: { id: userId },
+					},
+					members: {
+						connect: data.members.map((id: number) => ({ id: id })),
+					},
+				},
+			});
+
+			res.json(group);
+		} catch (error) {
+			res.status(500).json({ error: "Failed to create group" });
+		}
+	};
 }
