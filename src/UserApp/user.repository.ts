@@ -134,14 +134,10 @@ export const UserRepositories = {
 				},
 			},
 		});
-		});
 
 		return "changed part two";
 	},
-		return "changed part two";
-	},
-
-	addMyPhoto: async (data: string, id: number) => {
+	
 	addMyPhoto: async (data: string, id: number) => {
 		// Находим профиль по user_id
 		const profile = await prismaClient.profile.findUnique({
@@ -187,14 +183,6 @@ export const UserRepositories = {
 				},
 			},
 		});
-			include: {
-				avatars: {
-					include: {
-						image: true,
-					},
-				},
-			},
-		});
 
 		return "new photo added";
 	},
@@ -218,7 +206,6 @@ export const UserRepositories = {
 	changePassword: async (password: string, userId: number) => {
 		const newPassword = await prismaClient.user.update({
 			where: {
-				id: userId,
 				id: userId,
 			},
 			data: {

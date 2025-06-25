@@ -101,6 +101,7 @@ export class ChatController {
 					data: {
 						name: `chat-${Date.now()}`,
 						admin: { connect: { id: currentUserId } },
+						is_personal_chat: true,
 						members: {
 							connect: [
 								{ id: currentUserId },
@@ -156,7 +157,7 @@ export class ChatController {
 							id: +userId,
 						},
 					},
-					// adminId: +chatId
+					is_personal_chat: false,
 				},
 
 				include: {
@@ -177,8 +178,6 @@ export class ChatController {
 				},
 			});
 
-			// const allChats = [...chatsWereAdmin, ...chatsWereMember]
-
 			res.json(chats);
 		} catch (error) {
 			// console.log(error)
@@ -188,24 +187,35 @@ export class ChatController {
 
 	public createGroup = async (req: Request, res: Response) => {
 		try {
-			const userId = res.locals.userId;
+			const userId: number = req.user.id;
 			const data: CreateGroup = req.body;
+			// console.log(data)
 
 			const avatarData = await base64ToImage(data.avatar);
+			console.log(avatarData);
+
+			const groupMembers = [
+				...data.members.map((id: number) => ({ id: id })),
+				{ id: userId },
+			];
 
 			const group = await prismaClient.chatGroup.create({
 				data: {
 					name: data.name,
 					avatar: avatarData.filename,
-					is_personal_chat: true,
 					admin: {
 						connect: { id: userId },
 					},
 					members: {
-						connect: data.members.map((id: number) => ({ id: id })),
+						connect: groupMembers,
 					},
 				},
+				include: {
+					members: true,
+				},
 			});
+
+			console.log(group);
 
 			res.json(group);
 		} catch (error) {
